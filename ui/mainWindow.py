@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
         self.window().setFixedWidth(self.window().width())
         tryGetDarkTitleBar(self.window())
         self.saveTable = saveTableControler(self.ui.saveTable)
-        self.enchTable = enchTableControler(self.ui.enchTable)
+        self.enchTable = enchTableControler(self.ui.enchTable,self.ui.generatePendingBookButton,self.ui.enchSelFrame)
         self.equSelection = equipmentSelectionControler(self.equSelectButtons(),self.enchTable)
         self.pendingTable = pendingTableControler(self.ui.pendingBookTable)
 
@@ -134,11 +134,6 @@ class equipmentSelectionControler:
             button.mouseDoubleClickEvent = lambda e, b=button, i=item: self.buttonAction(b,i)
 
     def buttonAction(self,button:QPushButton,item:Enum):
-        def repolish(b:QPushButton):
-            # QT jank
-            b.style().unpolish(b)
-            b.style().polish(b)
-            b.update()
         if self.theChosenOne != None: # unchoosing chosen one:sob:
             self.theChosenOne.setProperty("chosenOne",False)
             repolish(self.theChosenOne)
@@ -151,11 +146,12 @@ class equipmentSelectionControler:
             self.theChosenOne = None
             self.enchTable.clearItem()
 
-
 class enchTableControler:
-    def __init__(self, table:QTableView):
+    def __init__(self, table:QTableView, confirmButton:QPushButton, enchSelectionFrame:QFrame):
         self.table = table
         self.model = EnchTableModel()
+        self.enchSelectionFrame = enchSelectionFrame
+        self.grayOut(True)
         table.setModel(self.model)
         delegate = CheckBoxDelegate()
         table.setItemDelegateForColumn(0, delegate)
@@ -172,6 +168,7 @@ class enchTableControler:
 
     def populateFromNewItem(self,item:Enum):
         self.clearItem()
+        self.grayOut(False)
         for ID, ench in enchs.dict.items():
             if ench.isCompatibleWith(item):
                 self.addItem(ench)
@@ -179,7 +176,11 @@ class enchTableControler:
     def addItem(self, ench:Ench):
         self.model.addItem(ench)
         self.table.resizeRowsToContents()
-    def clearItem(self): self.model.clearData()
+    def clearItem(self): self.model.clearData();self.grayOut(True)
+    def grayOut(self,doIt:bool): 
+        self.enchSelectionFrame.setDisabled(doIt)
+        self.table.verticalScrollBar().setProperty("grayOut",doIt)
+        repolish(self.table.verticalScrollBar())
 class EnchTableModel(QAbstractTableModel):
     # Mutex column doesn't exist because yes
     SELECTED_COL, FROMONEUP_COL, NAME_COL, LEVEL_COL, MUTEX_COL = [0,1,2,3,4]
@@ -301,20 +302,8 @@ def getRomanNum(n):
     ROMAN_NUMS = {1:"I",2:"II",3:"III",4:"IV",5:"V",6:"VI",7:"VII",8:"VIII",9:"IX",10:"X"}
     rom = ROMAN_NUMS.get(n)
     return str(n) if rom is None else rom
-
-def addItem(table:QTableWidget,*args):
-    """Just for testing, will write individual function for each table"""
-    row = table.rowCount()
-    table.insertRow(row)
-    for index,item in enumerate(args):
-        if(isinstance(item, QIcon)):
-            thing = QTableWidgetItem()
-            thing.setIcon(item)
-            table.setItem(row,index,thing)
-        elif(isinstance(item, str)):
-            table.setItem(row,index, QTableWidgetItem(item))
-        elif(isinstance(item,int)):
-            table.setItem(row,index, QTableWidgetItem(str(item)))
-        else:
-            table.setCellWidget(row,index,item)
-    table.resizeRowsToContents()
+def repolish(b:QPushButton):
+    """QT jank"""
+    b.style().unpolish(b)
+    b.style().polish(b)
+    b.update()

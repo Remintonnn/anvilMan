@@ -26,7 +26,10 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">/*====== The Test Zone Above ======*/
+   <string notr="true">
+
+
+/*====== The Test Zone Above ======*/
 
 
 
@@ -34,6 +37,10 @@ QFrame {
     background-color: #222222;
     border-radius:8px;
     border: 2px solid #b87700;
+}QFrame:disabled {
+    background-color: #151515;
+    border-radius:8px;
+    border: 2px solid #454545;
 }
 
 QWidget {
@@ -73,12 +80,19 @@ QTableView {
 	font-weight: bold;
 }
 
+QTableView:disabled {
+    border: 2px solid #333333;
+}QHeaderView::section:disabled {
+	color: #454545;
+    border-right: 1px solid #333333;
+}
+
 QScrollBar:vertical {
     background-color: #222222;
     width: 19px;
     margin: 19px 1px 19px 1px;
 }QScrollBar::handle:vertical {
-    background-color: #444444;
+    background-color: #454545;
     min-height: 20px;
     border-radius: 0px;
 }QScrollBar::handle:hover {background-color: #777777;}
@@ -92,12 +106,23 @@ QScrollBar::add-line, QScrollBar::sub-line{/* Arrow Things */
 QScrollBar::up-arrow:vertical {image: url(:/UI/upArrow.png);}
 QScrollBar::down-arrow:vertical {image: url(:/UI/downArrow.png);}
 
+QScrollBar[grayOut=true]::handle:vertical {
+    background-color: #252525;
+}QScrollBar[grayOut=true]::add-line:disabled, QScrollBar[grayOut=true]::sub-line{/* Arrow Things */
+	border: 2px solid #333333;
+	background-color: #222222
+}QScrollBar[grayOut=true]::up-arrow:vertical {image: url(:/NOTATHING);}
+QScrollBar[grayOut=true]::down-arrow:vertical {image: url(:/NOTATHING);}
+
 /*====== Smol things ======*/
 
 QLabel {
 	color: #ffffff;
     border-radius: 8px;
     border: 2px solid #505050;
+}QLabel:disabled{
+	color: #454545;
+	border: 2px solid #333333;
 }
 
 QPlainTextEdit{
@@ -128,7 +153,7 @@ QPushButton[chosenOne=True]{
     color: #FFFFFF;
     border-radius: 0px;
 	border: 2px solid #E87700;
-}QPushButton:hover {
+}QPushButton[chosenOne=True]:hover {
 	background-color: #5656FF;
 	border: 2px solid #878787;
 }
@@ -1111,6 +1136,9 @@ QPushButton:hover {
      <enum>QFrame::Raised</enum>
     </property>
     <widget class="QLabel" name="enchSelTitleLabel">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>
