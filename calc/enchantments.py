@@ -37,8 +37,7 @@ class Enchantment:
         self.names:list[str] = names
     def isCompatibleWith(self,item:str|Enum):
         if isinstance(item,Enum): item = item.value
-        if item == EnchantableItems.all.value: return True
-        if item == EnchantableItems.other.value: return EnchantableItems.all.value in self.compatibleItems
+        if EnchantableItems.all.value in self.compatibleItems: return True
         return item in self.compatibleItems
     def conflictsWith(self,ench:"Enchantment"):
         return ench.Id in self.mutexEnch
