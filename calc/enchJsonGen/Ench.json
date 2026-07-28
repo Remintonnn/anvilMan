@@ -1,12 +1,14 @@
 {
     "protection": {
+        "Id": "protection",
         "CompatibleItems": [
             "Helmet",
             "Chestplate",
             "Leggings",
             "Boots"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 4,
         "MutexEnch": [
             "fireProtection",
@@ -22,13 +24,15 @@
         ]
     },
     "fireProtection": {
+        "Id": "fireProtection",
         "CompatibleItems": [
             "Helmet",
             "Chestplate",
             "Leggings",
             "Boots"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 2,
         "MaxLevel": 4,
         "MutexEnch": [
             "protection",
@@ -44,10 +48,12 @@
         ]
     },
     "featherFalling": {
+        "Id": "featherFalling",
         "CompatibleItems": [
             "Boots"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 2,
         "MaxLevel": 4,
         "MutexEnch": [],
         "Tags": [
@@ -59,13 +65,15 @@
         ]
     },
     "blastProtection": {
+        "Id": "blastProtection",
         "CompatibleItems": [
             "Helmet",
             "Chestplate",
             "Leggings",
             "Boots"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 4,
         "MutexEnch": [
             "protection",
@@ -81,13 +89,15 @@
         ]
     },
     "projectileProtection": {
+        "Id": "projectileProtection",
         "CompatibleItems": [
             "Helmet",
             "Chestplate",
             "Leggings",
             "Boots"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 2,
         "MaxLevel": 4,
         "MutexEnch": [
             "protection",
@@ -103,13 +113,15 @@
         ]
     },
     "thorns": {
+        "Id": "thorns",
         "CompatibleItems": [
             "Helmet",
             "Chestplate",
             "Leggings",
             "Boots"
         ],
-        "Muitiplier": 4,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 3,
         "MutexEnch": [
             "sacrificeExperience"
@@ -123,10 +135,12 @@
         ]
     },
     "respiration": {
+        "Id": "respiration",
         "CompatibleItems": [
             "Helmet"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -138,10 +152,12 @@
         ]
     },
     "depthStrider": {
+        "Id": "depthStrider",
         "CompatibleItems": [
             "Boots"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 3,
         "MutexEnch": [
             "frostWalker"
@@ -155,10 +171,12 @@
         ]
     },
     "aquaAffinity": {
+        "Id": "aquaAffinity",
         "CompatibleItems": [
             "Helmet"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 1,
         "MutexEnch": [],
         "Tags": [
@@ -170,12 +188,14 @@
         ]
     },
     "sharpness": {
+        "Id": "sharpness",
         "CompatibleItems": [
             "Sword",
             "Axe",
             "Spear"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 5,
         "MutexEnch": [
             "smite",
@@ -193,13 +213,15 @@
         ]
     },
     "smite": {
+        "Id": "smite",
         "CompatibleItems": [
             "Sword",
             "Axe",
             "Mase",
             "Spear"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 2,
         "MaxLevel": 5,
         "MutexEnch": [
             "sharpness",
@@ -217,13 +239,15 @@
         ]
     },
     "baneOfArthropods": {
+        "Id": "baneOfArthropods",
         "CompatibleItems": [
             "Sword",
             "Axe",
             "Mase",
             "Spear"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 2,
         "MaxLevel": 5,
         "MutexEnch": [
             "sharpness",
@@ -241,11 +265,13 @@
         ]
     },
     "knockback": {
+        "Id": "knockback",
         "CompatibleItems": [
             "Sword",
             "Spear"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 2,
         "MaxLevel": 2,
         "MutexEnch": [],
         "Tags": [
@@ -257,12 +283,14 @@
         ]
     },
     "fireAspect": {
+        "Id": "fireAspect",
         "CompatibleItems": [
             "Sword",
             "Mase",
             "Spear"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 2,
         "MutexEnch": [
             "frozen"
@@ -276,11 +304,13 @@
         ]
     },
     "looting": {
+        "Id": "looting",
         "CompatibleItems": [
             "Sword",
             "Spear"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -292,6 +322,7 @@
         ]
     },
     "efficiency": {
+        "Id": "efficiency",
         "CompatibleItems": [
             "Pickaxe",
             "Axe",
@@ -299,7 +330,8 @@
             "Shears",
             "Hoe"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 5,
         "MutexEnch": [],
         "Tags": [
@@ -311,13 +343,15 @@
         ]
     },
     "silkTouch": {
+        "Id": "silkTouch",
         "CompatibleItems": [
             "Pickaxe",
             "Axe",
             "Shovel",
             "Hoe"
         ],
-        "Muitiplier": 4,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 1,
         "MutexEnch": [
             "fortune",
@@ -333,10 +367,12 @@
         ]
     },
     "unbreaking": {
+        "Id": "unbreaking",
         "CompatibleItems": [
             "All"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 2,
         "MaxLevel": 3,
         "MutexEnch": [
             "infiniteDurability",
@@ -351,13 +387,15 @@
         ]
     },
     "fortune": {
+        "Id": "fortune",
         "CompatibleItems": [
             "Pickaxe",
             "Axe",
             "Shovel",
             "Hoe"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 3,
         "MutexEnch": [
             "silkTouch",
@@ -372,10 +410,12 @@
         ]
     },
     "power": {
+        "Id": "power",
         "CompatibleItems": [
             "Bow"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 5,
         "MutexEnch": [],
         "Tags": [
@@ -387,10 +427,12 @@
         ]
     },
     "punch": {
+        "Id": "punch",
         "CompatibleItems": [
             "Bow"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 2,
         "MutexEnch": [],
         "Tags": [
@@ -402,10 +444,12 @@
         ]
     },
     "flame": {
+        "Id": "flame",
         "CompatibleItems": [
             "Bow"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 1,
         "MutexEnch": [],
         "Tags": [
@@ -417,10 +461,12 @@
         ]
     },
     "infinity": {
+        "Id": "infinity",
         "CompatibleItems": [
             "Bow"
         ],
-        "Muitiplier": 4,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 1,
         "MutexEnch": [
             "mending"
@@ -429,15 +475,17 @@
             "vanilla"
         ],
         "Names": [
-            "無限 ",
+            "無限",
             "Infinity"
         ]
     },
     "luckOfTheSea": {
+        "Id": "luckOfTheSea",
         "CompatibleItems": [
             "FishingRod"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -449,10 +497,12 @@
         ]
     },
     "lure": {
+        "Id": "lure",
         "CompatibleItems": [
             "FishingRod"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -464,10 +514,12 @@
         ]
     },
     "frostWalker": {
+        "Id": "frostWalker",
         "CompatibleItems": [
             "Boots"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 2,
         "MutexEnch": [
             "depthStrider"
@@ -481,10 +533,12 @@
         ]
     },
     "mending": {
+        "Id": "mending",
         "CompatibleItems": [
             "All"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 1,
         "MutexEnch": [
             "infinity",
@@ -495,11 +549,12 @@
             "vanilla"
         ],
         "Names": [
-            "修補 ",
+            "修補",
             "Mending"
         ]
     },
     "curseOfBinding": {
+        "Id": "curseOfBinding",
         "CompatibleItems": [
             "Helmet",
             "Chestplate",
@@ -507,7 +562,8 @@
             "Boots",
             "Elytra"
         ],
-        "Muitiplier": 4,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 1,
         "MutexEnch": [],
         "Tags": [
@@ -519,10 +575,12 @@
         ]
     },
     "curseOfVanishing": {
+        "Id": "curseOfVanishing",
         "CompatibleItems": [
             "All"
         ],
-        "Muitiplier": 4,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 1,
         "MutexEnch": [],
         "Tags": [
@@ -534,10 +592,12 @@
         ]
     },
     "impaling": {
+        "Id": "impaling",
         "CompatibleItems": [
             "Trident"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 5,
         "MutexEnch": [],
         "Tags": [
@@ -549,10 +609,12 @@
         ]
     },
     "riptide": {
+        "Id": "riptide",
         "CompatibleItems": [
             "Trident"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 3,
         "MutexEnch": [
             "loyalty",
@@ -567,10 +629,12 @@
         ]
     },
     "loyalty": {
+        "Id": "loyalty",
         "CompatibleItems": [
             "Trident"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 3,
         "MutexEnch": [
             "riptide"
@@ -584,10 +648,12 @@
         ]
     },
     "channeling": {
+        "Id": "channeling",
         "CompatibleItems": [
             "Trident"
         ],
-        "Muitiplier": 4,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 1,
         "MutexEnch": [
             "riptide"
@@ -601,10 +667,12 @@
         ]
     },
     "multishot": {
+        "Id": "multishot",
         "CompatibleItems": [
             "Crossbow"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 1,
         "MutexEnch": [
             "piercing"
@@ -618,10 +686,12 @@
         ]
     },
     "piercing": {
+        "Id": "piercing",
         "CompatibleItems": [
             "Crossbow"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 4,
         "MutexEnch": [
             "multishot"
@@ -635,10 +705,12 @@
         ]
     },
     "quickCharge": {
+        "Id": "quickCharge",
         "CompatibleItems": [
             "Crossbow"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 2,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -650,10 +722,12 @@
         ]
     },
     "soulSpeed": {
+        "Id": "soulSpeed",
         "CompatibleItems": [
             "Boots"
         ],
-        "Muitiplier": 4,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 3,
         "MutexEnch": [
             "lightSpeed"
@@ -667,10 +741,12 @@
         ]
     },
     "swiftSneak": {
+        "Id": "swiftSneak",
         "CompatibleItems": [
             "Leggings"
         ],
-        "Muitiplier": 4,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 3,
         "MutexEnch": [
             "steadySneak"
@@ -684,10 +760,12 @@
         ]
     },
     "windBurst": {
+        "Id": "windBurst",
         "CompatibleItems": [
             "Mase"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -699,10 +777,12 @@
         ]
     },
     "density": {
+        "Id": "density",
         "CompatibleItems": [
             "Mase"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 2,
         "MaxLevel": 5,
         "MutexEnch": [
             "sharpness",
@@ -719,10 +799,12 @@
         ]
     },
     "breach": {
+        "Id": "breach",
         "CompatibleItems": [
             "Mase"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 4,
         "MutexEnch": [
             "sharpness",
@@ -739,10 +821,12 @@
         ]
     },
     "lunge": {
+        "Id": "lunge",
         "CompatibleItems": [
             "Spear"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 2,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -754,10 +838,12 @@
         ]
     },
     "sweepingEdge": {
+        "Id": "sweepingEdge",
         "CompatibleItems": [
             "Sword"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -769,10 +855,12 @@
         ]
     },
     "voiceKizunaAkari": {
+        "Id": "voiceKizunaAkari",
         "CompatibleItems": [
             "Helmet"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 1,
         "MutexEnch": [
             "voiceYuzukiYukari",
@@ -788,10 +876,12 @@
         ]
     },
     "voiceYuzukiYukari": {
+        "Id": "voiceYuzukiYukari",
         "CompatibleItems": [
             "Helmet"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 1,
         "MutexEnch": [
             "voiceKizunaAkari",
@@ -807,10 +897,12 @@
         ]
     },
     "voiceKotonohaAkane": {
+        "Id": "voiceKotonohaAkane",
         "CompatibleItems": [
             "Helmet"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 1,
         "MutexEnch": [
             "voiceKizunaAkari",
@@ -826,10 +918,12 @@
         ]
     },
     "voiceKotonohaAoi": {
+        "Id": "voiceKotonohaAoi",
         "CompatibleItems": [
             "Helmet"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 1,
         "MutexEnch": [
             "voiceKizunaAkari",
@@ -845,10 +939,12 @@
         ]
     },
     "autoRepair": {
+        "Id": "autoRepair",
         "CompatibleItems": [
             "All"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 3,
         "MutexEnch": [
             "infiniteDurability",
@@ -863,10 +959,12 @@
         ]
     },
     "criticalChance": {
+        "Id": "criticalChance",
         "CompatibleItems": [
             "Axe"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 4,
         "MutexEnch": [],
         "Tags": [
@@ -878,10 +976,12 @@
         ]
     },
     "oreSmelting": {
+        "Id": "oreSmelting",
         "CompatibleItems": [
             "Pickaxe"
         ],
-        "Muitiplier": 4,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 1,
         "MutexEnch": [
             "silkTouch"
@@ -895,11 +995,13 @@
         ]
     },
     "vampiric": {
+        "Id": "vampiric",
         "CompatibleItems": [
             "Sword",
             "Spear"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 4,
         "MutexEnch": [
             "sharpness",
@@ -915,10 +1017,12 @@
         ]
     },
     "healthy": {
+        "Id": "healthy",
         "CompatibleItems": [
             "Chestplate"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -930,10 +1034,12 @@
         ]
     },
     "gale": {
+        "Id": "gale",
         "CompatibleItems": [
             "Elytra"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -945,10 +1051,12 @@
         ]
     },
     "breakRecovery": {
+        "Id": "breakRecovery",
         "CompatibleItems": [
             "All"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 1,
         "MutexEnch": [
             "infiniteDurability"
@@ -962,6 +1070,7 @@
         ]
     },
     "extension": {
+        "Id": "extension",
         "CompatibleItems": [
             "Pickaxe",
             "Axe",
@@ -969,7 +1078,8 @@
             "Shears",
             "Hoe"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -981,10 +1091,12 @@
         ]
     },
     "spear": {
+        "Id": "spear",
         "CompatibleItems": [
             "Axe"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -996,13 +1108,15 @@
         ]
     },
     "miniaturize": {
+        "Id": "miniaturize",
         "CompatibleItems": [
             "Helmet",
             "Chestplate",
             "Leggings",
             "Boots"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 1,
         "MutexEnch": [
             "giantify"
@@ -1016,13 +1130,15 @@
         ]
     },
     "giantify": {
+        "Id": "giantify",
         "CompatibleItems": [
             "Helmet",
             "Chestplate",
             "Leggings",
             "Boots"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 2,
         "MutexEnch": [
             "miniaturize"
@@ -1032,14 +1148,16 @@
         ],
         "Names": [
             "巨大化",
-            "Giantify"
+            "Gigantify"
         ]
     },
     "nimble": {
+        "Id": "nimble",
         "CompatibleItems": [
             "Elytra"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -1051,10 +1169,12 @@
         ]
     },
     "frozen": {
+        "Id": "frozen",
         "CompatibleItems": [
             "Sword"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 3,
         "MutexEnch": [
             "fireAspect"
@@ -1068,10 +1188,12 @@
         ]
     },
     "delicacy": {
+        "Id": "delicacy",
         "CompatibleItems": [
             "Helmet"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -1083,10 +1205,12 @@
         ]
     },
     "steadySneak": {
+        "Id": "steadySneak",
         "CompatibleItems": [
             "Leggings"
         ],
-        "Muitiplier": 4,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 3,
         "MutexEnch": [
             "swiftSneak"
@@ -1100,11 +1224,13 @@
         ]
     },
     "wisdom": {
+        "Id": "wisdom",
         "CompatibleItems": [
             "Sword",
             "Spear"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 5,
         "MutexEnch": [],
         "Tags": [
@@ -1116,13 +1242,15 @@
         ]
     },
     "sacrificeExperience": {
+        "Id": "sacrificeExperience",
         "CompatibleItems": [
             "Helmet",
             "Chestplate",
             "Leggings",
             "Boots"
         ],
-        "Muitiplier": 4,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 1,
         "MutexEnch": [
             "thorns"
@@ -1136,13 +1264,15 @@
         ]
     },
     "knockbackResistance": {
+        "Id": "knockbackResistance",
         "CompatibleItems": [
             "Helmet",
             "Chestplate",
             "Leggings",
             "Boots"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 2,
         "MutexEnch": [],
         "Tags": [
@@ -1154,10 +1284,12 @@
         ]
     },
     "buoyancy": {
+        "Id": "buoyancy",
         "CompatibleItems": [
             "Elytra"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -1169,10 +1301,12 @@
         ]
     },
     "gravity": {
+        "Id": "gravity",
         "CompatibleItems": [
             "Chestplate"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 4,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -1184,10 +1318,12 @@
         ]
     },
     "stubborn": {
+        "Id": "stubborn",
         "CompatibleItems": [
             "Chestplate"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 2,
         "MaxLevel": 4,
         "MutexEnch": [],
         "Tags": [
@@ -1199,10 +1335,12 @@
         ]
     },
     "fragile": {
+        "Id": "fragile",
         "CompatibleItems": [
             "Chestplate"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 3,
         "MutexEnch": [],
         "Tags": [
@@ -1214,10 +1352,12 @@
         ]
     },
     "windBlast": {
+        "Id": "windBlast",
         "CompatibleItems": [
             "Shield"
         ],
-        "Muitiplier": 2,
+        "MultiplierBook": 2,
+        "MultiplierItem": 2,
         "MaxLevel": 5,
         "MutexEnch": [],
         "Tags": [
@@ -1229,10 +1369,12 @@
         ]
     },
     "eternal": {
+        "Id": "eternal",
         "CompatibleItems": [
             "All"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 1,
         "MaxLevel": 1,
         "MutexEnch": [],
         "Tags": [
@@ -1244,6 +1386,7 @@
         ]
     },
     "overclocking": {
+        "Id": "overclocking",
         "CompatibleItems": [
             "Pickaxe",
             "Axe",
@@ -1251,7 +1394,8 @@
             "Shears",
             "Hoe"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 1,
+        "MultiplierItem": 2,
         "MaxLevel": 5,
         "MutexEnch": [
             "silkTouch",
@@ -1267,10 +1411,12 @@
         ]
     },
     "lightSpeed": {
+        "Id": "lightSpeed",
         "CompatibleItems": [
             "Boots"
         ],
-        "Muitiplier": 4,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 3,
         "MutexEnch": [
             "soulSpeed"
@@ -1284,10 +1430,12 @@
         ]
     },
     "infiniteDurability": {
+        "Id": "infiniteDurability",
         "CompatibleItems": [
             "All"
         ],
-        "Muitiplier": 1,
+        "MultiplierBook": 4,
+        "MultiplierItem": 8,
         "MaxLevel": 1,
         "MutexEnch": [
             "autoRepair",
