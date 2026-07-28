@@ -115,14 +115,22 @@ QPushButton {
     color: #FFFFFF;
     border-radius: 4px;
 	border: 2px solid #505050;
-}
-QPushButton:hover {
+}QPushButton:hover {
 	background-color: #565656;
 	border: 2px solid #878787;
-}
-QPushButton:disabled{
+}QPushButton:disabled{
 	border: 2px solid #181818;
 	color: #676767;
+}
+
+QPushButton[chosenOne=True]{
+    background-color: #454545;
+    color: #FFFFFF;
+    border-radius: 0px;
+	border: 2px solid #E87700;
+}QPushButton:hover {
+	background-color: #5656FF;
+	border: 2px solid #878787;
 }
 
 QToolTip {
@@ -181,8 +189,18 @@ QLabel:disabled{
     color: #FFFFFF;
     border-radius: 8px;
 	border: 0px solid #505050;
+}QPushButton:hover {
+	background-color: #767676
 }
-QPushButton:hover {background-color: #818181;}</string>
+
+QPushButton[chosenOne=true]{
+    background-color: #51514D;
+    color: #FFFFFF;
+	border: 2px solid #D87700;
+}QPushButton[chosenOne=true]:hover {
+	background-color: #AAAAAA;
+	border: 2px solid #FFAA00;
+}</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -286,6 +304,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <height>32</height>
       </size>
      </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QPushButton" name="clothB">
      <property name="geometry">
@@ -314,6 +335,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <width>32</width>
        <height>32</height>
       </size>
+     </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="pantsB">
@@ -344,6 +368,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <height>32</height>
       </size>
      </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QPushButton" name="shoesB">
      <property name="geometry">
@@ -372,6 +399,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <width>32</width>
        <height>32</height>
       </size>
+     </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="wingB">
@@ -402,6 +432,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <height>32</height>
       </size>
      </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QPushButton" name="maceB">
      <property name="geometry">
@@ -430,6 +463,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <width>32</width>
        <height>32</height>
       </size>
+     </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="tridentB">
@@ -460,6 +496,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <height>32</height>
       </size>
      </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QPushButton" name="swordB">
      <property name="geometry">
@@ -488,6 +527,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <width>32</width>
        <height>32</height>
       </size>
+     </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="shieldB">
@@ -518,6 +560,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <height>32</height>
       </size>
      </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QPushButton" name="spearB">
      <property name="geometry">
@@ -534,6 +579,9 @@ QPushButton:hover {background-color: #818181;}</string>
      <property name="toolTip">
       <string>拿棍子戳人可能不是太新盈的主意...</string>
      </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -546,6 +594,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <width>32</width>
        <height>32</height>
       </size>
+     </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="axeB1">
@@ -576,6 +627,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <height>32</height>
       </size>
      </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QPushButton" name="crossbowB">
      <property name="geometry">
@@ -604,6 +658,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <width>32</width>
        <height>32</height>
       </size>
+     </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="bowB">
@@ -634,6 +691,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <height>32</height>
       </size>
      </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QPushButton" name="hoeB">
      <property name="geometry">
@@ -662,6 +722,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <width>32</width>
        <height>32</height>
       </size>
+     </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="shearsB">
@@ -692,6 +755,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <height>32</height>
       </size>
      </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QPushButton" name="pickaxeB">
      <property name="geometry">
@@ -720,6 +786,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <width>32</width>
        <height>32</height>
       </size>
+     </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="flientSteelB">
@@ -750,6 +819,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <height>32</height>
       </size>
      </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QPushButton" name="shovelB">
      <property name="geometry">
@@ -779,6 +851,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <height>32</height>
       </size>
      </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QPushButton" name="axeB2">
      <property name="geometry">
@@ -807,6 +882,9 @@ QPushButton:hover {background-color: #818181;}</string>
        <width>32</width>
        <height>32</height>
       </size>
+     </property>
+     <property name="chosenOne" stdset="0">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>

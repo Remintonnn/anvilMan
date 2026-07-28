@@ -123,14 +123,22 @@ class Ui_MainWindow(object):
 "    color: #FFFFFF;\n"
 "    border-radius: 4px;\n"
 "	border: 2px solid #505050;\n"
-"}\n"
-"QPushButton:hover {\n"
+"}QPushButton:hover {\n"
 "	background-color: #565656;\n"
 "	border: 2px solid #878787;\n"
-"}\n"
-"QPushButton:disabled{\n"
+"}QPushButton:disabled{\n"
 "	border: 2px solid #181818;\n"
 "	color: #676767;\n"
+"}\n"
+"\n"
+"QPushButton[chosenOne=True]{\n"
+"    background-color: #454545;\n"
+"    color: #FFFFFF;\n"
+"    border-radius: 0px;\n"
+"	border: 2px solid #E87700;\n"
+"}QPushButton:hover {\n"
+"	background-color: #5656FF;\n"
+"	border: 2px solid #878787;\n"
 "}\n"
 "\n"
 "QToolTip {\n"
@@ -164,8 +172,18 @@ class Ui_MainWindow(object):
 "    color: #FFFFFF;\n"
 "    border-radius: 8px;\n"
 "	border: 0px solid #505050;\n"
+"}QPushButton:hover {\n"
+"	background-color: #767676\n"
 "}\n"
-"QPushButton:hover {background-color: #818181;}")
+"\n"
+"QPushButton[chosenOne=true]{\n"
+"    background-color: #51514D;\n"
+"    color: #FFFFFF;\n"
+"	border: 2px solid #D87700;\n"
+"}QPushButton[chosenOne=true]:hover {\n"
+"	background-color: #AAAAAA;\n"
+"	border: 2px solid #FFAA00;\n"
+"}")
         self.newEquFrame.setFrameShape(QFrame.StyledPanel)
         self.newEquFrame.setFrameShadow(QFrame.Raised)
         self.armorAndWingLabel = QLabel(self.newEquFrame)
@@ -192,6 +210,7 @@ class Ui_MainWindow(object):
         icon.addFile(u":/armors/helmet.webp", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.hatB.setIcon(icon)
         self.hatB.setIconSize(QSize(32, 32))
+        self.hatB.setProperty(u"chosenOne", False)
         self.clothB = QPushButton(self.newEquFrame)
         self.clothB.setObjectName(u"clothB")
         self.clothB.setGeometry(QRect(60, 80, 41, 41))
@@ -200,6 +219,7 @@ class Ui_MainWindow(object):
         icon1.addFile(u":/armors/chestplate.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.clothB.setIcon(icon1)
         self.clothB.setIconSize(QSize(32, 32))
+        self.clothB.setProperty(u"chosenOne", False)
         self.pantsB = QPushButton(self.newEquFrame)
         self.pantsB.setObjectName(u"pantsB")
         self.pantsB.setGeometry(QRect(110, 80, 41, 41))
@@ -208,6 +228,7 @@ class Ui_MainWindow(object):
         icon2.addFile(u":/armors/leggings.webp", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.pantsB.setIcon(icon2)
         self.pantsB.setIconSize(QSize(32, 32))
+        self.pantsB.setProperty(u"chosenOne", False)
         self.shoesB = QPushButton(self.newEquFrame)
         self.shoesB.setObjectName(u"shoesB")
         self.shoesB.setGeometry(QRect(160, 80, 41, 41))
@@ -216,6 +237,7 @@ class Ui_MainWindow(object):
         icon3.addFile(u":/armors/boots.webp", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.shoesB.setIcon(icon3)
         self.shoesB.setIconSize(QSize(32, 32))
+        self.shoesB.setProperty(u"chosenOne", False)
         self.wingB = QPushButton(self.newEquFrame)
         self.wingB.setObjectName(u"wingB")
         self.wingB.setGeometry(QRect(210, 80, 41, 41))
@@ -224,6 +246,7 @@ class Ui_MainWindow(object):
         icon4.addFile(u":/armors/elytra.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.wingB.setIcon(icon4)
         self.wingB.setIconSize(QSize(32, 32))
+        self.wingB.setProperty(u"chosenOne", False)
         self.maceB = QPushButton(self.newEquFrame)
         self.maceB.setObjectName(u"maceB")
         self.maceB.setGeometry(QRect(160, 170, 41, 41))
@@ -232,6 +255,7 @@ class Ui_MainWindow(object):
         icon5.addFile(u":/melee/mace.webp", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.maceB.setIcon(icon5)
         self.maceB.setIconSize(QSize(32, 32))
+        self.maceB.setProperty(u"chosenOne", False)
         self.tridentB = QPushButton(self.newEquFrame)
         self.tridentB.setObjectName(u"tridentB")
         self.tridentB.setGeometry(QRect(210, 170, 41, 41))
@@ -240,6 +264,7 @@ class Ui_MainWindow(object):
         icon6.addFile(u":/melee/trident.webp", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.tridentB.setIcon(icon6)
         self.tridentB.setIconSize(QSize(32, 32))
+        self.tridentB.setProperty(u"chosenOne", False)
         self.swordB = QPushButton(self.newEquFrame)
         self.swordB.setObjectName(u"swordB")
         self.swordB.setGeometry(QRect(10, 170, 41, 41))
@@ -248,6 +273,7 @@ class Ui_MainWindow(object):
         icon7.addFile(u":/melee/sword.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.swordB.setIcon(icon7)
         self.swordB.setIconSize(QSize(32, 32))
+        self.swordB.setProperty(u"chosenOne", False)
         self.shieldB = QPushButton(self.newEquFrame)
         self.shieldB.setObjectName(u"shieldB")
         self.shieldB.setGeometry(QRect(260, 170, 41, 41))
@@ -256,14 +282,17 @@ class Ui_MainWindow(object):
         icon8.addFile(u":/melee/shield.webp", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.shieldB.setIcon(icon8)
         self.shieldB.setIconSize(QSize(32, 32))
+        self.shieldB.setProperty(u"chosenOne", False)
         self.spearB = QPushButton(self.newEquFrame)
         self.spearB.setObjectName(u"spearB")
         self.spearB.setGeometry(QRect(110, 170, 41, 41))
         self.spearB.setFocusPolicy(Qt.NoFocus)
+        self.spearB.setStyleSheet(u"")
         icon9 = QIcon()
         icon9.addFile(u":/melee/spear.webp", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.spearB.setIcon(icon9)
         self.spearB.setIconSize(QSize(32, 32))
+        self.spearB.setProperty(u"chosenOne", False)
         self.axeB1 = QPushButton(self.newEquFrame)
         self.axeB1.setObjectName(u"axeB1")
         self.axeB1.setGeometry(QRect(60, 170, 41, 41))
@@ -272,6 +301,7 @@ class Ui_MainWindow(object):
         icon10.addFile(u":/melee/axe.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.axeB1.setIcon(icon10)
         self.axeB1.setIconSize(QSize(32, 32))
+        self.axeB1.setProperty(u"chosenOne", False)
         self.crossbowB = QPushButton(self.newEquFrame)
         self.crossbowB.setObjectName(u"crossbowB")
         self.crossbowB.setGeometry(QRect(10, 260, 41, 41))
@@ -280,6 +310,7 @@ class Ui_MainWindow(object):
         icon11.addFile(u":/range/crossbow.webp", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.crossbowB.setIcon(icon11)
         self.crossbowB.setIconSize(QSize(32, 32))
+        self.crossbowB.setProperty(u"chosenOne", False)
         self.bowB = QPushButton(self.newEquFrame)
         self.bowB.setObjectName(u"bowB")
         self.bowB.setGeometry(QRect(60, 260, 41, 41))
@@ -288,6 +319,7 @@ class Ui_MainWindow(object):
         icon12.addFile(u":/range/bow.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.bowB.setIcon(icon12)
         self.bowB.setIconSize(QSize(32, 32))
+        self.bowB.setProperty(u"chosenOne", False)
         self.hoeB = QPushButton(self.newEquFrame)
         self.hoeB.setObjectName(u"hoeB")
         self.hoeB.setGeometry(QRect(160, 350, 41, 41))
@@ -296,6 +328,7 @@ class Ui_MainWindow(object):
         icon13.addFile(u":/tools/hoe.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.hoeB.setIcon(icon13)
         self.hoeB.setIconSize(QSize(32, 32))
+        self.hoeB.setProperty(u"chosenOne", False)
         self.shearsB = QPushButton(self.newEquFrame)
         self.shearsB.setObjectName(u"shearsB")
         self.shearsB.setGeometry(QRect(210, 350, 41, 41))
@@ -304,6 +337,7 @@ class Ui_MainWindow(object):
         icon14.addFile(u":/tools/shear.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.shearsB.setIcon(icon14)
         self.shearsB.setIconSize(QSize(32, 32))
+        self.shearsB.setProperty(u"chosenOne", False)
         self.pickaxeB = QPushButton(self.newEquFrame)
         self.pickaxeB.setObjectName(u"pickaxeB")
         self.pickaxeB.setGeometry(QRect(10, 350, 41, 41))
@@ -312,6 +346,7 @@ class Ui_MainWindow(object):
         icon15.addFile(u":/tools/pickaxe.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.pickaxeB.setIcon(icon15)
         self.pickaxeB.setIconSize(QSize(32, 32))
+        self.pickaxeB.setProperty(u"chosenOne", False)
         self.flientSteelB = QPushButton(self.newEquFrame)
         self.flientSteelB.setObjectName(u"flientSteelB")
         self.flientSteelB.setGeometry(QRect(260, 350, 41, 41))
@@ -320,6 +355,7 @@ class Ui_MainWindow(object):
         icon16.addFile(u":/tools/F&C.webp", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.flientSteelB.setIcon(icon16)
         self.flientSteelB.setIconSize(QSize(32, 32))
+        self.flientSteelB.setProperty(u"chosenOne", False)
         self.shovelB = QPushButton(self.newEquFrame)
         self.shovelB.setObjectName(u"shovelB")
         self.shovelB.setGeometry(QRect(110, 350, 41, 41))
@@ -328,6 +364,7 @@ class Ui_MainWindow(object):
         icon17.addFile(u":/tools/shovel.webp", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.shovelB.setIcon(icon17)
         self.shovelB.setIconSize(QSize(32, 32))
+        self.shovelB.setProperty(u"chosenOne", False)
         self.axeB2 = QPushButton(self.newEquFrame)
         self.axeB2.setObjectName(u"axeB2")
         self.axeB2.setGeometry(QRect(60, 350, 41, 41))
@@ -336,6 +373,7 @@ class Ui_MainWindow(object):
         icon18.addFile(u":/tools/axe.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.axeB2.setIcon(icon18)
         self.axeB2.setIconSize(QSize(32, 32))
+        self.axeB2.setProperty(u"chosenOne", False)
         self.saveFrame = QFrame(self.centralWidget)
         self.saveFrame.setObjectName(u"saveFrame")
         self.saveFrame.setGeometry(QRect(10, 60, 271, 351))

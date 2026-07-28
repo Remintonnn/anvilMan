@@ -28,36 +28,36 @@ class MainWindow(QMainWindow):
         tryGetDarkTitleBar(self.window())
         self.saveTable = saveTableControler(self.ui.saveTable)
         self.enchTable = enchTableControler(self.ui.enchTable)
+        self.equSelection = equipmentSelectionControler(self.equSelectButtons(),self.enchTable)
         self.pendingTable = pendingTableControler(self.ui.pendingBookTable)
 
         self.mankAnvilLabel(self.ui.titleLabel)
-        self.connectEquSelectButtons()
-
         # self.ui.hatB.clicked.connect(self.test)
         # self.ui.clothB.clicked.connect(lambda: self.enchTable.clearItem())
 
-    def connectEquSelectButtons(self):
-        def CON(button:QPushButton,item:Enum): button.clicked.connect(lambda:self.enchTable.populateFromNewItem(item))
+    def equSelectButtons(self):
         ui = self.ui; EI = EnchItems
-        CON(ui.hatB,EI.hat)
-        CON(ui.clothB,EI.cloth)
-        CON(ui.pantsB,EI.pants)
-        CON(ui.shoesB,EI.shoes)
-        CON(ui.wingB,EI.wing)
-        CON(ui.swordB,EI.sword)
-        CON(ui.axeB1,EI.axe)
-        CON(ui.axeB2,EI.axe)
-        CON(ui.spearB,EI.spear)
-        CON(ui.maceB,EI.mase)
-        CON(ui.tridentB,EI.trident)
-        CON(ui.shieldB,EI.shield)
-        CON(ui.crossbowB,EI.crossbow)
-        CON(ui.bowB,EI.bow)
-        CON(ui.pickaxeB,EI.pickaxe)
-        CON(ui.shovelB,EI.shovel)
-        CON(ui.hoeB,EI.hoe)
-        CON(ui.shearsB,EI.shears)
-        CON(ui.flientSteelB,EI.other)
+        return [
+            [ui.hatB,EI.hat],
+            [ui.clothB,EI.cloth],
+            [ui.pantsB,EI.pants],
+            [ui.shoesB,EI.shoes],
+            [ui.wingB,EI.wing],
+            [ui.swordB,EI.sword],
+            [ui.axeB1,EI.axe],
+            [ui.axeB2,EI.axe],
+            [ui.spearB,EI.spear],
+            [ui.maceB,EI.mase],
+            [ui.tridentB,EI.trident],
+            [ui.shieldB,EI.shield],
+            [ui.crossbowB,EI.crossbow],
+            [ui.bowB,EI.bow],
+            [ui.pickaxeB,EI.pickaxe],
+            [ui.shovelB,EI.shovel],
+            [ui.hoeB,EI.hoe],
+            [ui.shearsB,EI.shears],
+            [ui.flientSteelB,EI.other]
+        ]
     def mankAnvilLabel(self,label:QLabel):
         """all this for a joke lmao"""
         soundDir = ":/Sound/sounds/"
@@ -120,6 +120,37 @@ class saveTableControler:
         self.table.setItem(row,1, dateObj)
         self.table.setItem(row,2, nameObj)
         self.table.resizeRowsToContents()
+
+class equipmentSelectionControler:
+    def __init__(self,buttons:list[list[QPushButton,Enum]],enchTable:"enchTableControler"):
+        self.buttons = []
+        self.enchTable = enchTable
+        self.theChosenOne:QPushButton = None
+        for button,item in buttons:
+            button:QPushButton;item:Enum
+            # print(f"connecting {button.objectName()} for {item.value}")
+            self.buttons.append(button)
+            button.mousePressEvent = lambda e, b=button, i=item: self.buttonAction(b,i)
+            button.mouseDoubleClickEvent = lambda e, b=button, i=item: self.buttonAction(b,i)
+
+    def buttonAction(self,button:QPushButton,item:Enum):
+        def repolish(b:QPushButton):
+            # QT jank
+            b.style().unpolish(b)
+            b.style().polish(b)
+            b.update()
+        if self.theChosenOne != None: # unchoosing chosen one:sob:
+            self.theChosenOne.setProperty("chosenOne",False)
+            repolish(self.theChosenOne)
+        if button != self.theChosenOne:
+            button.setProperty("chosenOne",True)
+            repolish(button)
+            self.theChosenOne = button
+            self.enchTable.populateFromNewItem(item)
+        else:
+            self.theChosenOne = None
+            self.enchTable.clearItem()
+
 
 class enchTableControler:
     def __init__(self, table:QTableView):
