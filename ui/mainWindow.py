@@ -209,7 +209,7 @@ class EnchTableModel(QAbstractTableModel):
         selected,fromOneUp,ench,lvl,mutex = self._data[row]
         selected:bool;fromOneUp:bool;ench:Ench;lvl:int;mutex:list[Ench]
         if role == Qt.ItemDataRole.DisplayRole:
-            if col == self.NAME_COL: return ench.names[0]
+            if col == self.NAME_COL: return ench.names[0].replace(" ","\n")
             if col == self.LEVEL_COL: return getRomanNum(lvl)
         if role == Qt.ItemDataRole.CheckStateRole:
             if col == self.SELECTED_COL: return Qt.CheckState.Checked if selected else Qt.CheckState.Unchecked

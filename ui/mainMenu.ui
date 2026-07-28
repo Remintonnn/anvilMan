@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
+    <width>910</width>
     <height>862</height>
    </rect>
   </property>
@@ -82,9 +82,16 @@ QTableView {
 
 QTableView:disabled {
     border: 2px solid #333333;
+	border-radius: 0px;
+}QHeaderView:disabled{
+	border:none;
 }QHeaderView::section:disabled {
 	color: #454545;
+	background-color: #202020;
+	border:none;
     border-right: 1px solid #333333;
+	font: 10pt &quot;OCR A Extended&quot;;
+	font-weight: bold;
 }
 
 QScrollBar:vertical {
@@ -1122,7 +1129,7 @@ QPushButton:hover {
      <rect>
       <x>610</x>
       <y>10</y>
-      <width>281</width>
+      <width>291</width>
       <height>821</height>
      </rect>
     </property>
@@ -1156,7 +1163,7 @@ QPushButton:hover {
       <rect>
        <x>10</x>
        <y>38</y>
-       <width>261</width>
+       <width>271</width>
        <height>736</height>
       </rect>
      </property>
@@ -1213,9 +1220,9 @@ QPushButton:hover {
     <widget class="QPushButton" name="generatePendingBookButton">
      <property name="geometry">
       <rect>
-       <x>130</x>
+       <x>120</x>
        <y>780</y>
-       <width>141</width>
+       <width>161</width>
        <height>31</height>
       </rect>
      </property>
@@ -1470,7 +1477,7 @@ QPushButton:disabled{
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>900</width>
+     <width>910</width>
      <height>21</height>
     </rect>
    </property>

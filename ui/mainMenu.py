@@ -27,7 +27,7 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(900, 862)
+        MainWindow.resize(910, 862)
         font = QFont()
         font.setBold(False)
         MainWindow.setFont(font)
@@ -89,9 +89,16 @@ class Ui_MainWindow(object):
 "\n"
 "QTableView:disabled {\n"
 "    border: 2px solid #333333;\n"
+"	border-radius: 0px;\n"
+"}QHeaderView:disabled{\n"
+"	border:none;\n"
 "}QHeaderView::section:disabled {\n"
 "	color: #454545;\n"
+"	background-color: #202020;\n"
+"	border:none;\n"
 "    border-right: 1px solid #333333;\n"
+"	font: 10pt \"OCR A Extended\";\n"
+"	font-weight: bold;\n"
 "}\n"
 "\n"
 "QScrollBar:vertical {\n"
@@ -108,11 +115,11 @@ class Ui_MainWindow(object):
 "    height: 13px;\n"
 "    subcontrol-origin: margin;\n"
 "	border: 2px solid #676767;\n"
-" 	margin: 1px 1px 1px 1px;\n"
+" 	margin: 1p"
+                        "x 1px 1px 1px;\n"
 "}QScrollBar::add-line:hover, QScrollBar::sub-line:hover{background-color: #555555;}\n"
 "QScrollBar::up-arrow:vertical {image: url(:/UI/upArrow.png);}\n"
-"QScroll"
-                        "Bar::down-arrow:vertical {image: url(:/UI/downArrow.png);}\n"
+"QScrollBar::down-arrow:vertical {image: url(:/UI/downArrow.png);}\n"
 "\n"
 "QScrollBar[grayOut=true]::handle:vertical {\n"
 "    background-color: #252525;\n"
@@ -139,7 +146,8 @@ class Ui_MainWindow(object):
 "	color: #FFFFFF;\n"
 "}\n"
 "QPlainTextEdit:disabled{\n"
-"	border: 2px solid #181818;\n"
+"	border: 2px s"
+                        "olid #181818;\n"
 "	color: #676767;\n"
 "}\n"
 "\n"
@@ -147,8 +155,7 @@ class Ui_MainWindow(object):
 "    background-color: #222222;\n"
 "    color: #FFFFFF;\n"
 "    border-radius: 4px;\n"
-"	border: 2px solid #50505"
-                        "0;\n"
+"	border: 2px solid #505050;\n"
 "}QPushButton:hover {\n"
 "	background-color: #565656;\n"
 "	border: 2px solid #878787;\n"
@@ -477,7 +484,7 @@ class Ui_MainWindow(object):
         self.enchSelFrame = QFrame(self.centralWidget)
         self.enchSelFrame.setObjectName(u"enchSelFrame")
         self.enchSelFrame.setEnabled(True)
-        self.enchSelFrame.setGeometry(QRect(610, 10, 281, 821))
+        self.enchSelFrame.setGeometry(QRect(610, 10, 291, 821))
         self.enchSelFrame.setStyleSheet(u"")
         self.enchSelFrame.setFrameShape(QFrame.StyledPanel)
         self.enchSelFrame.setFrameShadow(QFrame.Raised)
@@ -487,7 +494,7 @@ class Ui_MainWindow(object):
         self.enchSelTitleLabel.setGeometry(QRect(10, 10, 111, 23))
         self.enchTable = QTableView(self.enchSelFrame)
         self.enchTable.setObjectName(u"enchTable")
-        self.enchTable.setGeometry(QRect(10, 38, 261, 736))
+        self.enchTable.setGeometry(QRect(10, 38, 271, 736))
         font3 = QFont()
         font3.setFamilies([u"Noto Serif"])
         font3.setPointSize(12)
@@ -512,7 +519,7 @@ class Ui_MainWindow(object):
         self.enchTable.verticalHeader().setVisible(False)
         self.generatePendingBookButton = QPushButton(self.enchSelFrame)
         self.generatePendingBookButton.setObjectName(u"generatePendingBookButton")
-        self.generatePendingBookButton.setGeometry(QRect(130, 780, 141, 31))
+        self.generatePendingBookButton.setGeometry(QRect(120, 780, 161, 31))
         self.generatePendingBookButton.setFont(font2)
         self.generatePendingBookButton.setFocusPolicy(Qt.NoFocus)
         self.generatePendingBookButton.setStyleSheet(u"QPushButton{\n"
@@ -607,7 +614,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralWidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 900, 21))
+        self.menubar.setGeometry(QRect(0, 0, 910, 21))
         self.manual = QMenu(self.menubar)
         self.manual.setObjectName(u"manual")
         MainWindow.setMenuBar(self.menubar)
