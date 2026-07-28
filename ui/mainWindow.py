@@ -1,11 +1,13 @@
 import ctypes
 import random
+from enum import Enum
 
 import hmmm_rc as resource
 from calc.enchantments import Enchantment as Ench
 from calc.enchantments import enchantments as enchs # not cap cuz it's an instance
 from calc.enchantments import EnchantmentId as EnchId
 from calc.enchantments import EnchantmentTags as EnchTag
+from calc.enchantments import EnchantableItems as EnchItems
 from ui.mainMenu import Ui_MainWindow
 
 from PySide6.QtCore import Qt, QUrl, QDir, QTimer, QAbstractTableModel, QModelIndex, QEvent
@@ -29,11 +31,34 @@ class MainWindow(QMainWindow):
         self.pendingTable = pendingTableControler(self.ui.pendingBookTable)
 
         self.mankAnvilLabel(self.ui.titleLabel)
+        self.connectEquSelectButtons()
 
-        self.ui.hatB.clicked.connect(self.test)
-        self.ui.clothB.clicked.connect(lambda: self.enchTable.clearItem())
+        # self.ui.hatB.clicked.connect(self.test)
+        # self.ui.clothB.clicked.connect(lambda: self.enchTable.clearItem())
 
-    def mankAnvilLabel(label:QLabel):
+    def connectEquSelectButtons(self):
+        def CON(button:QPushButton,item:Enum): button.clicked.connect(lambda:self.enchTable.populateFromNewItem(item))
+        ui = self.ui; EI = EnchItems
+        CON(ui.hatB,EI.hat)
+        CON(ui.clothB,EI.cloth)
+        CON(ui.pantsB,EI.pants)
+        CON(ui.shoesB,EI.shoes)
+        CON(ui.wingB,EI.wing)
+        CON(ui.swordB,EI.sword)
+        CON(ui.axeB1,EI.axe)
+        CON(ui.axeB2,EI.axe)
+        CON(ui.spearB,EI.spear)
+        CON(ui.maceB,EI.mase)
+        CON(ui.tridentB,EI.trident)
+        CON(ui.shieldB,EI.shield)
+        CON(ui.crossbowB,EI.crossbow)
+        CON(ui.bowB,EI.bow)
+        CON(ui.pickaxeB,EI.pickaxe)
+        CON(ui.shovelB,EI.shovel)
+        CON(ui.hoeB,EI.hoe)
+        CON(ui.shearsB,EI.shears)
+        CON(ui.flientSteelB,EI.other)
+    def mankAnvilLabel(self,label:QLabel):
         """all this for a joke lmao"""
         soundDir = ":/Sound/sounds/"
         anvilSounds:list[QSoundEffect] = []; noAnvilSounds:list[QSoundEffect] = []
@@ -115,6 +140,12 @@ class enchTableControler:
         # print(table.columnWidth(2)) -> 89
         table.setColumnWidth(3, 55)
         table.verticalHeader().hide()
+
+    def populateFromNewItem(self,item:Enum):
+        self.clearItem()
+        for ID, ench in enchs.dict.items():
+            if ench.isCompatibleWith(item):
+                self.addItem(ench)
 
     def addItem(self, ench:Ench):
         self.model.addItem(ench)
