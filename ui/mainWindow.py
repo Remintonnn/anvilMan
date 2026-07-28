@@ -1,6 +1,5 @@
 import ctypes
 import random
-import time
 
 import hmmm_rc as resource
 from calc.enchantments import Enchantment as Ench
@@ -9,7 +8,7 @@ from calc.enchantments import EnchantmentId as EnchId
 from calc.enchantments import EnchantmentTags as EnchTag
 from ui.mainMenu import Ui_MainWindow
 
-from PySide6.QtCore import Qt, QUrl, QDir, QTimer
+from PySide6.QtCore import Qt, QUrl, QDir, QTimer, QAbstractTableModel, QModelIndex, QEvent
 from PySide6.QtWidgets import * # QApplication, QStyleFactory, QHeaderView, QTableWidgetItem
 from PySide6.QtUiTools import * # QUiLoader
 from PySide6.QtGui import * # QIcon
@@ -29,38 +28,10 @@ class MainWindow(QMainWindow):
         self.enchTable = enchTableControler(self.ui.enchTable)
         self.pendingTable = pendingTableControler(self.ui.pendingBookTable)
 
-        # all this for a joke lmao
-        soundDir = ":/Sound/sounds/"
-        anvilSounds:list[QSoundEffect] = []; noAnvilSounds:list[QSoundEffect] = []
-        anvilUsed = 0; anvilLife = 5
-        anvilCDTimer = QTimer(); anvilCDTimer.setSingleShot(True)
-        anvilCDTimer.timeout.connect(lambda:self.ui.titleLabel.setEnabled(True))
-        for file in QDir(soundDir).entryList():
-            sound = QSoundEffect(source=QUrl("qrc"+soundDir+file)) # qrc is necessary here
-            if file.startswith("anvil"):
-                anvilSounds.append(sound)
-                if file != "anvilD3.wav": anvilSounds.append(sound) # less *DEEP* sound
-            elif file.startswith("noAnvil"): noAnvilSounds.append(sound)
-        def playAnvil(e):
-            nonlocal anvilUsed, anvilLife
-            if anvilUsed >= 16:
-                random.choice(noAnvilSounds).play()
-                anvilUsed = 0
-                self.ui.titleLabel.setEnabled(False)
-                if anvilLife <= 1:
-                    oldFont = self.ui.titleLabel.font()
-                    oldFont.setPointSize(17)
-                    self.ui.titleLabel.setText("AIN'T NO FUCKING WAY")
-                    self.ui.titleLabel.setFont(oldFont)
-                else:
-                    anvilCDTimer.start(6767)
-                    anvilLife -= 1
-                return
-            random.choice(anvilSounds).play()
-            anvilUsed += 1
-        self.ui.titleLabel.mousePressEvent = playAnvil
+        mankAnvilLabel(self.ui.titleLabel)
 
         self.ui.hatB.clicked.connect(self.test)
+        self.ui.clothB.clicked.connect(lambda: self.enchTable.clearItem())
 
 
     def test(self):
@@ -98,79 +69,119 @@ class saveTableControler:
         self.table.resizeRowsToContents()
 
 class enchTableControler:
-    def __init__(self, table:QTableWidget):
-        PMS = 16
-        self.__CHECKED__ = QIcon(":/UI/checked.png").pixmap(PMS,PMS)
-        self.__UNCHECKED__ = QIcon(":/UI/unChecked.png").pixmap(PMS,PMS)
+    def __init__(self, table:QTableView):
         self.table = table
+        self.model = EnchTableModel()
+        table.setModel(self.model)
+        delegate = CheckBoxDelegate()
+        table.setItemDelegateForColumn(0, delegate)
+        table.setItemDelegateForColumn(1, delegate)
+        
+        
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
         table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
         table.setColumnWidth(0, 35)
         table.setColumnWidth(1, 59)
         # print(table.columnWidth(2)) -> 89
         table.setColumnWidth(3, 55)
-        # self.table.cellClicked only emit event on mouse UP instead of DOWN, which feels terrible
-        # cellDoubleClicked is called on mouse DOWN
-        self.table.cellPressed.connect(self.onCellClicked)
-        self.table.cellDoubleClicked.connect(self.onCellClicked)
+        table.verticalHeader().hide()
 
     def addItem(self, ench:Ench):
-        row = self.table.rowCount()
-        self.table.insertRow(row)
-
-        # the build in check box and QCheck box has a problem where
-        # the click is only registerted when mouse been pressed DOWN then UP at the check box
-        # which can cause the click to not reg if your mouse is moving, which is annoying
-        # also centering the build in one requires you to write a delegate youself
-
-        # selContainter = QWidget()
-        # selCB = QCheckBox()
-        # selCB.checkStateChanged.connect(lambda state: self.onEnchSel(state,ench))
-        # selLayout = QHBoxLayout(selContainter)
-        # selLayout.addWidget(selCB)
-        # selLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # selLayout.setContentsMargins(0,0,0,0)
-
-        # selCB = QTableWidgetItem()
-        # selCB.setCheckState(Qt.CheckState.Unchecked)
-
-        selCB = QLabel()
-        selCB.setStyleSheet("background: transparent; border: none;")
-        selCB.setProperty("checked", False)
-        selCB.setProperty("ench", ench)
-        selCB.setPixmap(self.__UNCHECKED__)
-        selCB.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        fromOneUpCB = QLabel()
-        fromOneUpCB.setStyleSheet("background: transparent; border: none;")
-        fromOneUpCB.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        isBud = EnchTag.catBud in ench.tags
-        fromOneUpCB.setProperty("checked", isBud)
-        fromOneUpCB.setPixmap(self.__CHECKED__ if isBud else self.__UNCHECKED__)
-        
-        nameObj = QTableWidgetItem(ench.names[0])
-        nameObj.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-        lvlObj = QTableWidgetItem(getRomanNum(ench.maxlvl))
-        lvlObj.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.table.setCellWidget(row,0, selCB)
-        self.table.setCellWidget(row,1, fromOneUpCB)
-        self.table.setItem(row,2, nameObj)
-        self.table.setItem(row,3, lvlObj)
+        self.model.addItem(ench)
         self.table.resizeRowsToContents()
+    def clearItem(self): self.model.clearData()
+class EnchTableModel(QAbstractTableModel):
+    # Mutex column doesn't exist because yes
+    SELECTED_COL, FROMONEUP_COL, NAME_COL, LEVEL_COL, MUTEX_COL = [0,1,2,3,4]
+    HEADERS = ["選取","從I打起","名稱","目標等級"]
+    ConflictedRole = Qt.ItemDataRole.UserRole+1
 
-    def onCellClicked(self,row,column):
-        if column in (0,1):
-            cell:QLabel = self.table.cellWidget(row, column)
-            cellState:bool = cell.property("checked")
-            cell.setProperty("checked", not cellState)
-            cell.setPixmap(self.__UNCHECKED__ if cellState else self.__CHECKED__)
-            if column != 0: return
-            ench:Ench = cell.property("ench")
-            global aGlobal
-            print("clikie "+ str(aGlobal) + " for " + ench.names[0])
-            print(f"state now: {not cellState}")
-            aGlobal += 1
+    def __init__(self):
+        super().__init__()
+        self._data = []
+
+    def addItem(self,ench:Ench,selected=None,fromOneUp=None,lvl=None):
+        row = self.rowCount()
+        self.beginInsertRows(QModelIndex(), row, row)
+        if selected is None: selected = False
+        if fromOneUp is None: fromOneUp = EnchTag.catBud in ench.tags
+        if lvl is None: lvl = ench.maxlvl
+        self._data.append([selected,fromOneUp,ench,lvl,[]])
+        self.endInsertRows()
+    def clearData(self):
+        self.beginResetModel()
+        self._data.clear()
+        self.endResetModel()
+
+    def data(self, index:QModelIndex, role:Qt.ItemDataRole):
+        col, row = index.column(),index.row()
+        selected,fromOneUp,ench,lvl,mutex = self._data[row]
+        selected:bool;fromOneUp:bool;ench:Ench;lvl:int;mutex:list[Ench]
+        if role == Qt.ItemDataRole.DisplayRole:
+            if col == self.NAME_COL: return ench.names[0]
+            if col == self.LEVEL_COL: return getRomanNum(lvl)
+        if role == Qt.ItemDataRole.CheckStateRole:
+            if col == self.SELECTED_COL: return Qt.CheckState.Checked if selected else Qt.CheckState.Unchecked
+            if col == self.FROMONEUP_COL: return Qt.CheckState.Checked if fromOneUp else Qt.CheckState.Unchecked
+        if role == Qt.ItemDataRole.ForegroundRole:
+            if len(mutex) != 0: return QColor("#676767")
+            if fromOneUp: return QColor("#FFA600")
+        if role == Qt.ItemDataRole.TextAlignmentRole: return Qt.AlignmentFlag.AlignCenter
+        if role == self.ConflictedRole: return len(mutex)==0
+    def setData(self, index, value, /, role = ...):
+        col, row = index.column(),index.row()
+        if role == Qt.ItemDataRole.CheckStateRole:
+            if col not in (self.SELECTED_COL,self.FROMONEUP_COL): return False
+            self._data[row][col] = value==Qt.CheckState.Checked
+
+            self.dataChanged.emit(
+                self.index(row, 2), 
+                self.index(row, 3), # This is a range
+                [
+                    Qt.ItemDataRole.CheckStateRole,
+                    Qt.ItemDataRole.ForegroundRole,
+                    Qt.ItemDataRole.DisplayRole,
+                ]
+            )
+            return True
+        return False
+
+    def flags(self, index):
+        flags = Qt.ItemFlag.ItemIsEnabled
+        if index.column() in (0,1): flags |= Qt.ItemFlag.ItemIsUserCheckable
+        return flags
+
+    def rowCount(self, index=0): return len(self._data)
+    def columnCount(self, index=0): return 4
+    def headerData(self, section, orientation, role):
+        # section is the index of the column/row.
+        if role != Qt.ItemDataRole.DisplayRole: return
+        if orientation == Qt.Vertical: return
+        if orientation == Qt.Horizontal:
+            return str(self.HEADERS[section])
+class CheckBoxDelegate(QStyledItemDelegate):
+    def __init__(self):
+        super().__init__()
+        self.checked = QIcon(":/UI/checked.png").pixmap(16,16)
+        self.unchecked = QIcon(":/UI/unChecked.png").pixmap(16,16)
+
+    def paint(self, painter, option, index):
+        if index.column() not in (0,1): super().paint(painter, option, index); return
+        checkState = index.data(Qt.ItemDataRole.CheckStateRole) == Qt.CheckState.Checked
+        conflicted = index.data(EnchTableModel.ConflictedRole)
+        pix = self.checked if checkState else self.unchecked
+        x = option.rect.center().x() - pix.width()//2
+        y = option.rect.center().y() - pix.height()//2
+        painter.drawPixmap(x,y,pix)
+
+    def editorEvent(self, event, model, option, index):
+        # MouseButtonDoubleClick is called on the second mouse DOWN
+        if event.type() in (QEvent.Type.MouseButtonPress,QEvent.Type.MouseButtonDblClick):
+            checkState = index.data(Qt.CheckStateRole)==Qt.CheckState.Checked
+            model.setData(index, Qt.CheckState.Unchecked if checkState else Qt.CheckState.Checked, Qt.ItemDataRole.CheckStateRole)
+            return True
+        return False
+
 
 class pendingTableControler:
     def __init__(self, table:QTableWidget):
@@ -194,6 +205,37 @@ def tryGetDarkTitleBar(window, dark=True):
         )
     except Exception as e:
         print(f"Unable to set window frame theme: {e}")
+def mankAnvilLabel(label:QLabel):
+    """all this for a joke lmao"""
+    soundDir = ":/Sound/sounds/"
+    anvilSounds:list[QSoundEffect] = []; noAnvilSounds:list[QSoundEffect] = []
+    anvilUsed = 0; anvilLife = 5
+    anvilCDTimer = QTimer(); anvilCDTimer.setSingleShot(True)
+    anvilCDTimer.timeout.connect(lambda:label.setEnabled(True))
+    for file in QDir(soundDir).entryList():
+        sound = QSoundEffect(source=QUrl("qrc"+soundDir+file)) # qrc is necessary here
+        if file.startswith("anvil"):
+            anvilSounds.append(sound)
+            if file != "anvilD3.wav": anvilSounds.append(sound) # less *DEEP* sound
+        elif file.startswith("noAnvil"): noAnvilSounds.append(sound)
+    def playAnvil(e):
+        nonlocal anvilUsed, anvilLife
+        if anvilUsed >= 16:
+            random.choice(noAnvilSounds).play()
+            anvilUsed = 0
+            label.setEnabled(False)
+            if anvilLife <= 1:
+                oldFont = label.font()
+                oldFont.setPointSize(17)
+                label.setText("AIN'T NO FUCKING WAY")
+                label.setFont(oldFont)
+            else:
+                anvilCDTimer.start(6767)
+                anvilLife -= 1
+            return
+        random.choice(anvilSounds).play()
+        anvilUsed += 1
+    label.mousePressEvent = playAnvil
 
 def getRomanNum(n):
     """up to 10 cuz lazy"""

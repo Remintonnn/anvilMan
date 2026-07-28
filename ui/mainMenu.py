@@ -18,8 +18,8 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QTransform)
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QFrame, QHeaderView,
     QLabel, QMainWindow, QMenu, QMenuBar,
-    QPlainTextEdit, QPushButton, QSizePolicy, QTableWidget,
-    QTableWidgetItem, QWidget)
+    QPlainTextEdit, QPushButton, QSizePolicy, QTableView,
+    QTableWidget, QTableWidgetItem, QWidget)
 import hmmm_rc
 
 class Ui_MainWindow(object):
@@ -56,45 +56,16 @@ class Ui_MainWindow(object):
 "    color: white;\n"
 "}\n"
 "\n"
-"QTableWidget {\n"
+"QTableView {\n"
 "    background-color: #202020;\n"
-"	alternate-background-color:#3b1500;\n"
-"    border-radius:0px;\n"
+"    alternate-background-color: #3b1500;\n"
+"    border-radius: 0px;\n"
 "    border: 2px solid #676767;\n"
-"	gridline-color: #454545;\n"
-"	color: #FFFFFF\n"
-"}QTableWidget::item:hover {\n"
+"    gridline-color: #454545;\n"
+"    color: #FFFFFF;\n"
+"}QTableView::item:hover {\n"
 "    background-color: #333333;\n"
-"	alternate-background-color:#FF0000;\n"
-"}QTableWidget::item:selected:active {\n"
-"    background-color: #878787;\n"
-"    color: white;\n"
-"}QHeaderView{\n"
-"	border:none;\n"
-"}QHeaderView::section {\n"
-"	background-color: #333333;\n"
-"	color: #FFFFFF;\n"
-"	border:none;\n"
-"    border-right: 1px solid #676767;\n"
-""
-                        "	font: 10pt \"OCR A Extended\";\n"
-"	font-weight: bold;\n"
-"}\n"
-"/*\n"
-"QTableWidget {\n"
-"    background-color: #202020;\n"
-"	alternate-background-color:#e31500;\n"
-"    border-radius:0px;\n"
-"    border: 2px solid #676767;\n"
-"	gridline-color: #454545;\n"
-"	color: #FFFFFF\n"
-"}QTableWidget::item, QTableWidget::item:selected:!active{\n"
-"	alternate-background-color:#e31500;\n"
-"	background-color: #202020;\n"
-" 	color: white;\n"
-"}QTableWidget::item:hover {\n"
-"    background-color: #333333;\n"
-"}QTableWidget::item:selected:active {\n"
+"}QTableView::item:selected:active {\n"
 "    background-color: #878787;\n"
 "    color: white;\n"
 "}QHeaderView{\n"
@@ -105,17 +76,16 @@ class Ui_MainWindow(object):
 "	border:none;\n"
 "    border-right: 1px solid #676767;\n"
 "	font: 10pt \"OCR A Extended\";\n"
-"	font-weight: bold;\n"
+""
+                        "	font-weight: bold;\n"
 "}\n"
-"*/\n"
 "\n"
 "QScrollBar:vertical {\n"
 "    background-color: #222222;\n"
 "    width: 19px;\n"
 "    margin: 19px 1px 19px 1px;\n"
 "}QScrollBar::handle:vertical {\n"
-"    background-col"
-                        "or: #444444;\n"
+"    background-color: #444444;\n"
 "    min-height: 20px;\n"
 "    border-radius: 0px;\n"
 "}QScrollBar::handle:hover {background-color: #777777;}\n"
@@ -140,7 +110,8 @@ class Ui_MainWindow(object):
 "QPlainTextEdit{\n"
 "	border-radius: 0px;\n"
 "	border: 2px solid #676767;\n"
-"	color: #FFFFFF;\n"
+"	color: #FFFFFF;"
+                        "\n"
 "}\n"
 "QPlainTextEdit:disabled{\n"
 "	border: 2px solid #181818;\n"
@@ -151,8 +122,7 @@ class Ui_MainWindow(object):
 "    background-color: #222222;\n"
 "    color: #FFFFFF;\n"
 "    border-radius: 4px;\n"
-""
-                        "	border: 2px solid #505050;\n"
+"	border: 2px solid #505050;\n"
 "}\n"
 "QPushButton:hover {\n"
 "	background-color: #565656;\n"
@@ -450,30 +420,20 @@ class Ui_MainWindow(object):
         self.enchSelTitleLabel = QLabel(self.enchSelFrame)
         self.enchSelTitleLabel.setObjectName(u"enchSelTitleLabel")
         self.enchSelTitleLabel.setGeometry(QRect(10, 10, 111, 23))
-        self.enchTable = QTableWidget(self.enchSelFrame)
-        if (self.enchTable.columnCount() < 4):
-            self.enchTable.setColumnCount(4)
-        __qtablewidgetitem3 = QTableWidgetItem()
-        self.enchTable.setHorizontalHeaderItem(0, __qtablewidgetitem3)
-        __qtablewidgetitem4 = QTableWidgetItem()
-        self.enchTable.setHorizontalHeaderItem(1, __qtablewidgetitem4)
-        __qtablewidgetitem5 = QTableWidgetItem()
-        self.enchTable.setHorizontalHeaderItem(2, __qtablewidgetitem5)
-        __qtablewidgetitem6 = QTableWidgetItem()
-        self.enchTable.setHorizontalHeaderItem(3, __qtablewidgetitem6)
+        self.enchTable = QTableView(self.enchSelFrame)
         self.enchTable.setObjectName(u"enchTable")
         self.enchTable.setGeometry(QRect(10, 38, 261, 726))
         font3 = QFont()
-        font3.setFamilies([u"OCR A Extended"])
+        font3.setFamilies([u"Noto Serif"])
         font3.setPointSize(12)
         font3.setBold(False)
         font3.setItalic(False)
         self.enchTable.setFont(font3)
         self.enchTable.setFocusPolicy(Qt.NoFocus)
-        self.enchTable.setStyleSheet(u"QTableWidget{\n"
-"	font: 12pt \"OCR A Extended\";\n"
-"}QTableWidget::item{\n"
-"	padding: 5px 0px 4px 0px;\n"
+        self.enchTable.setStyleSheet(u"QTableView{\n"
+"	font: 12pt \"Noto Serif\";\n"
+"}QTableView::item{\n"
+"	padding: 2px 0px 1px 0px;\n"
 "}")
         self.enchTable.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.enchTable.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -484,10 +444,6 @@ class Ui_MainWindow(object):
         self.enchTable.setAlternatingRowColors(False)
         self.enchTable.setSelectionMode(QAbstractItemView.NoSelection)
         self.enchTable.setGridStyle(Qt.SolidLine)
-        self.enchTable.setRowCount(0)
-        self.enchTable.horizontalHeader().setVisible(True)
-        self.enchTable.horizontalHeader().setCascadingSectionResizes(False)
-        self.enchTable.horizontalHeader().setDefaultSectionSize(60)
         self.enchTable.verticalHeader().setVisible(False)
         self.generatePendingBookButton = QPushButton(self.enchSelFrame)
         self.generatePendingBookButton.setObjectName(u"generatePendingBookButton")
@@ -520,12 +476,12 @@ class Ui_MainWindow(object):
         self.pendingBookTable = QTableWidget(self.pendingBookFram)
         if (self.pendingBookTable.columnCount() < 3):
             self.pendingBookTable.setColumnCount(3)
-        __qtablewidgetitem7 = QTableWidgetItem()
-        self.pendingBookTable.setHorizontalHeaderItem(0, __qtablewidgetitem7)
-        __qtablewidgetitem8 = QTableWidgetItem()
-        self.pendingBookTable.setHorizontalHeaderItem(1, __qtablewidgetitem8)
-        __qtablewidgetitem9 = QTableWidgetItem()
-        self.pendingBookTable.setHorizontalHeaderItem(2, __qtablewidgetitem9)
+        __qtablewidgetitem3 = QTableWidgetItem()
+        self.pendingBookTable.setHorizontalHeaderItem(0, __qtablewidgetitem3)
+        __qtablewidgetitem4 = QTableWidgetItem()
+        self.pendingBookTable.setHorizontalHeaderItem(1, __qtablewidgetitem4)
+        __qtablewidgetitem5 = QTableWidgetItem()
+        self.pendingBookTable.setHorizontalHeaderItem(2, __qtablewidgetitem5)
         self.pendingBookTable.setObjectName(u"pendingBookTable")
         self.pendingBookTable.setGeometry(QRect(10, 38, 571, 316))
         self.pendingBookTable.setStyleSheet(u"")
@@ -695,22 +651,14 @@ class Ui_MainWindow(object):
         self.saveLoadButton.setStyleSheet("")
         self.saveLoadButton.setText(QCoreApplication.translate("MainWindow", u"\u8f09\u5165", None))
         self.enchSelTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt;\">\u9078\u64c7\u76ee\u6a19\u9644\u9b54</span></p></body></html>", None))
-        ___qtablewidgetitem3 = self.enchTable.horizontalHeaderItem(0)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"\u9078\u53d6", None))
-        ___qtablewidgetitem4 = self.enchTable.horizontalHeaderItem(1)
-        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"\u5f9eI\u6253\u8d77", None))
-        ___qtablewidgetitem5 = self.enchTable.horizontalHeaderItem(2)
-        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"\u540d\u7a31", None))
-        ___qtablewidgetitem6 = self.enchTable.horizontalHeaderItem(3)
-        ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"\u76ee\u6a19\u7b49\u7d1a", None))
         self.generatePendingBookButton.setText(QCoreApplication.translate("MainWindow", u"\u751f\u6210\u9644\u9b54\u66f8\u7d44\u5408", None))
         self.pendingBookTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt;\">\u5408\u6210\u5167\u5bb9\u9810\u89bd</span></p></body></html>", None))
-        ___qtablewidgetitem7 = self.pendingBookTable.horizontalHeaderItem(0)
-        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"\u5167\u542b\u9644\u9b54", None))
-        ___qtablewidgetitem8 = self.pendingBookTable.horizontalHeaderItem(1)
-        ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"\u61f2\u7f70\u7b49\u7d1a", None))
-        ___qtablewidgetitem9 = self.pendingBookTable.horizontalHeaderItem(2)
-        ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"\u6578\u91cf\u793a\u610f\u5716", None))
+        ___qtablewidgetitem3 = self.pendingBookTable.horizontalHeaderItem(0)
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"\u5167\u542b\u9644\u9b54", None))
+        ___qtablewidgetitem4 = self.pendingBookTable.horizontalHeaderItem(1)
+        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"\u61f2\u7f70\u7b49\u7d1a", None))
+        ___qtablewidgetitem5 = self.pendingBookTable.horizontalHeaderItem(2)
+        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"\u6578\u91cf\u793a\u610f\u5716", None))
         self.calculateInstructionButton.setText(QCoreApplication.translate("MainWindow", u"\u8a08\u7b97\u7d44\u5408\u65b9\u5f0f", None))
         self.pendingBookAdvencedEditButton.setText(QCoreApplication.translate("MainWindow", u"\u9032\u968e\u7de8\u8f2f", None))
         self.saveButton.setText(QCoreApplication.translate("MainWindow", u"\u5132\u5b58", None))

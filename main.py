@@ -21,8 +21,6 @@ def main():
 
 main()
 
-# TODO: enchTable data obj
-# TODO: ebchTable data update
 # TODO: equ select enchTable population
 # TODO: ench conflict logic
 # TODO: enchTable lvl scroll edit

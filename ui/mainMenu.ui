@@ -50,17 +50,16 @@ QMenuBar {
     color: white;
 }
 
-QTableWidget {
+QTableView {
     background-color: #202020;
-	alternate-background-color:#3b1500;
-    border-radius:0px;
+    alternate-background-color: #3b1500;
+    border-radius: 0px;
     border: 2px solid #676767;
-	gridline-color: #454545;
-	color: #FFFFFF
-}QTableWidget::item:hover {
+    gridline-color: #454545;
+    color: #FFFFFF;
+}QTableView::item:hover {
     background-color: #333333;
-	alternate-background-color:#FF0000;
-}QTableWidget::item:selected:active {
+}QTableView::item:selected:active {
     background-color: #878787;
     color: white;
 }QHeaderView{
@@ -73,34 +72,6 @@ QTableWidget {
 	font: 10pt &quot;OCR A Extended&quot;;
 	font-weight: bold;
 }
-/*
-QTableWidget {
-    background-color: #202020;
-	alternate-background-color:#e31500;
-    border-radius:0px;
-    border: 2px solid #676767;
-	gridline-color: #454545;
-	color: #FFFFFF
-}QTableWidget::item, QTableWidget::item:selected:!active{
-	alternate-background-color:#e31500;
-	background-color: #202020;
- 	color: white;
-}QTableWidget::item:hover {
-    background-color: #333333;
-}QTableWidget::item:selected:active {
-    background-color: #878787;
-    color: white;
-}QHeaderView{
-	border:none;
-}QHeaderView::section {
-	background-color: #333333;
-	color: #FFFFFF;
-	border:none;
-    border-right: 1px solid #676767;
-	font: 10pt &quot;OCR A Extended&quot;;
-	font-weight: bold;
-}
-*/
 
 QScrollBar:vertical {
     background-color: #222222;
@@ -1074,7 +1045,7 @@ QPushButton:hover {
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;選擇目標附魔&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="enchTable">
+    <widget class="QTableView" name="enchTable">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -1085,7 +1056,7 @@ QPushButton:hover {
      </property>
      <property name="font">
       <font>
-       <family>OCR A Extended</family>
+       <family>Noto Serif</family>
        <pointsize>12</pointsize>
        <weight>50</weight>
        <italic>false</italic>
@@ -1096,10 +1067,10 @@ QPushButton:hover {
       <enum>Qt::NoFocus</enum>
      </property>
      <property name="styleSheet">
-      <string notr="true">QTableWidget{
-	font: 12pt &quot;OCR A Extended&quot;;
-}QTableWidget::item{
-	padding: 5px 0px 4px 0px;
+      <string notr="true">QTableView{
+	font: 12pt &quot;Noto Serif&quot;;
+}QTableView::item{
+	padding: 2px 0px 1px 0px;
 }</string>
      </property>
      <property name="verticalScrollBarPolicy">
@@ -1129,41 +1100,9 @@ QPushButton:hover {
      <property name="gridStyle">
       <enum>Qt::SolidLine</enum>
      </property>
-     <property name="rowCount">
-      <number>0</number>
-     </property>
-     <attribute name="horizontalHeaderVisible">
-      <bool>true</bool>
-     </attribute>
-     <attribute name="horizontalHeaderCascadingSectionResizes">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>60</number>
-     </attribute>
      <attribute name="verticalHeaderVisible">
       <bool>false</bool>
      </attribute>
-     <column>
-      <property name="text">
-       <string>選取</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>從I打起</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>名稱</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>目標等級</string>
-      </property>
-     </column>
     </widget>
     <widget class="QPushButton" name="generatePendingBookButton">
      <property name="geometry">
