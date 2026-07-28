@@ -1,0 +1,49 @@
+<RCC>
+  <qresource prefix="armors">
+    <file>boots.webp</file>
+    <file>chestplate.png</file>
+    <file>elytra.png</file>
+    <file>helmet.webp</file>
+    <file>leggings.webp</file>
+  </qresource>
+  <qresource prefix="melee">
+    <file>trident.webp</file>
+    <file>axe.png</file>
+    <file>mace.webp</file>
+    <file>shield.webp</file>
+    <file>spear.webp</file>
+    <file>sword.png</file>
+    <file>trident.webp</file>
+  </qresource>
+  <qresource prefix="range">
+    <file>bow.png</file>
+    <file>crossbow.webp</file>
+  </qresource>
+  <qresource prefix="tools">
+    <file>axe.png</file>
+    <file>F&amp;C.webp</file>
+    <file>hoe.png</file>
+    <file>pickaxe.png</file>
+    <file>shear.png</file>
+    <file>shovel.webp</file>
+  </qresource>
+  <qresource prefix="UI">
+    <file>checked.png</file>
+    <file>unChecked.png</file>
+    <file>upArrow.png</file>
+    <file>downArrow.png</file>
+  </qresource>
+  <qresource prefix="Sound">
+    <file>sounds/anvilC#4.wav</file>
+    <file>sounds/anvilC4.wav</file>
+    <file>sounds/anvilD#4.wav</file>
+    <file>sounds/anvilD3.wav</file>
+    <file>sounds/anvilD4.wav</file>
+    <file>sounds/anvilE4.wav</file>
+    <file>sounds/anvilF#4.wav</file>
+    <file>sounds/anvilF4.wav</file>
+    <file>sounds/noAnvilB3.wav</file>
+    <file>sounds/noAnvilD3.wav</file>
+    <file>sounds/noAnvilG3.wav</file>
+  </qresource>
+</RCC>

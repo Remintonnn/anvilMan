@@ -1,0 +1,1306 @@
+{
+    "protection": {
+        "CompatibleItems": [
+            "Helmet",
+            "Chestplate",
+            "Leggings",
+            "Boots"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 4,
+        "MutexEnch": [
+            "fireProtection",
+            "projectileProtection",
+            "blastProtection"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "保護",
+            "Protection"
+        ]
+    },
+    "fireProtection": {
+        "CompatibleItems": [
+            "Helmet",
+            "Chestplate",
+            "Leggings",
+            "Boots"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 4,
+        "MutexEnch": [
+            "protection",
+            "projectileProtection",
+            "blastProtection"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "火焰保護",
+            "Fire Protection"
+        ]
+    },
+    "featherFalling": {
+        "CompatibleItems": [
+            "Boots"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 4,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "輕盈",
+            "Feather Falling"
+        ]
+    },
+    "blastProtection": {
+        "CompatibleItems": [
+            "Helmet",
+            "Chestplate",
+            "Leggings",
+            "Boots"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 4,
+        "MutexEnch": [
+            "protection",
+            "fireProtection",
+            "projectileProtection"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "爆炸保護",
+            "Blast Protection"
+        ]
+    },
+    "projectileProtection": {
+        "CompatibleItems": [
+            "Helmet",
+            "Chestplate",
+            "Leggings",
+            "Boots"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 4,
+        "MutexEnch": [
+            "protection",
+            "fireProtection",
+            "blastProtection"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "投射物保護",
+            "Projectile Protection"
+        ]
+    },
+    "thorns": {
+        "CompatibleItems": [
+            "Helmet",
+            "Chestplate",
+            "Leggings",
+            "Boots"
+        ],
+        "Muitiplier": 4,
+        "MaxLevel": 3,
+        "MutexEnch": [
+            "sacrificeExperience"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "尖刺",
+            "Thorns"
+        ]
+    },
+    "respiration": {
+        "CompatibleItems": [
+            "Helmet"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "水中呼吸",
+            "Respiration"
+        ]
+    },
+    "depthStrider": {
+        "CompatibleItems": [
+            "Boots"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 3,
+        "MutexEnch": [
+            "frostWalker"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "深海漫遊",
+            "Depth Strider"
+        ]
+    },
+    "aquaAffinity": {
+        "CompatibleItems": [
+            "Helmet"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 1,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "親水性",
+            "Aqua Affinity"
+        ]
+    },
+    "sharpness": {
+        "CompatibleItems": [
+            "Sword",
+            "Axe",
+            "Spear"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 5,
+        "MutexEnch": [
+            "smite",
+            "baneOfArthropods",
+            "density",
+            "breach",
+            "vampiric"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "鋒利",
+            "Sharpness"
+        ]
+    },
+    "smite": {
+        "CompatibleItems": [
+            "Sword",
+            "Axe",
+            "Mase",
+            "Spear"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 5,
+        "MutexEnch": [
+            "sharpness",
+            "baneOfArthropods",
+            "density",
+            "breach",
+            "vampiric"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "不死剋星",
+            "Smite"
+        ]
+    },
+    "baneOfArthropods": {
+        "CompatibleItems": [
+            "Sword",
+            "Axe",
+            "Mase",
+            "Spear"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 5,
+        "MutexEnch": [
+            "sharpness",
+            "smite",
+            "density",
+            "breach",
+            "vampiric"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "節肢剋星",
+            "Bane of Arthropods"
+        ]
+    },
+    "knockback": {
+        "CompatibleItems": [
+            "Sword",
+            "Spear"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 2,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "擊退",
+            "Knockback"
+        ]
+    },
+    "fireAspect": {
+        "CompatibleItems": [
+            "Sword",
+            "Mase",
+            "Spear"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 2,
+        "MutexEnch": [
+            "frozen"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "燃燒",
+            "Fire Aspect"
+        ]
+    },
+    "looting": {
+        "CompatibleItems": [
+            "Sword",
+            "Spear"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "掠奪",
+            "Looting"
+        ]
+    },
+    "efficiency": {
+        "CompatibleItems": [
+            "Pickaxe",
+            "Axe",
+            "Shovel",
+            "Shears",
+            "Hoe"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 5,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "效率",
+            "Efficiency"
+        ]
+    },
+    "silkTouch": {
+        "CompatibleItems": [
+            "Pickaxe",
+            "Axe",
+            "Shovel",
+            "Hoe"
+        ],
+        "Muitiplier": 4,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "fortune",
+            "oreSmelting",
+            "overclocking"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "絲綢之觸",
+            "Silk Touch"
+        ]
+    },
+    "unbreaking": {
+        "CompatibleItems": [
+            "All"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 3,
+        "MutexEnch": [
+            "infiniteDurability",
+            "overclocking"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "耐久",
+            "Unbreaking"
+        ]
+    },
+    "fortune": {
+        "CompatibleItems": [
+            "Pickaxe",
+            "Axe",
+            "Shovel",
+            "Hoe"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 3,
+        "MutexEnch": [
+            "silkTouch",
+            "overclocking"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "幸運",
+            "Fortune"
+        ]
+    },
+    "power": {
+        "CompatibleItems": [
+            "Bow"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 5,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "強力",
+            "Power"
+        ]
+    },
+    "punch": {
+        "CompatibleItems": [
+            "Bow"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 2,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "衝擊",
+            "Punch"
+        ]
+    },
+    "flame": {
+        "CompatibleItems": [
+            "Bow"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 1,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "火焰",
+            "Flame"
+        ]
+    },
+    "infinity": {
+        "CompatibleItems": [
+            "Bow"
+        ],
+        "Muitiplier": 4,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "mending"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "無限 ",
+            "Infinity"
+        ]
+    },
+    "luckOfTheSea": {
+        "CompatibleItems": [
+            "FishingRod"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "海洋的祝福",
+            "Luck of the Sea"
+        ]
+    },
+    "lure": {
+        "CompatibleItems": [
+            "FishingRod"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "魚餌",
+            "Lure"
+        ]
+    },
+    "frostWalker": {
+        "CompatibleItems": [
+            "Boots"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 2,
+        "MutexEnch": [
+            "depthStrider"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "冰霜行者",
+            "Frost Walker"
+        ]
+    },
+    "mending": {
+        "CompatibleItems": [
+            "All"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "infinity",
+            "infiniteDurability",
+            "autoRepair"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "修補 ",
+            "Mending"
+        ]
+    },
+    "curseOfBinding": {
+        "CompatibleItems": [
+            "Helmet",
+            "Chestplate",
+            "Leggings",
+            "Boots",
+            "Elytra"
+        ],
+        "Muitiplier": 4,
+        "MaxLevel": 1,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "綁定詛咒",
+            "Curse of Binding"
+        ]
+    },
+    "curseOfVanishing": {
+        "CompatibleItems": [
+            "All"
+        ],
+        "Muitiplier": 4,
+        "MaxLevel": 1,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "消失詛咒",
+            "Curse of Vanishing"
+        ]
+    },
+    "impaling": {
+        "CompatibleItems": [
+            "Trident"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 5,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "魚叉",
+            "Impaling"
+        ]
+    },
+    "riptide": {
+        "CompatibleItems": [
+            "Trident"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 3,
+        "MutexEnch": [
+            "loyalty",
+            "channeling"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "波濤",
+            "Riptide"
+        ]
+    },
+    "loyalty": {
+        "CompatibleItems": [
+            "Trident"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 3,
+        "MutexEnch": [
+            "riptide"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "忠誠",
+            "Loyalty"
+        ]
+    },
+    "channeling": {
+        "CompatibleItems": [
+            "Trident"
+        ],
+        "Muitiplier": 4,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "riptide"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "喚雷",
+            "Channeling"
+        ]
+    },
+    "multishot": {
+        "CompatibleItems": [
+            "Crossbow"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "piercing"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "分裂箭矢",
+            "Multishot"
+        ]
+    },
+    "piercing": {
+        "CompatibleItems": [
+            "Crossbow"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 4,
+        "MutexEnch": [
+            "multishot"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "貫穿",
+            "Piercing"
+        ]
+    },
+    "quickCharge": {
+        "CompatibleItems": [
+            "Crossbow"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "快速上弦",
+            "Quick Charge"
+        ]
+    },
+    "soulSpeed": {
+        "CompatibleItems": [
+            "Boots"
+        ],
+        "Muitiplier": 4,
+        "MaxLevel": 3,
+        "MutexEnch": [
+            "lightSpeed"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "靈魂疾走",
+            "Soul Speed"
+        ]
+    },
+    "swiftSneak": {
+        "CompatibleItems": [
+            "Leggings"
+        ],
+        "Muitiplier": 4,
+        "MaxLevel": 3,
+        "MutexEnch": [
+            "steadySneak"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "迅捷潛行",
+            "Swift Sneak"
+        ]
+    },
+    "windBurst": {
+        "CompatibleItems": [
+            "Mase"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "風爆",
+            "Wind Burst"
+        ]
+    },
+    "density": {
+        "CompatibleItems": [
+            "Mase"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 5,
+        "MutexEnch": [
+            "sharpness",
+            "smite",
+            "baneOfArthropods",
+            "breach"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "緻密",
+            "Density"
+        ]
+    },
+    "breach": {
+        "CompatibleItems": [
+            "Mase"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 4,
+        "MutexEnch": [
+            "sharpness",
+            "smite",
+            "baneOfArthropods",
+            "density"
+        ],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "破甲",
+            "Breach"
+        ]
+    },
+    "lunge": {
+        "CompatibleItems": [
+            "Spear"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "突刺",
+            "Lunge"
+        ]
+    },
+    "sweepingEdge": {
+        "CompatibleItems": [
+            "Sword"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "vanilla"
+        ],
+        "Names": [
+            "橫掃之刃",
+            "Sweeping Edge"
+        ]
+    },
+    "voiceKizunaAkari": {
+        "CompatibleItems": [
+            "Helmet"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "voiceYuzukiYukari",
+            "voiceKotonohaAkane",
+            "voiceKotonohaAoi"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "動作音效 紲星燈",
+            "Voice Kizuna Akari"
+        ]
+    },
+    "voiceYuzukiYukari": {
+        "CompatibleItems": [
+            "Helmet"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "voiceKizunaAkari",
+            "voiceKotonohaAkane",
+            "voiceKotonohaAoi"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "動作音效 結月緣",
+            "Voice Yuzuki Yukari"
+        ]
+    },
+    "voiceKotonohaAkane": {
+        "CompatibleItems": [
+            "Helmet"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "voiceKizunaAkari",
+            "voiceYuzukiYukari",
+            "voiceKotonohaAoi"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "動作音效 琴葉茜",
+            "Voice Kotonoha Akane"
+        ]
+    },
+    "voiceKotonohaAoi": {
+        "CompatibleItems": [
+            "Helmet"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "voiceKizunaAkari",
+            "voiceYuzukiYukari",
+            "voiceKotonohaAkane"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "動作音效 琴葉葵",
+            "Voice Kotonoha Aoi"
+        ]
+    },
+    "autoRepair": {
+        "CompatibleItems": [
+            "All"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 3,
+        "MutexEnch": [
+            "infiniteDurability",
+            "mending"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "自動修補",
+            "Auto Repair"
+        ]
+    },
+    "criticalChance": {
+        "CompatibleItems": [
+            "Axe"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 4,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "爆擊可能",
+            "Critical Chance"
+        ]
+    },
+    "oreSmelting": {
+        "CompatibleItems": [
+            "Pickaxe"
+        ],
+        "Muitiplier": 4,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "silkTouch"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "自動熔煉",
+            "Ore Smelting"
+        ]
+    },
+    "vampiric": {
+        "CompatibleItems": [
+            "Sword",
+            "Spear"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 4,
+        "MutexEnch": [
+            "sharpness",
+            "smite",
+            "baneOfArthropods"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "吸血",
+            "Vampiric"
+        ]
+    },
+    "healthy": {
+        "CompatibleItems": [
+            "Chestplate"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "健康",
+            "Healthy"
+        ]
+    },
+    "gale": {
+        "CompatibleItems": [
+            "Elytra"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "疾風",
+            "Gale"
+        ]
+    },
+    "breakRecovery": {
+        "CompatibleItems": [
+            "All"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "infiniteDurability"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "毀損救援",
+            "Break Recovery"
+        ]
+    },
+    "extension": {
+        "CompatibleItems": [
+            "Pickaxe",
+            "Axe",
+            "Shovel",
+            "Shears",
+            "Hoe"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "延伸",
+            "Extension"
+        ]
+    },
+    "spear": {
+        "CompatibleItems": [
+            "Axe"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "長茅",
+            "Spear"
+        ]
+    },
+    "miniaturize": {
+        "CompatibleItems": [
+            "Helmet",
+            "Chestplate",
+            "Leggings",
+            "Boots"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "giantify"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "迷你化",
+            "Miniaturize"
+        ]
+    },
+    "giantify": {
+        "CompatibleItems": [
+            "Helmet",
+            "Chestplate",
+            "Leggings",
+            "Boots"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 2,
+        "MutexEnch": [
+            "miniaturize"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "巨大化",
+            "Giantify"
+        ]
+    },
+    "nimble": {
+        "CompatibleItems": [
+            "Elytra"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "靈巧",
+            "Nimble"
+        ]
+    },
+    "frozen": {
+        "CompatibleItems": [
+            "Sword"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 3,
+        "MutexEnch": [
+            "fireAspect"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "冰凍",
+            "Frozen"
+        ]
+    },
+    "delicacy": {
+        "CompatibleItems": [
+            "Helmet"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "美食",
+            "Delicacy"
+        ]
+    },
+    "steadySneak": {
+        "CompatibleItems": [
+            "Leggings"
+        ],
+        "Muitiplier": 4,
+        "MaxLevel": 3,
+        "MutexEnch": [
+            "swiftSneak"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "穩重潛行",
+            "Steady Sneak"
+        ]
+    },
+    "wisdom": {
+        "CompatibleItems": [
+            "Sword",
+            "Spear"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 5,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "智慧",
+            "Wisdom"
+        ]
+    },
+    "sacrificeExperience": {
+        "CompatibleItems": [
+            "Helmet",
+            "Chestplate",
+            "Leggings",
+            "Boots"
+        ],
+        "Muitiplier": 4,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "thorns"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "獻祭經驗",
+            "Sacrifice Experience"
+        ]
+    },
+    "knockbackResistance": {
+        "CompatibleItems": [
+            "Helmet",
+            "Chestplate",
+            "Leggings",
+            "Boots"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 2,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "擊退保護",
+            "Knockback Resistance"
+        ]
+    },
+    "buoyancy": {
+        "CompatibleItems": [
+            "Elytra"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "浮力",
+            "Buoyancy"
+        ]
+    },
+    "gravity": {
+        "CompatibleItems": [
+            "Chestplate"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "重力",
+            "Gravity"
+        ]
+    },
+    "stubborn": {
+        "CompatibleItems": [
+            "Chestplate"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 4,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "掘強",
+            "Stubborn"
+        ]
+    },
+    "fragile": {
+        "CompatibleItems": [
+            "Chestplate"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 3,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "脆弱",
+            "Fragile"
+        ]
+    },
+    "windBlast": {
+        "CompatibleItems": [
+            "Shield"
+        ],
+        "Muitiplier": 2,
+        "MaxLevel": 5,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "風擊",
+            "Wind Blast"
+        ]
+    },
+    "eternal": {
+        "CompatibleItems": [
+            "All"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 1,
+        "MutexEnch": [],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "不滅",
+            "Eternal"
+        ]
+    },
+    "overclocking": {
+        "CompatibleItems": [
+            "Pickaxe",
+            "Axe",
+            "Shovel",
+            "Shears",
+            "Hoe"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 5,
+        "MutexEnch": [
+            "silkTouch",
+            "fortune",
+            "unbreaking"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "超頻",
+            "Overclocking"
+        ]
+    },
+    "lightSpeed": {
+        "CompatibleItems": [
+            "Boots"
+        ],
+        "Muitiplier": 4,
+        "MaxLevel": 3,
+        "MutexEnch": [
+            "soulSpeed"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "燭光疾走",
+            "Light Speed"
+        ]
+    },
+    "infiniteDurability": {
+        "CompatibleItems": [
+            "All"
+        ],
+        "Muitiplier": 1,
+        "MaxLevel": 1,
+        "MutexEnch": [
+            "autoRepair",
+            "mending",
+            "breakRecovery",
+            "unbreaking"
+        ],
+        "Tags": [
+            "catBud"
+        ],
+        "Names": [
+            "無限耐久",
+            "Infinite Durability"
+        ]
+    }
+}
