@@ -14,6 +14,7 @@ except for the mutexEnch part, which uhhh is doable but why
 TheBigDict = {}
 class comp(Enum):
     """Compatible items"""
+    """You will need to call .value() to get the str|list cuz this is am enum"""
     hat = "Helmet"
     cloth = "Chestplate"
     pants = "Leggings"

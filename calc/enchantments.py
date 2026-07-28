@@ -1,6 +1,7 @@
 import json
 from calc.enchJsonGen.enchJsonGen import ench as EnchantmentId
 from calc.enchJsonGen.enchJsonGen import enchTags as EnchantmentTags
+from calc.enchJsonGen.enchJsonGen import comp as enchItems
 
 class EnchantmentsClass:
     def __getitem__(self, key:str):

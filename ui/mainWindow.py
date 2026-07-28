@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
         self.enchTable = enchTableControler(self.ui.enchTable)
         self.pendingTable = pendingTableControler(self.ui.pendingBookTable)
 
-        mankAnvilLabel(self.ui.titleLabel)
+        self.mankAnvilLabel(self.ui.titleLabel)
 
         self.ui.hatB.clicked.connect(self.test)
         self.ui.clothB.clicked.connect(lambda: self.enchTable.clearItem())
