@@ -96,8 +96,6 @@ class MainWindow(QMainWindow):
             # addItem(enchTable,QCheckBox(),QCheckBox(),"動作音效 紲星燈", 4)
 
 
-# Should've use TableView for these...
-# Too bad I just clicked on the first thing that says TABLE in QT Designer
 class saveTableControler:
     def __init__(self, table:QTableWidget):
         self.table:QTableWidget = table
