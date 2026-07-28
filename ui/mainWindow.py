@@ -33,7 +33,37 @@ class MainWindow(QMainWindow):
         self.ui.hatB.clicked.connect(self.test)
         self.ui.clothB.clicked.connect(lambda: self.enchTable.clearItem())
 
-
+    def mankAnvilLabel(label:QLabel):
+        """all this for a joke lmao"""
+        soundDir = ":/Sound/sounds/"
+        anvilSounds:list[QSoundEffect] = []; noAnvilSounds:list[QSoundEffect] = []
+        anvilUsed = 0; anvilLife = 5
+        anvilCDTimer = QTimer(); anvilCDTimer.setSingleShot(True)
+        anvilCDTimer.timeout.connect(lambda:label.setEnabled(True))
+        for file in QDir(soundDir).entryList():
+            sound = QSoundEffect(source=QUrl("qrc"+soundDir+file)) # qrc is necessary here
+            if file.startswith("anvil"):
+                anvilSounds.append(sound)
+                if file != "anvilD3.wav": anvilSounds.append(sound) # less *DEEP* sound
+            elif file.startswith("noAnvil"): noAnvilSounds.append(sound)
+        def playAnvil(e):
+            nonlocal anvilUsed, anvilLife
+            if anvilUsed >= 16:
+                random.choice(noAnvilSounds).play()
+                anvilUsed = 0
+                label.setEnabled(False)
+                if anvilLife <= 1:
+                    oldFont = label.font()
+                    oldFont.setPointSize(17)
+                    label.setText("AIN'T NO FUCKING WAY")
+                    label.setFont(oldFont)
+                else:
+                    anvilCDTimer.start(6767)
+                    anvilLife -= 1
+                return
+            random.choice(anvilSounds).play()
+            anvilUsed += 1
+        label.mousePressEvent = playAnvil
     def test(self):
             self.saveTable.addItem(QIcon(r"ui/icons/sword.png"),"2026/12/25","The big man is here")
             self.enchTable.addItem(enchs[EnchId.gravity])
@@ -205,37 +235,6 @@ def tryGetDarkTitleBar(window, dark=True):
         )
     except Exception as e:
         print(f"Unable to set window frame theme: {e}")
-def mankAnvilLabel(label:QLabel):
-    """all this for a joke lmao"""
-    soundDir = ":/Sound/sounds/"
-    anvilSounds:list[QSoundEffect] = []; noAnvilSounds:list[QSoundEffect] = []
-    anvilUsed = 0; anvilLife = 5
-    anvilCDTimer = QTimer(); anvilCDTimer.setSingleShot(True)
-    anvilCDTimer.timeout.connect(lambda:label.setEnabled(True))
-    for file in QDir(soundDir).entryList():
-        sound = QSoundEffect(source=QUrl("qrc"+soundDir+file)) # qrc is necessary here
-        if file.startswith("anvil"):
-            anvilSounds.append(sound)
-            if file != "anvilD3.wav": anvilSounds.append(sound) # less *DEEP* sound
-        elif file.startswith("noAnvil"): noAnvilSounds.append(sound)
-    def playAnvil(e):
-        nonlocal anvilUsed, anvilLife
-        if anvilUsed >= 16:
-            random.choice(noAnvilSounds).play()
-            anvilUsed = 0
-            label.setEnabled(False)
-            if anvilLife <= 1:
-                oldFont = label.font()
-                oldFont.setPointSize(17)
-                label.setText("AIN'T NO FUCKING WAY")
-                label.setFont(oldFont)
-            else:
-                anvilCDTimer.start(6767)
-                anvilLife -= 1
-            return
-        random.choice(anvilSounds).play()
-        anvilUsed += 1
-    label.mousePressEvent = playAnvil
 
 def getRomanNum(n):
     """up to 10 cuz lazy"""
