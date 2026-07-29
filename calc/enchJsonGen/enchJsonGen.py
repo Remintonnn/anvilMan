@@ -209,7 +209,7 @@ def CatBudEnch():
     EOM(ench.delicacy,comp.hat,3,1,1,["美食","Delicacy"])
     EOM(ench.wisdom,comp.meleeSS,5,1,1,["智慧","Wisdom"])
     EOM(ench.buoyancy,comp.wing,3,2,4,["浮力","Buoyancy"])
-    EOM(ench.stubborn,comp.cloth,4,1,2,["掘強","Stubborn"])
+    EOM(ench.stubborn,comp.cloth,4,1,2,["倔強","Stubborn"])
     EOM(ench.windBlast,comp.shield,5,2,2,["風擊","Wind Blast"])
     EOM(ench.sacrificeExperience,comp.armors,1,4,8,["獻祭經驗","Sacrifice Experience"])
     EOM(ench.criticalChance,comp.axe,4,1,1,["爆擊可能","Critical Chance"])
