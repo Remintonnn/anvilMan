@@ -191,14 +191,12 @@ class enchTableControler:
         self.grayOut(False)
         for ID, ench in enchs.dict.items():
             if ench.isCompatibleWith(item):
-                self.addItem(ench)
+                self.model.addItem(ench)
+        self.table.resizeRowsToContents()
 
     def setSelectdHighlight(self, doIt:bool|Qt.CheckState):
         if isinstance(doIt,Qt.CheckState): doIt = doIt==Qt.CheckState.Checked
         self.model.setSelectdHighlight(doIt)
-    def addItem(self, ench:Ench):
-        self.model.addItem(ench)
-        self.table.resizeRowsToContents()
     def clearItem(self): self.model.clearData();self.grayOut(True)
     def grayOut(self,doIt:bool): 
         self.enchSelectionFrame.setDisabled(doIt)
@@ -253,6 +251,7 @@ class EnchTableModel(QAbstractTableModel):
                 return QColor("#553803") if fromOneUp else QColor("#454545")
             if col == self.LEVEL_COL and lvl!=ench.maxlvl:
                 return QColor("#38FF07") if fromOneUp else QColor("#FF6FF3")
+                # return QColor("#07FFF3")
             # if self.shouldHighlight():
             #     if fromOneUp: return QColor("#FFA600") if selected else QColor("#C58001")
             #     if not selected: return QColor("#A7A7A7")
@@ -355,7 +354,6 @@ class CheckBoxDelegate(QStyledItemDelegate):
         self.unchecked = QIcon(":/UI/unChecked.png").pixmap(16,16)
         self.checkedGrayout = QIcon(":/UI/checkedGrayout.png").pixmap(16,16)
         self.uncheckedGrayout = QIcon(":/UI/unCheckedGrayout.png").pixmap(16,16)
-
     def paint(self, painter, option, index):
         if index.column() not in (0,1): return
         opt = QStyleOptionViewItem(option)
@@ -385,7 +383,7 @@ class CheckBoxDelegate(QStyledItemDelegate):
 
 
 class pendingTableControler:
-    def __init__(self, table:QTableWidget):
+    def __init__(self, table:QTableView):
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
         table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
         table.setColumnWidth(0, 120)
