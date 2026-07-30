@@ -26,10 +26,10 @@ class MainWindow(QMainWindow):
         self.window().setFixedHeight(self.window().height())
         self.window().setFixedWidth(self.window().width())
         tryGetDarkTitleBar(self.window())
-        self.saveTable = saveTableControler(self.ui.saveTable)
-        self.enchTable = enchTableControler(self.ui.enchTable,self.ui.enchSelFrame)
-        self.equSelection = equipmentSelectionControler(self.equSelectButtons(),self.enchTable)
-        self.pendingTable = pendingTableControler(self.ui.pendingBookTable)
+        self.saveTable = SaveTableControler(self.ui.saveTable)
+        self.enchTable = EnchTableControler(self.ui.enchTable,self.ui.enchSelFrame)
+        self.equSelection = EquipmentSelectionControler(self.equSelectButtons(),self.enchTable)
+        self.pendingTable = PendingTableControler(self.ui.pendingBookTable)
 
         self.mankAnvilLabel(self.ui.titleLabel)
         self.ui.enchSelHighlightCheckBox.toggled.connect(self.enchTable.setSelectdHighlight)
@@ -101,7 +101,7 @@ class MainWindow(QMainWindow):
             # addItem(enchTable,QCheckBox(),QCheckBox(),"動作音效 紲星燈", 4)
 
 
-class saveTableControler:
+class SaveTableControler:
     def __init__(self, table:QTableWidget):
         self.table:QTableWidget = table
         table.setWordWrap(True)
@@ -126,7 +126,7 @@ class saveTableControler:
         self.table.setItem(row,2, nameObj)
         self.table.resizeRowsToContents()
 
-class equipmentSelectionControler:
+class EquipmentSelectionControler:
     def __init__(self,buttons:list[list[QPushButton,Enum]],enchTable:"enchTableControler"):
         self.buttons = []
         self.enchTable = enchTable
@@ -151,7 +151,7 @@ class equipmentSelectionControler:
             self.theChosenOne = None
             self.enchTable.clearItem()
 
-class enchTableControler:
+class EnchTableControler:
     def __init__(self, table:QTableView, enchSelectionFrame:QFrame):
         self.table = table
         self.model = EnchTableModel()
@@ -381,8 +381,7 @@ class CheckBoxDelegate(QStyledItemDelegate):
             return True
         return False
 
-
-class pendingTableControler:
+class PendingTableControler:
     def __init__(self, table:QTableView):
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
         table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
