@@ -28,20 +28,20 @@
     <file>shovel.webp</file>
   </qresource>
   <qresource prefix="UI">
+    <file>checked10x10CenterGrayout.png</file>
+    <file>checked10x10Center.png</file>
+    <file>unCheckedGrayout.png</file>
+    <file>checkedGrayout.png</file>
     <file>checked.png</file>
     <file>unChecked.png</file>
     <file>upArrow.png</file>
     <file>downArrow.png</file>
   </qresource>
   <qresource prefix="Sound">
-    <file>sounds/anvilC#4.wav</file>
-    <file>sounds/anvilC4.wav</file>
-    <file>sounds/anvilD#4.wav</file>
     <file>sounds/anvilD3.wav</file>
-    <file>sounds/anvilD4.wav</file>
-    <file>sounds/anvilE4.wav</file>
     <file>sounds/anvilF#4.wav</file>
-    <file>sounds/anvilF4.wav</file>
+    <file>sounds/anvilD4.wav</file>
+    <file>sounds/anvilD#4.wav</file>
     <file>sounds/noAnvilB3.wav</file>
     <file>sounds/noAnvilD3.wav</file>
     <file>sounds/noAnvilG3.wav</file>

@@ -16,10 +16,10 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QFrame, QHeaderView,
-    QLabel, QMainWindow, QMenu, QMenuBar,
-    QPlainTextEdit, QPushButton, QSizePolicy, QTableView,
-    QTableWidget, QTableWidgetItem, QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QFrame,
+    QHeaderView, QLabel, QMainWindow, QMenu,
+    QMenuBar, QPlainTextEdit, QPushButton, QSizePolicy,
+    QTableView, QTableWidget, QTableWidgetItem, QWidget)
 import hmmm_rc
 
 class Ui_MainWindow(object):
@@ -173,6 +173,35 @@ class Ui_MainWindow(object):
 "	background-color: #5656FF;\n"
 "	border: 2px solid #878787;\n"
 "}\n"
+"\n"
+"QCheckBox{\n"
+"    spacing: 6px;\n"
+"    font-size: 12px;\n"
+"    color: #CCCCCC;\n"
+"}QCheckBox:hover{color: #FFFFFF;}QCheckBox::indicator{\n"
+"    width: 12px;\n"
+"    height: 12px;\n"
+"    border: 2px solid #676767;\n"
+"    border-radius: 0px;\n"
+"}QCheckBox::indicator:checked{\n"
+"	image: url(:/UI/checked10x10Center.png)\n"
+"}\n"
+"\n"
+"QCheckBox:disabled{\n"
+"    spacing: 6px;\n"
+"  "
+                        "  font-size: 12px;\n"
+"    color: #333333;\n"
+"}\n"
+"QCheckBox::indicator:disabled{\n"
+"    width: 12px;\n"
+"    height: 12px;\n"
+"    border: 2px solid #333333;\n"
+"    border-radius: 0px;\n"
+"}QCheckBox::indicator:checked:disabled{\n"
+"	image: url(:/UI/checked10x10CenterGrayout.png)\n"
+"}\n"
+"\n"
 "\n"
 "QToolTip {\n"
 "    background-color: #2b2b2b;\n"
@@ -533,8 +562,17 @@ class Ui_MainWindow(object):
 "}\n"
 "QPushButton:disabled{\n"
 "	border: 2px solid #2f2f2f;\n"
-"	color: #676767;\n"
+"	color: #333333;\n"
 "}")
+        self.enchSelHighlightCheckBox = QCheckBox(self.enchSelFrame)
+        self.enchSelHighlightCheckBox.setObjectName(u"enchSelHighlightCheckBox")
+        self.enchSelHighlightCheckBox.setEnabled(True)
+        self.enchSelHighlightCheckBox.setGeometry(QRect(12, 786, 101, 21))
+        font4 = QFont()
+        self.enchSelHighlightCheckBox.setFont(font4)
+        self.enchSelHighlightCheckBox.setFocusPolicy(Qt.NoFocus)
+        self.enchSelHighlightCheckBox.setStyleSheet(u"")
+        self.enchSelHighlightCheckBox.setChecked(True)
         self.pendingBookFram = QFrame(self.centralWidget)
         self.pendingBookFram.setObjectName(u"pendingBookFram")
         self.pendingBookFram.setEnabled(True)
@@ -586,7 +624,7 @@ class Ui_MainWindow(object):
 "}\n"
 "QPushButton:disabled{\n"
 "	border: 2px solid #2f2f2f;\n"
-"	color: #676767;\n"
+"	color: #333333;\n"
 "}")
         self.pendingBookAdvencedEditButton = QPushButton(self.pendingBookFram)
         self.pendingBookAdvencedEditButton.setObjectName(u"pendingBookAdvencedEditButton")
@@ -603,10 +641,10 @@ class Ui_MainWindow(object):
         self.saveNameInputBox = QPlainTextEdit(self.pendingBookFram)
         self.saveNameInputBox.setObjectName(u"saveNameInputBox")
         self.saveNameInputBox.setGeometry(QRect(10, 370, 231, 31))
-        font4 = QFont()
-        font4.setFamilies([u"Segoe UI"])
-        font4.setPointSize(12)
-        self.saveNameInputBox.setFont(font4)
+        font5 = QFont()
+        font5.setFamilies([u"Segoe UI"])
+        font5.setPointSize(12)
+        self.saveNameInputBox.setFont(font5)
         self.saveNameInputBox.setStyleSheet(u"")
         self.saveNameInputBox.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.saveNameInputBox.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -724,6 +762,7 @@ class Ui_MainWindow(object):
         self.saveLoadButton.setText(QCoreApplication.translate("MainWindow", u"\u8f09\u5165", None))
         self.enchSelTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt;\">\u9078\u64c7\u76ee\u6a19\u9644\u9b54</span></p></body></html>", None))
         self.generatePendingBookButton.setText(QCoreApplication.translate("MainWindow", u"\u751f\u6210\u9644\u9b54\u66f8\u7d44\u5408", None))
+        self.enchSelHighlightCheckBox.setText(QCoreApplication.translate("MainWindow", u"\u51f8\u986f\u5df2\u9078\u9644\u9b54", None))
         self.pendingBookTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt;\">\u5408\u6210\u5167\u5bb9\u9810\u89bd</span></p></body></html>", None))
         ___qtablewidgetitem3 = self.pendingBookTable.horizontalHeaderItem(0)
         ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"\u5167\u542b\u9644\u9b54", None))

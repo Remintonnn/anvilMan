@@ -21,10 +21,4 @@ def main():
 
 main()
 
-# TODO: equ select enchTable population
-# TODO: ench conflict logic
-# TODO: enchTable lvl scroll edit
-# TODO:
-# TODO:
-# TODO:
-# TODO: imp pendingTable.addItem()
+# TODO: imp pendingTable

@@ -165,6 +165,34 @@ QPushButton[chosenOne=True]{
 	border: 2px solid #878787;
 }
 
+QCheckBox{
+    spacing: 6px;
+    font-size: 12px;
+    color: #CCCCCC;
+}QCheckBox:hover{color: #FFFFFF;}QCheckBox::indicator{
+    width: 12px;
+    height: 12px;
+    border: 2px solid #676767;
+    border-radius: 0px;
+}QCheckBox::indicator:checked{
+	image: url(:/UI/checked10x10Center.png)
+}
+
+QCheckBox:disabled{
+    spacing: 6px;
+    font-size: 12px;
+    color: #333333;
+}
+QCheckBox::indicator:disabled{
+    width: 12px;
+    height: 12px;
+    border: 2px solid #333333;
+    border-radius: 0px;
+}QCheckBox::indicator:checked:disabled{
+	image: url(:/UI/checked10x10CenterGrayout.png)
+}
+
+
 QToolTip {
     background-color: #2b2b2b;
     color: white;
@@ -1246,11 +1274,41 @@ QPushButton:hover {
 }
 QPushButton:disabled{
 	border: 2px solid #2f2f2f;
-	color: #676767;
+	color: #333333;
 }</string>
      </property>
      <property name="text">
       <string>生成附魔書組合</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="enchSelHighlightCheckBox">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>786</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>-1</pointsize>
+      </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>凸顯已選附魔</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>
@@ -1384,7 +1442,7 @@ QPushButton:hover {
 }
 QPushButton:disabled{
 	border: 2px solid #2f2f2f;
-	color: #676767;
+	color: #333333;
 }</string>
      </property>
      <property name="text">

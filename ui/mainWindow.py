@@ -10,7 +10,7 @@ from calc.enchantments import EnchantmentTags as EnchTag
 from calc.enchantments import EnchantableItems as EnchItems
 from ui.mainMenu import Ui_MainWindow
 
-from PySide6.QtCore import Qt, QUrl, QDir, QTimer, QAbstractTableModel, QModelIndex, QEvent
+from PySide6.QtCore import Qt, QUrl, QDir, QTimer, QAbstractTableModel, QModelIndex, QEvent, QObject
 from PySide6.QtWidgets import * # QApplication, QStyleFactory, QHeaderView, QTableWidgetItem
 from PySide6.QtUiTools import * # QUiLoader
 from PySide6.QtGui import * # QIcon
@@ -27,13 +27,13 @@ class MainWindow(QMainWindow):
         self.window().setFixedWidth(self.window().width())
         tryGetDarkTitleBar(self.window())
         self.saveTable = saveTableControler(self.ui.saveTable)
-        self.enchTable = enchTableControler(self.ui.enchTable,self.ui.generatePendingBookButton,self.ui.enchSelFrame)
+        self.enchTable = enchTableControler(self.ui.enchTable,self.ui.enchSelFrame)
         self.equSelection = equipmentSelectionControler(self.equSelectButtons(),self.enchTable)
         self.pendingTable = pendingTableControler(self.ui.pendingBookTable)
 
         self.mankAnvilLabel(self.ui.titleLabel)
-        # self.ui.hatB.clicked.connect(self.test)
-        # self.ui.clothB.clicked.connect(lambda: self.enchTable.clearItem())
+        self.ui.enchSelHighlightCheckBox.toggled.connect(self.enchTable.setSelectdHighlight)
+        self.ui.enchSelHighlightCheckBox.toggle()
 
     def equSelectButtons(self):
         ui = self.ui; EI = EnchItems
@@ -65,11 +65,16 @@ class MainWindow(QMainWindow):
         anvilUsed = 0; anvilLife = 5
         anvilCDTimer = QTimer(); anvilCDTimer.setSingleShot(True)
         anvilCDTimer.timeout.connect(lambda:label.setEnabled(True))
+        totalSound = 0
+
         for file in QDir(soundDir).entryList():
             sound = QSoundEffect(source=QUrl("qrc"+soundDir+file)) # qrc is necessary here
             if file.startswith("anvil"):
-                anvilSounds.append(sound)
-                if file != "anvilD3.wav": anvilSounds.append(sound) # less *DEEP* sound
+                totalSound += 1
+                if file == "anvilD3.wav": # less *DEEP* sound
+                    anvilSounds.append(sound)
+                else: 
+                    for i in range(totalSound): anvilSounds.append(sound)
             elif file.startswith("noAnvil"): noAnvilSounds.append(sound)
         def playAnvil(e):
             nonlocal anvilUsed, anvilLife
@@ -147,7 +152,7 @@ class equipmentSelectionControler:
             self.enchTable.clearItem()
 
 class enchTableControler:
-    def __init__(self, table:QTableView, confirmButton:QPushButton, enchSelectionFrame:QFrame):
+    def __init__(self, table:QTableView, enchSelectionFrame:QFrame):
         self.table = table
         self.model = EnchTableModel()
         self.enchSelectionFrame = enchSelectionFrame
@@ -165,6 +170,21 @@ class enchTableControler:
         # print(table.columnWidth(2)) -> 89
         table.setColumnWidth(3, 55)
         table.verticalHeader().hide()
+        # TODO: DEAL WITH THIS
+        self.filter = self.filterObj(self,table.viewport())
+        table.viewport().installEventFilter(self.filter) # for the level scroll
+    class filterObj(QObject):
+        def __init__(self, controller:"enchTableControler", parent=None):
+            super().__init__(parent) # To prevent effor when close program
+            self.controller = controller
+        def eventFilter(self, obj, event): # for the level scroll
+            if obj == self.controller.table.viewport():
+                if event.type() == QEvent.Type.Wheel:
+                    index = self.controller.table.indexAt(event.position().toPoint())
+                    if index.isValid() and index.column() == EnchTableModel.LEVEL_COL:
+                        self.controller.model.changelvl(index.row(), event.angleDelta().y()>0)
+                        return True
+            return super().eventFilter(obj, event)
 
     def populateFromNewItem(self,item:Enum):
         self.clearItem()
@@ -173,6 +193,9 @@ class enchTableControler:
             if ench.isCompatibleWith(item):
                 self.addItem(ench)
 
+    def setSelectdHighlight(self, doIt:bool|Qt.CheckState):
+        if isinstance(doIt,Qt.CheckState): doIt = doIt==Qt.CheckState.Checked
+        self.model.setSelectdHighlight(doIt)
     def addItem(self, ench:Ench):
         self.model.addItem(ench)
         self.table.resizeRowsToContents()
@@ -181,6 +204,9 @@ class enchTableControler:
         self.enchSelectionFrame.setDisabled(doIt)
         self.table.verticalScrollBar().setProperty("grayOut",doIt)
         repolish(self.table.verticalScrollBar())
+    def gimmeTheThing(self):
+        """get a copy of the table's data"""
+        return self.model.givingTheThing()
 class EnchTableModel(QAbstractTableModel):
     # Mutex column doesn't exist because yes
     SELECTED_COL, FROMONEUP_COL, NAME_COL, LEVEL_COL, MUTEX_COL = [0,1,2,3,4]
@@ -190,6 +216,8 @@ class EnchTableModel(QAbstractTableModel):
     def __init__(self):
         super().__init__()
         self._data = []
+        self.highlightSelected = True
+        self.selectedEnch = 0
 
     def addItem(self,ench:Ench,selected=None,fromOneUp=None,lvl=None):
         row = self.rowCount()
@@ -203,6 +231,7 @@ class EnchTableModel(QAbstractTableModel):
         self.beginResetModel()
         self._data.clear()
         self.endResetModel()
+        self.selectedEnch = 0
 
     def data(self, index:QModelIndex, role:Qt.ItemDataRole):
         col, row = index.column(),index.row()
@@ -214,19 +243,69 @@ class EnchTableModel(QAbstractTableModel):
         if role == Qt.ItemDataRole.CheckStateRole:
             if col == self.SELECTED_COL: return Qt.CheckState.Checked if selected else Qt.CheckState.Unchecked
             if col == self.FROMONEUP_COL: return Qt.CheckState.Checked if fromOneUp else Qt.CheckState.Unchecked
+        if role == Qt.ItemDataRole.BackgroundRole:
+            if len(mutex) != 0: return QColor("#171717")
+            if selected and self.shouldHighlight(): return QColor("#2A2A2A")
         if role == Qt.ItemDataRole.ForegroundRole:
-            if len(mutex) != 0: return QColor("#676767")
+            if len(mutex) != 0:
+                if col == self.LEVEL_COL and lvl!=ench.maxlvl:
+                    return QColor("#0E4400") if fromOneUp else QColor("#4B2247")
+                return QColor("#553803") if fromOneUp else QColor("#454545")
+            if col == self.LEVEL_COL and lvl!=ench.maxlvl:
+                return QColor("#38FF07") if fromOneUp else QColor("#FF6FF3")
+            # if self.shouldHighlight():
+            #     if fromOneUp: return QColor("#FFA600") if selected else QColor("#C58001")
+            #     if not selected: return QColor("#A7A7A7")
+            # else:
             if fromOneUp: return QColor("#FFA600")
         if role == Qt.ItemDataRole.TextAlignmentRole: return Qt.AlignmentFlag.AlignCenter
-        if role == self.ConflictedRole: return len(mutex)==0
+        if role == Qt.ItemDataRole.FontRole:
+            if col == self.NAME_COL and selected and self.shouldHighlight():
+                font = QFont();font.setBold(True)
+                return font
+            if col == self.LEVEL_COL and lvl!=ench.maxlvl:
+                font = QFont();font.setBold(True);font.setItalic(True)
+                return font
+        if role == self.ConflictedRole: return len(mutex)!=0
     def setData(self, index, value, /, role = ...):
         col, row = index.column(),index.row()
         if role == Qt.ItemDataRole.CheckStateRole:
             if col not in (self.SELECTED_COL,self.FROMONEUP_COL): return False
-            self._data[row][col] = value==Qt.CheckState.Checked
+            stateNow = value==Qt.CheckState.Checked
+            self._data[row][col] = stateNow
 
+            if col == self.SELECTED_COL:
+                if stateNow: 
+                    if self.selectedEnch == 0:
+                        self.beginResetModel()
+                        self.selectedEnch += 1
+                        self.endResetModel()
+                    else: self.selectedEnch += 1
+                else:
+                    if self.selectedEnch == 1:
+                        self.beginResetModel()
+                        self.selectedEnch -= 1
+                        self.endResetModel()
+                    else: self.selectedEnch -= 1
+                ench:Ench = self._data[row][self.NAME_COL]
+                if len(ench.mutexEnch)!=0:
+                    for dataIndex in range(len(self._data)):
+                        data = self._data[dataIndex]
+                        if not ench.conflictsWith(data[self.NAME_COL]): continue
+                        if stateNow: data[self.MUTEX_COL].append(ench)
+                        else: data[self.MUTEX_COL].remove(ench)
+                        self.dataChanged.emit(
+                            self.index(dataIndex, 0),
+                            self.index(dataIndex, 3), # This is a range
+                            [
+                                Qt.ItemDataRole.CheckStateRole,
+                                Qt.ItemDataRole.ForegroundRole,
+                                Qt.ItemDataRole.BackgroundRole,
+                                Qt.ItemDataRole.DisplayRole,
+                            ]
+                        )
             self.dataChanged.emit(
-                self.index(row, 2), 
+                self.index(row, 0), 
                 self.index(row, 3), # This is a range
                 [
                     Qt.ItemDataRole.CheckStateRole,
@@ -236,12 +315,31 @@ class EnchTableModel(QAbstractTableModel):
             )
             return True
         return False
+    def changelvl(self,row:int,lvlUp:bool):
+        lvlCap = self._data[row][self.NAME_COL].maxlvl
+        lvlNow = self._data[row][self.LEVEL_COL]
+        lvlOld = lvlNow
+        lvlNow = max(1, min(lvlNow+1 if lvlUp else lvlNow-1, lvlCap))
+        self._data[row][self.LEVEL_COL] = lvlNow
+        # print(f"LEVEL CHANGE AT ROW {row} GOING {"up" if lvlUp else "down"} from {lvlOld} to {lvlNow}")
+        index = self.index(row,self.LEVEL_COL)
+        self.dataChanged.emit(index,index,[Qt.ItemDataRole.FontRole,Qt.ItemDataRole.DisplayRole])
+    def givingTheThing(self):
+        """get a copy of all data"""
+        result = [data.copy() for data in self._data]
+        return result
 
     def flags(self, index):
         flags = Qt.ItemFlag.ItemIsEnabled
         if index.column() in (0,1): flags |= Qt.ItemFlag.ItemIsUserCheckable
         return flags
-
+    def shouldHighlight(self):
+        return self.highlightSelected and self.selectedEnch!=0
+    def setSelectdHighlight(self, value:bool):
+        if value == self.highlightSelected: return
+        self.beginResetModel()
+        self.highlightSelected = value
+        self.endResetModel()
     def rowCount(self, index=0): return len(self._data)
     def columnCount(self, index=0): return 4
     def headerData(self, section, orientation, role):
@@ -255,17 +353,29 @@ class CheckBoxDelegate(QStyledItemDelegate):
         super().__init__()
         self.checked = QIcon(":/UI/checked.png").pixmap(16,16)
         self.unchecked = QIcon(":/UI/unChecked.png").pixmap(16,16)
+        self.checkedGrayout = QIcon(":/UI/checkedGrayout.png").pixmap(16,16)
+        self.uncheckedGrayout = QIcon(":/UI/unCheckedGrayout.png").pixmap(16,16)
 
     def paint(self, painter, option, index):
-        if index.column() not in (0,1): super().paint(painter, option, index); return
+        if index.column() not in (0,1): return
+        opt = QStyleOptionViewItem(option)
+        self.initStyleOption(opt, index)
+        opt.features &= ~QStyleOptionViewItem.ViewItemFeature.HasCheckIndicator
+        style = opt.widget.style() if opt.widget else QApplication.style()
+        style.drawControl(QStyle.ControlElement.CE_ItemViewItem, opt, painter, opt.widget)
+
         checkState = index.data(Qt.ItemDataRole.CheckStateRole) == Qt.CheckState.Checked
         conflicted = index.data(EnchTableModel.ConflictedRole)
-        pix = self.checked if checkState else self.unchecked
+        pix = None
+        if conflicted: pix = self.checkedGrayout if checkState else self.uncheckedGrayout
+        else: pix = self.checked if checkState else self.unchecked
         x = option.rect.center().x() - pix.width()//2
         y = option.rect.center().y() - pix.height()//2
         painter.drawPixmap(x,y,pix)
 
-    def editorEvent(self, event, model, option, index):
+    def editorEvent(self, event, model, option, index:QModelIndex):
+        conflicted = index.data(EnchTableModel.ConflictedRole)
+        if conflicted: return False
         # MouseButtonDoubleClick is called on the second mouse DOWN
         if event.type() in (QEvent.Type.MouseButtonPress,QEvent.Type.MouseButtonDblClick):
             checkState = index.data(Qt.CheckStateRole)==Qt.CheckState.Checked
