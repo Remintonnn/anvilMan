@@ -1383,13 +1383,13 @@ QPushButton:disabled{
       <enum>QAbstractItemView::NoSelection</enum>
      </property>
      <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>1</number>
+      <number>183</number>
      </attribute>
      <attribute name="horizontalHeaderHighlightSections">
       <bool>false</bool>
      </attribute>
      <attribute name="horizontalHeaderMinimumSectionSize">
-      <number>183</number>
+      <number>0</number>
      </attribute>
      <attribute name="verticalHeaderVisible">
       <bool>false</bool>

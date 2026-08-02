@@ -393,7 +393,9 @@ class PendingTableControler:
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
         table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
         table.setColumnWidth(0, 120)
-        table.setColumnWidth(1, 59)
+        table.setColumnWidth(1, 39)
+
+        table.verticalHeader().hide()
         # print(table.columnWidth(2)) -> 369
     def clearItem(self): self.model.clearData();self.grayOut(True)
     def grayOut(self,doIt:bool): 
