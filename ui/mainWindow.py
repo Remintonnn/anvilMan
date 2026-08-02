@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
         self.saveTable = SaveTableControler(self.ui.saveTable)
         self.enchTable = EnchTableControler(self.ui.enchTable,self.ui.enchSelFrame)
         self.equSelection = EquipmentSelectionControler(self.equSelectButtons(),self.enchTable)
-        self.pendingTable = PendingTableControler(self.ui.pendingBookTable)
+        self.pendingTable = PendingTableControler(self.ui.pendingBookTable,self.ui.pendingBookFram)
 
         self.mankAnvilLabel(self.ui.titleLabel)
         self.ui.enchSelHighlightCheckBox.toggled.connect(self.enchTable.setSelectdHighlight)
@@ -382,12 +382,75 @@ class CheckBoxDelegate(QStyledItemDelegate):
         return False
 
 class PendingTableControler:
-    def __init__(self, table:QTableView):
+    def __init__(self, table:QTableView, pendingBookFrame:QFrame):
+        self.table = table
+        self.model = pendingTableModel()
+        self.pendingBookFrame = pendingBookFrame
+        self.grayOut(True)
+        table.setModel(self.model)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
         table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
         table.setColumnWidth(0, 120)
         table.setColumnWidth(1, 59)
         # print(table.columnWidth(2)) -> 369
+    def clearItem(self): self.model.clearData();self.grayOut(True)
+    def grayOut(self,doIt:bool): 
+        self.pendingBookFrame.setDisabled(doIt)
+        self.table.verticalScrollBar().setProperty("grayOut",doIt)
+        repolish(self.table.verticalScrollBar())
+    def gimmeTheThing(self):
+        """get a copy of the table's data"""
+        return self.model.giveUTheThing()
+class pendingTableModel(QAbstractTableModel):
+    # custom column doesn't exist because yes as well
+    ENCHESS_COL, PUNUSHENT_COL, AMOUNT_COL, CUSTOM_COL = [0,1,2,3]
+    HEADERS = ["內容","懲罰","數量示意圖"]
+
+    def __init__(self):
+        super().__init__()
+        self._data:list[tuple[list[tuple[Ench,int]],int,int,bool]] = [] # [[(ench,lvl)],punishment,number,custom]
+    def addItem(self,theData):
+        pass
+    def clearData(self):
+        self.beginResetModel()
+        self._data.clear()
+        self.endResetModel()
+
+    def data(self, index:QModelIndex, role:Qt.ItemDataRole):
+        col, row = index.column(),index.row()
+        enchess, punishent, amount, isCustom = self._data[row]
+        if role == Qt.ItemDataRole.DisplayRole:
+            if col == self.ENCHESS_COL: return "PROTECTION XIV"
+            if col == self.PUNUSHENT_COL: return 0
+            if col == self.AMOUNT_COL: return "IM WORKING ON IT"
+        if role == Qt.ItemDataRole.BackgroundRole:
+            if isCustom: return QColor("#3B1500")
+        if role == Qt.ItemDataRole.ForegroundRole:
+            if col == self.PUNUSHENT_COL and punishent!=0: return QColor("#FF0000")
+        if role == Qt.ItemDataRole.TextAlignmentRole:
+            if col<self.AMOUNT_COL: return Qt.AlignmentFlag.AlignCenter
+            else: return Qt.AlignmentFlag.AlignLeft
+        if role == Qt.ItemDataRole.FontRole:
+            if col == self.PUNUSHENT_COL and punishent!=0:
+                font = QFont();font.setBold(True)
+                return font
+    def setData(self, index, value, /, role = ...): return False
+    def giveUTheThing(self):
+        """get a copy of all data"""
+        result = [data.copy() for data in self._data]
+        return result
+
+    def flags(self, index):
+        flags = Qt.ItemFlag.ItemIsEnabled
+        return flags
+    def rowCount(self, index=0): return len(self._data)
+    def columnCount(self, index=0): return 3
+    def headerData(self, section, orientation, role):
+        # section is the index of the column/row.
+        if role != Qt.ItemDataRole.DisplayRole: return
+        if orientation == Qt.Vertical: return
+        if orientation == Qt.Horizontal:
+            return str(self.HEADERS[section])
 
 def tryGetDarkTitleBar(window, dark=True):
     try:
