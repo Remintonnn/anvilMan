@@ -127,7 +127,7 @@ class SaveTableControler:
         self.table.resizeRowsToContents()
 
 class EquipmentSelectionControler:
-    def __init__(self,buttons:list[list[QPushButton,Enum]],enchTable:"enchTableControler"):
+    def __init__(self,buttons:list[list[QPushButton,Enum]],enchTable:"EnchTableControler"):
         self.buttons = []
         self.enchTable = enchTable
         self.theChosenOne:QPushButton = None
@@ -170,11 +170,11 @@ class EnchTableControler:
         # print(table.columnWidth(2)) -> 89
         table.setColumnWidth(3, 55)
         table.verticalHeader().hide()
-        # TODO: DEAL WITH THIS
+
         self.filter = self.filterObj(self,table.viewport())
         table.viewport().installEventFilter(self.filter) # for the level scroll
     class filterObj(QObject):
-        def __init__(self, controller:"enchTableControler", parent=None):
+        def __init__(self, controller:"EnchTableControler", parent=None):
             super().__init__(parent) # To prevent effor when close program
             self.controller = controller
         def eventFilter(self, obj, event): # for the level scroll
@@ -204,7 +204,7 @@ class EnchTableControler:
         repolish(self.table.verticalScrollBar())
     def gimmeTheThing(self):
         """get a copy of the table's data"""
-        return self.model.givingTheThing()
+        return self.model.giveUTheThing()
 class EnchTableModel(QAbstractTableModel):
     # Mutex column doesn't exist because yes
     SELECTED_COL, FROMONEUP_COL, NAME_COL, LEVEL_COL, MUTEX_COL = [0,1,2,3,4]
@@ -213,11 +213,13 @@ class EnchTableModel(QAbstractTableModel):
 
     def __init__(self):
         super().__init__()
-        self._data = []
+        self._data:list[tuple[bool,bool,Ench,int,list[Ench]]] = []
         self.highlightSelected = True
         self.selectedEnch = 0
 
     def addItem(self,ench:Ench,selected=None,fromOneUp=None,lvl=None):
+        # The mutex list means the currently conflicting enchantments that's selected
+        # so it will always be init as empty because no enchantment has been selected yet
         row = self.rowCount()
         self.beginInsertRows(QModelIndex(), row, row)
         if selected is None: selected = False
@@ -323,7 +325,7 @@ class EnchTableModel(QAbstractTableModel):
         # print(f"LEVEL CHANGE AT ROW {row} GOING {"up" if lvlUp else "down"} from {lvlOld} to {lvlNow}")
         index = self.index(row,self.LEVEL_COL)
         self.dataChanged.emit(index,index,[Qt.ItemDataRole.FontRole,Qt.ItemDataRole.DisplayRole])
-    def givingTheThing(self):
+    def giveUTheThing(self):
         """get a copy of all data"""
         result = [data.copy() for data in self._data]
         return result
