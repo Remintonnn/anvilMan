@@ -28,6 +28,7 @@
     <file>shovel.webp</file>
   </qresource>
   <qresource prefix="UI">
+    <file>enchantedBook.webp</file>
     <file>checked10x10CenterGrayout.png</file>
     <file>checked10x10Center.png</file>
     <file>unCheckedGrayout.png</file>

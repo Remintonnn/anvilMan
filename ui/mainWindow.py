@@ -3,6 +3,7 @@ import random
 from enum import Enum
 
 import hmmm_rc as resource
+from calc import calc
 from calc.enchantments import Enchantment as Ench
 from calc.enchantments import enchantments as enchs # not cap cuz it's an instance
 from calc.enchantments import EnchantmentId as EnchId
@@ -28,12 +29,13 @@ class MainWindow(QMainWindow):
         tryGetDarkTitleBar(self.window())
         self.saveTable = SaveTableControler(self.ui.saveTable)
         self.enchTable = EnchTableControler(self.ui.enchTable,self.ui.enchSelFrame)
-        self.equSelection = EquipmentSelectionControler(self.equSelectButtons(),self.enchTable)
         self.pendingTable = PendingTableControler(self.ui.pendingBookTable,self.ui.pendingBookFram)
+        self.equSelection = EquipmentSelectionControler(self.equSelectButtons(),self.enchTable,self.pendingTable)
 
         self.mankAnvilLabel(self.ui.titleLabel)
         self.ui.enchSelHighlightCheckBox.toggled.connect(self.enchTable.setSelectdHighlight)
         self.ui.enchSelHighlightCheckBox.toggle()
+        self.ui.generatePendingBookButton.clicked.connect(self.generatePendingBooks)
 
     def equSelectButtons(self):
         ui = self.ui; EI = EnchItems
@@ -94,6 +96,14 @@ class MainWindow(QMainWindow):
             random.choice(anvilSounds).play()
             anvilUsed += 1
         label.mousePressEvent = playAnvil
+    def generatePendingBooks(self):
+        data = []
+        for d in self.enchTable.gimmeTheThing():
+            if d[0]: data.append((d[1],d[2],d[3]))
+        books = calc.generateBooks(data)
+        self.pendingTable.clearItem()
+        self.pendingTable.setItems(books)
+        
     def test(self):
             self.saveTable.addItem(QIcon(r"ui/icons/sword.png"),"2026/12/25","The big man is here")
             self.enchTable.addItem(enchs[EnchId.gravity])
@@ -127,9 +137,10 @@ class SaveTableControler:
         self.table.resizeRowsToContents()
 
 class EquipmentSelectionControler:
-    def __init__(self,buttons:list[list[QPushButton,Enum]],enchTable:"EnchTableControler"):
+    def __init__(self,buttons:list[list[QPushButton,Enum]],enchTable:"EnchTableControler",pendingTable:"PendingTableControler"):
         self.buttons = []
         self.enchTable = enchTable
+        self.pendingTable = pendingTable
         self.theChosenOne:QPushButton = None
         for button,item in buttons:
             button:QPushButton;item:Enum
@@ -139,6 +150,7 @@ class EquipmentSelectionControler:
             button.mouseDoubleClickEvent = lambda e, b=button, i=item: self.buttonAction(b,i)
 
     def buttonAction(self,button:QPushButton,item:Enum):
+        self.pendingTable.clearItem()
         if self.theChosenOne != None: # unchoosing chosen one:sob:
             self.theChosenOne.setProperty("chosenOne",False)
             repolish(self.theChosenOne)
@@ -202,6 +214,7 @@ class EnchTableControler:
         self.enchSelectionFrame.setDisabled(doIt)
         self.table.verticalScrollBar().setProperty("grayOut",doIt)
         repolish(self.table.verticalScrollBar())
+
     def gimmeTheThing(self):
         """get a copy of the table's data"""
         return self.model.giveUTheThing()
@@ -388,15 +401,20 @@ class PendingTableControler:
         self.table = table
         self.model = pendingTableModel()
         self.pendingBookFrame = pendingBookFrame
+        delegate = AmountDisplayDelegate()
+        table.setItemDelegateForColumn(pendingTableModel.AMOUNT_COL,delegate)
         self.grayOut(True)
         table.setModel(self.model)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
         table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
         table.setColumnWidth(0, 120)
         table.setColumnWidth(1, 39)
+        # print(table.columnWidth(2)) -> 369
 
         table.verticalHeader().hide()
-        # print(table.columnWidth(2)) -> 369
+    def setItems(self,data:list[tuple[list[tuple[Ench,int]],int,int,bool]]):
+        self.model.setItems(data)
+        self.grayOut(False)
     def clearItem(self): self.model.clearData();self.grayOut(True)
     def grayOut(self,doIt:bool): 
         self.pendingBookFrame.setDisabled(doIt)
@@ -413,8 +431,10 @@ class pendingTableModel(QAbstractTableModel):
     def __init__(self):
         super().__init__()
         self._data:list[tuple[list[tuple[Ench,int]],int,int,bool]] = [] # [[(ench,lvl)],punishment,number,custom]
-    def addItem(self,theData):
-        pass
+    def setItems(self,theData):
+        self.beginInsertRows(QModelIndex(),0,len(theData)-1)
+        self._data = theData
+        self.endInsertRows()
     def clearData(self):
         self.beginResetModel()
         self._data.clear()
@@ -424,9 +444,18 @@ class pendingTableModel(QAbstractTableModel):
         col, row = index.column(),index.row()
         enchess, punishent, amount, isCustom = self._data[row]
         if role == Qt.ItemDataRole.DisplayRole:
-            if col == self.ENCHESS_COL: return "PROTECTION XIV"
-            if col == self.PUNUSHENT_COL: return 0
-            if col == self.AMOUNT_COL: return "IM WORKING ON IT"
+            if col == self.ENCHESS_COL:
+                string = ""; first = True
+                for ench,lvl in enchess:
+                    if first: first = False
+                    else: string+='\n'                  
+                    string += f"{ench.names[0]} {getRomanNum(lvl)}"
+                return string
+            if col == self.PUNUSHENT_COL: return punishent
+            if col == self.AMOUNT_COL: return amount # return '📓'*amount
+            # print(f"WAT ARE YOU TALKING ABOUT IN {row},{col} ?")
+            # print(f"IS THIS AMOUNT COL? THE ANSWER IS {col == self.AMOUNT_COL}")
+            # print(f"IT IS {type(col)} TYPE BTW")
         if role == Qt.ItemDataRole.BackgroundRole:
             if isCustom: return QColor("#3B1500")
         if role == Qt.ItemDataRole.ForegroundRole:
@@ -455,6 +484,24 @@ class pendingTableModel(QAbstractTableModel):
         if orientation == Qt.Vertical: return
         if orientation == Qt.Horizontal:
             return str(self.HEADERS[section])
+class AmountDisplayDelegate(QStyledItemDelegate):
+    def __init__(self):
+        super().__init__()
+        self.iconSize = 16
+        self.enchBook = QIcon(":/UI/enchantedBook.webp").pixmap(self.iconSize,self.iconSize)
+    def paint(self, painter, option, index):
+        if index.column() != pendingTableModel.AMOUNT_COL: return False
+
+        count = index.data(Qt.ItemDataRole.DisplayRole)
+        x = option.rect.x() + 4
+        y = option.rect.y() + (option.rect.height() - self.iconSize) // 2
+
+        # This breaks if there's like 32 books,
+        # But I won't think about that for now
+        for _ in range(count):
+            painter.drawPixmap(x,y,self.iconSize,self.iconSize,self.enchBook)
+            x += self.iconSize
+        return True
 
 def tryGetDarkTitleBar(window, dark=True):
     try:
