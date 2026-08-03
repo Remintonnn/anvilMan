@@ -26,6 +26,7 @@ class EnchantmentsClass:
                 self.dict[id] = ench
 
 class Enchantment:
+    """You really shouldn't change the content of this"""
     def __init__(self,Id,comp,maxlvl,mulBook,mulItem,mutex,tags,names):
         self.Id = Id
         self.compatibleItems:list[str] = comp
@@ -41,6 +42,15 @@ class Enchantment:
         return item in self.compatibleItems
     def conflictsWith(self,ench:"Enchantment"):
         return ench.Id in self.mutexEnch
+    def __str__(self):
+        return self.names[0]
+    def __repr__(self):
+        return f"Enchantment({self.Id},{self.compatibleItems},{self.maxlvl},{self.multiplierBook},{self.multiplierItem},{self.mutexEnch},{self.tags},{self.names})"
+    def __eq__(self, otherEnch):
+        if not isinstance(otherEnch,Enchantment): return NotImplemented
+        return self.Id==otherEnch.Id
+    def __hash__(self):
+        return hash(self.Id)
 
 enchantments = EnchantmentsClass()
 # ==================
