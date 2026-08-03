@@ -18,7 +18,7 @@ class Book:
     def addEnch(self,ench:Ench,lvl:int):
         self.enchess.append((ench,lvl))
     def asList(self) -> tuple[list[tuple[Ench,int]],int,int,bool]:
-        return [self.enchess,self.punishent,self.amount,self.isCustom].copy()
+        return [self.enchess,self.punishent,self.amount,self.isCustom]
 
 def generateBooks(targetEnchs:list[tuple[bool,Ench,int]]):
     bookBag:list[Book] = []
