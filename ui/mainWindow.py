@@ -101,7 +101,7 @@ class MainWindow(QMainWindow):
         data = self.enchTable.gimmeTheThing()
         books = calc.generateBooks(data)
         self.pendingTable.clearItem()
-        self.pendingTable.setItems(books)
+        self.pendingTable.setItems(books,self.equSelection.getChosenIcon())
         
     def test(self):
             self.saveTable.addItem(QIcon(r"ui/icons/sword.png"),"2026/12/25","The big man is here")
@@ -161,6 +161,9 @@ class EquipmentSelectionControler:
         else:
             self.theChosenOne = None
             self.enchTable.clearItem()
+    def getChosenIcon(self):
+        if self.theChosenOne is None: return None
+        return self.theChosenOne.icon()
 
 class EnchTableControler:
     def __init__(self, table:QTableView, enchSelectionFrame:QFrame):
@@ -412,8 +415,8 @@ class PendingTableControler:
         # print(table.columnWidth(2)) -> 369
 
         table.verticalHeader().hide()
-    def setItems(self,bookBag:list[Book]):
-        self.model.setItems(bookBag)
+    def setItems(self,bookBag:list[Book],currentIcon:QIcon):
+        self.model.setItems(bookBag,currentIcon)
         self.table.resizeRowsToContents()
         self.grayOut(False)
     def clearItem(self): self.model.clearData();self.grayOut(True)
@@ -427,12 +430,13 @@ class PendingTableControler:
 class pendingTableModel(QAbstractTableModel):
     # custom column doesn't exist because yes as well
     ENCHESS_COL, PUNUSHENT_COL, AMOUNT_COL, CUSTOM_COL = [0,1,2,3]
-    HEADERS = ["內容","懲罰","數量示意圖"]
+    HEADERS = ["內含附魔","懲罰","數量示意圖"]
 
     def __init__(self):
         super().__init__()
         self._data:list[Book] = []
-    def setItems(self,theData):
+    def setItems(self,theData,currentIcon:QIcon):
+        self._equIcon = currentIcon
         self.beginInsertRows(QModelIndex(),0,len(theData)-1)
         self._data = theData
         self.endInsertRows()
@@ -443,7 +447,7 @@ class pendingTableModel(QAbstractTableModel):
 
     def data(self, index:QModelIndex, role:Qt.ItemDataRole):
         col, row = index.column(),index.row()
-        enchess, punishent, amount, isCustom = self._data[row].asList()
+        enchess, punishent, amount, isBook, isCustom = self._data[row].asList()
         if role == Qt.ItemDataRole.DisplayRole:
             if col == self.ENCHESS_COL:
                 string = ""; first = True
@@ -453,7 +457,9 @@ class pendingTableModel(QAbstractTableModel):
                     string += f"{ench.names[0]} {getRomanNum(lvl)}"
                 return string
             if col == self.PUNUSHENT_COL: return punishent
-            if col == self.AMOUNT_COL: return amount # return '📓'*amount
+            if col == self.AMOUNT_COL:
+                return amount, None if isBook else self._equIcon
+                # return '📓'*amount
             # print(f"WAT ARE YOU TALKING ABOUT IN {row},{col} ?")
             # print(f"IS THIS AMOUNT COL? THE ANSWER IS {col == self.AMOUNT_COL}")
             # print(f"IT IS {type(col)} TYPE BTW")
@@ -493,14 +499,16 @@ class AmountDisplayDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         if index.column() != pendingTableModel.AMOUNT_COL: return False
 
-        count = index.data(Qt.ItemDataRole.DisplayRole)
+        count, icon = index.data(Qt.ItemDataRole.DisplayRole)
+        if icon is None: icon = self.enchBook
+        else: icon = icon.pixmap(self.iconSize,self.iconSize)
         x = option.rect.x() + 4
         y = option.rect.y() + (option.rect.height() - self.iconSize) // 2
 
         # This breaks if there's like 32 books,
         # But I won't think about that for now
         for _ in range(count):
-            painter.drawPixmap(x,y,self.iconSize,self.iconSize,self.enchBook)
+            painter.drawPixmap(x,y,self.iconSize,self.iconSize,icon)
             x += self.iconSize
         return True
 
