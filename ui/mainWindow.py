@@ -330,6 +330,7 @@ class EnchTableModel(QAbstractTableModel):
             return True
         return False
     def changelvl(self,row:int,lvlUp:bool):
+        if self.data(self.index(row,0),self.ConflictedRole): return
         lvlCap = self._data[row][self.NAME_COL].maxlvl
         lvlNow = self._data[row][self.LEVEL_COL]
         lvlOld = lvlNow
