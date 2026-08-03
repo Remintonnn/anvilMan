@@ -4,6 +4,7 @@ from enum import Enum
 
 import hmmm_rc as resource
 from calc import calc
+from calc.calc import Book
 from calc.enchantments import Enchantment as Ench
 from calc.enchantments import enchantments as enchs # not cap cuz it's an instance
 from calc.enchantments import EnchantmentId as EnchId
@@ -97,9 +98,7 @@ class MainWindow(QMainWindow):
             anvilUsed += 1
         label.mousePressEvent = playAnvil
     def generatePendingBooks(self):
-        data = []
-        for d in self.enchTable.gimmeTheThing():
-            if d[0]: data.append((d[1],d[2],d[3]))
+        data = self.enchTable.gimmeTheThing()
         books = calc.generateBooks(data)
         self.pendingTable.clearItem()
         self.pendingTable.setItems(books)
@@ -340,8 +339,8 @@ class EnchTableModel(QAbstractTableModel):
         index = self.index(row,self.LEVEL_COL)
         self.dataChanged.emit(index,index,[Qt.ItemDataRole.FontRole,Qt.ItemDataRole.DisplayRole])
     def giveUTheThing(self):
-        """get a copy of all data"""
-        result = [data.copy() for data in self._data]
+        """get a list of all ench selected"""
+        result = [[data[1],data[2],data[3]] for data in self._data if data[0]]
         return result
 
     def flags(self, index):
@@ -413,8 +412,9 @@ class PendingTableControler:
         # print(table.columnWidth(2)) -> 369
 
         table.verticalHeader().hide()
-    def setItems(self,data:list[tuple[list[tuple[Ench,int]],int,int,bool]]):
-        self.model.setItems(data)
+    def setItems(self,bookBag:list[Book]):
+        self.model.setItems(bookBag)
+        self.table.resizeRowsToContents()
         self.grayOut(False)
     def clearItem(self): self.model.clearData();self.grayOut(True)
     def grayOut(self,doIt:bool): 
@@ -431,7 +431,7 @@ class pendingTableModel(QAbstractTableModel):
 
     def __init__(self):
         super().__init__()
-        self._data:list[tuple[list[tuple[Ench,int]],int,int,bool]] = [] # [[(ench,lvl)],punishment,number,custom]
+        self._data:list[Book] = []
     def setItems(self,theData):
         self.beginInsertRows(QModelIndex(),0,len(theData)-1)
         self._data = theData
@@ -443,7 +443,7 @@ class pendingTableModel(QAbstractTableModel):
 
     def data(self, index:QModelIndex, role:Qt.ItemDataRole):
         col, row = index.column(),index.row()
-        enchess, punishent, amount, isCustom = self._data[row]
+        enchess, punishent, amount, isCustom = self._data[row].asList()
         if role == Qt.ItemDataRole.DisplayRole:
             if col == self.ENCHESS_COL:
                 string = ""; first = True
