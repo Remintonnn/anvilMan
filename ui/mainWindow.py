@@ -37,6 +37,7 @@ class MainWindow(QMainWindow):
         self.ui.enchSelHighlightCheckBox.toggled.connect(self.enchTable.setSelectdHighlight)
         self.ui.enchSelHighlightCheckBox.toggle()
         self.ui.generatePendingBookButton.clicked.connect(self.generatePendingBooks)
+        self.ui.calculateInstructionButton.clicked.connect(self.generateSteps)
 
     def equSelectButtons(self):
         ui = self.ui; EI = EnchItems
@@ -99,10 +100,13 @@ class MainWindow(QMainWindow):
         label.mousePressEvent = playAnvil
     def generatePendingBooks(self):
         data = self.enchTable.gimmeTheThing()
-        books = calc.generateBooks(data)
+        books = calc.generateBooks(data,self.equSelection.theChosenItem)
         self.pendingTable.clearItem()
         self.pendingTable.setItems(books,self.equSelection.getChosenIcon())
-        
+    def generateSteps(self):
+        targetEnch = self.enchTable.gimmeTheThing()
+        bookBag = self.pendingTable.gimmeTheThing()
+        calc.generateSteps(targetEnch,bookBag)
     def test(self):
             self.saveTable.addItem(QIcon(r"ui/icons/sword.png"),"2026/12/25","The big man is here")
             self.enchTable.addItem(enchs[EnchId.gravity])
@@ -141,6 +145,7 @@ class EquipmentSelectionControler:
         self.enchTable = enchTable
         self.pendingTable = pendingTable
         self.theChosenOne:QPushButton = None
+        self.theChosenItem:Enum = None
         for button,item in buttons:
             button:QPushButton;item:Enum
             # print(f"connecting {button.objectName()} for {item.value}")
@@ -157,9 +162,11 @@ class EquipmentSelectionControler:
             button.setProperty("chosenOne",True)
             repolish(button)
             self.theChosenOne = button
+            self.theChosenItem = item
             self.enchTable.populateFromNewItem(item)
         else:
             self.theChosenOne = None
+            self.theChosenItem = None
             self.enchTable.clearItem()
     def getChosenIcon(self):
         if self.theChosenOne is None: return None
@@ -335,8 +342,9 @@ class EnchTableModel(QAbstractTableModel):
         if self.data(self.index(row,0),self.ConflictedRole): return
         lvlCap = self._data[row][self.NAME_COL].maxlvl
         lvlNow = self._data[row][self.LEVEL_COL]
-        lvlOld = lvlNow
-        lvlNow = max(1, min(lvlNow+1 if lvlUp else lvlNow-1, lvlCap))
+        # lvlOld = lvlNow
+        # lvlNow = max(1, min(lvlNow+1 if lvlUp else lvlNow-1, lvlCap))
+        lvlNow = max(1, lvlNow+1 if lvlUp else lvlNow-1)
         self._data[row][self.LEVEL_COL] = lvlNow
         # print(f"LEVEL CHANGE AT ROW {row} GOING {"up" if lvlUp else "down"} from {lvlOld} to {lvlNow}")
         index = self.index(row,self.LEVEL_COL)
@@ -451,7 +459,7 @@ class pendingTableModel(QAbstractTableModel):
         if role == Qt.ItemDataRole.DisplayRole:
             if col == self.ENCHESS_COL:
                 string = ""; first = True
-                for ench,lvl in enchess:
+                for ench,lvl in enchess.items():
                     if first: first = False
                     else: string+='\n'                  
                     string += f"{ench.names[0]} {getRomanNum(lvl)}"
@@ -477,7 +485,7 @@ class pendingTableModel(QAbstractTableModel):
     def setData(self, index, value, /, role = ...): return False
     def giveUTheThing(self):
         """get a copy of all data"""
-        result = [data.copy() for data in self._data]
+        result = [book.copy() for book in self._data]
         return result
 
     def flags(self, index):
