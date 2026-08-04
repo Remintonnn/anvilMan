@@ -1,9 +1,12 @@
 from enum import Enum
-from itertools import product
 from time import time
 import cProfile
+import pstats
 from dataclasses import dataclass
 from dataclasses import field
+from rich.tree import Tree
+from rich import print as rprint
+
 
 from calc.enchantments import Enchantment as Ench
 from calc.enchantments import enchantments as enchs # not cap cuz it's an instance
@@ -13,6 +16,7 @@ from calc.enchantments import EnchantableItems as EnchItems# Constants
 
 MAX_LEVEL = 39
 MAX_TREE_SIZE = 32 # punishent=5
+MAX_TREE_HEIGHT = 5
 
 @dataclass(frozen=True)
 class Book:
@@ -80,7 +84,8 @@ class Book:
             if first: first=False
             else: result += ", "
             result += f"{ench.names[0]}{lvl}"
-        result += f"]*{self.amount}"
+        # result += f"]*{self.amount}"
+        result += "]"
         return result
     def __repr__(self):
         # return self.__str__()
@@ -102,9 +107,20 @@ def generateSteps(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
         genStepBinTree(targetEnchs,bookBag)
         # genStepDFS(targetEnchs,bookBag)
         print("===========================")
-        pr.print_stats("cumtime")
+        # pr.print_stats("cumtime")
+        stats = pstats.Stats(pr)
+        stats.sort_stats("cumtime").print_stats(10)
+        # stats.print_callers("generateSplits")
+        # stats.print_callees("generateSplits")
 def genStepBinTree(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
-    def ncw():return (None,393,None) # Default value for newBook,Cost,Waste
+    """This will search through all possible Tree and combination,
+    garanteeing the optimal solution,
+    but with a big O of 4^n or some crazy BS,
+    better not use this on more then 20~30 books.
+    I just left this here because I have spend too much time on this to remove it,
+    Take this as a trophy of past I suppose.
+    """ # man the data trees REALLY are a pain in the ass
+    def ncw():return None,393,None # Default value for newBook,Cost,Waste
     # The amount in Book will be ignored, use countDict[Book] instead
     # There is no need to dynamic assign new Id for the books prduced durning combining
     # because those books are stored in the DPMAN, and won't appear in generateSplits
@@ -115,15 +131,19 @@ def genStepBinTree(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
 
     wasteAllowed = calWasteAllowed(targetEnchs,bookBag)
     # value None means bookBag cannot be combined
-    DPMAN:dict[any,tuple[Book,int,dict[Ench,int]]] = {} # Dynamic Programming Module And Notes
+    DPMAN:dict[any,DPPOINT] = {} # Dynamic Programming Module And Notes
 
     interation = 0; recu = 0
     cacHit,cacMis=0,0
-    def loopBoi(cd:dict[int,int]):
-        nonlocal cacHit,cacMis
+    heightTruncate = 0
+    BAD = 0; heightRecord = 0
+    def loopBoi(cd:dict[int,int],height:int=0):
+        nonlocal cacHit,cacMis,heightTruncate,BAD,heightRecord
+        if height>heightRecord: heightRecord = height
+        # if height>MAX_TREE_HEIGHT: BAD+=1
+        # we checked cache hit outside before calling self
         key = bagKey(cd)
-        DPMAN[key] = ncw(); cacMis+=1 # we checked cache hit outside before calling self
-        
+        DPMAN[key] = DPPOINT(); cacMis+=1
         # nonlocal interation,recu
         # interation+=1
         for bl,amountL,br,amountR in generateSplits(cd): # we assume bl+br=br+bl for now
@@ -133,51 +153,79 @@ def genStepBinTree(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
             keyL,keyR = bagKey(bl),bagKey(br)
             leftReady = amountL==1 or keyL in DPMAN # use in because None values
             rightReady = amountR==1 or keyR in DPMAN
-            if not leftReady: cacMis+=1; nbL,ccL,wwL = loopBoi(bl)
+            if height==MAX_TREE_HEIGHT+5 and (not leftReady or not rightReady): heightTruncate += 1; continue
+            if not leftReady: cacMis+=1; nbL,ccL,wwL = loopBoi(bl,height+1)
             else:
                 if amountL!=1: cacHit += 1
-                nbL,ccL,wwL = (id2BookDict[next(iter(bl))],0,{}) if amountL==1 else DPMAN[keyL]
-            if not rightReady: cacMis+=1; nbR,ccR,wwR = loopBoi(br)
+                nbL,ccL,wwL = (id2BookDict[next(iter(bl))],0,{}) if amountL==1 else DPMAN[keyL].ncw()
+            if not rightReady: cacMis+=1; nbR,ccR,wwR = loopBoi(br,height+1)
             else:
                 if amountR!=1: cacHit += 1
-                nbR,ccR,wwR = (id2BookDict[next(iter(br))],0,{}) if amountR==1 else DPMAN[keyR]
+                nbR,ccR,wwR = (id2BookDict[next(iter(br))],0,{}) if amountR==1 else DPMAN[keyR].ncw()
             nb,cc,ww = combine(nbL,nbR)
             if nb is None: continue
             cc = cc+ccL+ccR; ww = wasteCombine(ww,wwL,wwR)
-            DPnb,DPcc,DPww = DPMAN[key]
-            if DPnb is None: DPMAN[key] = (nb,cc,ww)
-            elif nb.punishent<DPnb.punishent or (nb.punishent<=DPnb.punishent and cc<DPcc):
-                DPMAN[key]=(nb,cc,ww)
-        return DPMAN[key]
-
+            DPnb,DPcc,DPww = DPMAN[key].ncw()
+            if  DPnb is None or nb.punishent<DPnb.punishent or (nb.punishent<=DPnb.punishent and cc<DPcc):
+                DPMAN[key]=DPPOINT(nb,cc,ww,keyL if amountL!=1 else None,keyR if amountR!=1 else None,bl,br)
+        return DPMAN[key].ncw()
+    # cacComb:dict[any,tuple[Book,int,dict[Ench,int]]] = {}
+    # cacCombH,cacCombM = 0,0
     def combine(bl:Book,br:Book) -> tuple[Book,int,dict[Ench,int]]:
+        # nonlocal cacCombH,cacCombM
+        # no need remeber this cuz you see None you know the answer
         nb,cc,ww = ncw()
         if bl is None or br is None: return nb,cc,ww
+        # bk = bookKey(bl,br)
+        # if bk in cacComb: cacCombH+=1; return cacComb[bk]
+        # cacCombM+=1
         nb1,c1,w1 = bl.combineWith(br)
         nb2,c2,w2 = br.combineWith(bl)
         if isCombValid(nb1,c1,w1): nb=nb1;cc=c1;ww=w1
         if isCombValid(nb2,c2,w2) and c2<cc: nb=nb2;cc=c2;ww=w2 # we only compare cost for now
+        # cacComb[bk] = (nb,cc,ww)
         return nb,cc,ww
     def generateSplits(countDict: dict[int,int]):
-        bookCount = sum(countDict.values())
-        vectors = (range(num + 1) for num in countDict.values())
-        seen = set()
-        left:dict[int,int]={}; right:dict[int,int]={} # more CD!
-        for leftSet in product(*vectors): # leftSet = (0,4,4,2) for example, if 4 items in bookBag
-            left.clear();right.clear()
-            leftCount = sum(leftSet); rightCount = bookCount-leftCount
-            if leftCount==0 or rightCount==0: continue
-            if leftCount>MAX_TREE_SIZE or rightCount>MAX_TREE_SIZE: continue
-            rightSet = tuple(num-leftBook for num,leftBook in zip(countDict.values(),leftSet))
-            canon = min(leftSet, rightSet)
-            if canon in seen: continue
-            seen.add(canon)
-
-            for (bookId, bookAmount), leftAmount in zip(countDict.items(), leftSet):
-                rightAmount = bookAmount - leftAmount
+        cdVal,cdKey = list(countDict.values()),list(countDict.keys())
+        left:dict[int,int]; right:dict[int,int] # more CD!
+        for leftSet, leftCount, rightSet, rightCount in productXL(cdVal):
+            left={};right={}
+            for bookId, leftAmount, rightAmount in zip(cdKey,leftSet,rightSet):
                 if leftAmount: left[bookId] = leftAmount
                 if rightAmount: right[bookId] = rightAmount
             yield left, leftCount, right, rightCount
+    def productXL(bookNums:list[int]):
+        totalBook = sum(bookNums)
+        halfTotalBook = [num//2 for num in bookNums]
+        isBookNumEven = [num&1==0 for num in bookNums]
+        bookTypes = len(bookNums)
+        # print(f"halfBooks: {halfTotalBook}, tookTypes: {bookTypes}")
+        left = [0]*bookTypes
+        def dfs(depth,leftCount,headLess):
+            if depth == bookTypes:
+                rightCount = totalBook-leftCount
+                if leftCount == 0 or rightCount > MAX_TREE_SIZE: return
+                lefties = tuple(left)
+                rightiest = tuple(total-lefty for total,lefty in zip(bookNums, lefties))
+                # if lefties > rightiest: return
+                yield lefties, leftCount, rightiest, rightCount
+                return
+            maxTake = bookNums[depth]
+            for x in range(maxTake + 1):
+                bnIsEven,halfPoint = isBookNumEven[depth],halfTotalBook[depth]
+                if not headLess and x>halfPoint: break
+                # print(f"PURGED AT DEPTH {depth} with {x} > {halfTotalBook[depth]}, tup={tuple(left)}")
+                # newCount i.e. left only goes up from here
+                newCount = leftCount + x
+                if newCount == totalBook: break
+                if newCount > MAX_TREE_SIZE: break
+                left[depth] = x
+                # the headLess is treated differently because for even numbers,
+                # the half point sits perfectly in the middle
+                # so x is not really less when x==halfPoint
+                # which is the case for odd numbsrs
+                yield from dfs(depth+1, newCount, headLess or (x<halfPoint if bnIsEven else x<=halfPoint))
+        yield from dfs(0,0,False)
     def isCombValid(success:bool,cost:int,waste:dict[Ench,int]):
         if success is None: return False
         if cost>MAX_LEVEL: return False
@@ -190,14 +238,37 @@ def genStepBinTree(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
             for ench,amount in waste.items():
                 result[ench] = result.get(ench,0)+amount
         return result
-    def bagKey(cd:dict[int,int]):
-        return tuple(cd.items())
+    def bagKey(cd:dict[int,int]): return tuple(cd.items())
+    
+    @dataclass
+    class DPPOINT:
+        book:Book=None
+        cost:int=393
+        waste:dict[Ench,int]=None
+        keyL:tuple=None
+        keyR:tuple=None
+        bagL:dict[int,int]=None
+        bagR:dict[int,int]=None
+        def ncw(self): return self.book,self.cost,self.waste
+        def __str__(self): return str(self.book)
+    def treePrinter(DPMAN:dict[any,DPPOINT],key:tuple,id2BookDict:dict[int,Book]):
+        print("TREE WALKING TIME")
+        root = Tree(str(DPMAN[key]))
+        def nodeWalker(key:tuple, parentNode:Tree):
+            dp = DPMAN[key]
+            kl,kr = dp.keyL,dp.keyR
+            if kl is None: parentNode.add(str(id2BookDict[iter(dp.bagL.keys()).__next__()]))
+            else: nodeWalker(kl,parentNode.add(""))
+            if kr is None: parentNode.add(str(id2BookDict[iter(dp.bagR.keys()).__next__()]))
+            else: nodeWalker(kr,parentNode.add(""))
+        nodeWalker(key, root)
+        rprint(root)
 
     start = time()
     print("start loop")
     print(f"Total books: {sum(b.amount for b in bookBag)}, totalTypes: {len(bookBag)}")
     loopBoi(countDict)
-    resultBook,totalXPCost,wastedEnch = DPMAN[bagKey(countDict)]
+    resultBook,totalXPCost,wastedEnch = DPMAN[bagKey(countDict)].ncw()
     if not resultBook is None:
         print(f"{resultBook}, PENALTY = {resultBook.getPenaltylvl()}")
         if len(wastedEnch):
@@ -209,7 +280,30 @@ def genStepBinTree(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
     print(f"done loop in {time()-start}")
     print(f"cacH:M = {cacHit}:{cacMis}")
     print(f"cacheLen = {len(DPMAN)}")
+    print(f"Height truncated: {heightTruncate}")
+    print(f"Height record: {heightRecord}")
+    print(f"BAD: {BAD}")
+    print(f"Vals: {list(countDict.values())}")
+    if resultBook is not None:
+        treePrinter(DPMAN,bagKey(countDict),id2BookDict)
+    # start loop
+    # Total books: 18, totalTypes: 7
+    # EQU [保護4, 獻祭經驗1, 擊退保護2, 耐久3, 健康3, 倔強4], PENALTY = 31
+    # FOUND COMBINATION
+    # done loop in 3.658159017562866
+    # cacH:M = 307339:4303
+    # cacheLen = 2152
+    # Height truncated: 2873
+    # Height record: 10
+    # BAD: 0
+    # Vals: [1, 1, 1, 4, 8, 1, 2]
 def genStepDFS(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
+    """Search through all combination of merging steps with DFS!
+    This thing is so slow I didn't even get to the find optimal solution part.
+    I just left this here because I have spend too much time on this to remove it,
+    Take this as a trophy of past I suppose.
+    The data classes has changed quite a bit since then, so this function is kinda broken rn.
+    """ # I'm surprised how far this thing got, I mean, 20 books before search time exploding
     bb = [book.copy() for book in bookBag] # bb stands for bookBag
     wasteAllowed = calWasteAllowed(targetEnchs,bookBag)
     DPMAN = {} # Dynamic Programming Module And Notes
