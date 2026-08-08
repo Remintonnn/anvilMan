@@ -652,9 +652,12 @@ class Ui_MainWindow(object):
         self.menubar.setGeometry(QRect(0, 0, 910, 21))
         self.manual = QMenu(self.menubar)
         self.manual.setObjectName(u"manual")
+        self.menu = QMenu(self.menubar)
+        self.menu.setObjectName(u"menu")
         MainWindow.setMenuBar(self.menubar)
 
         self.menubar.addAction(self.manual.menuAction())
+        self.menubar.addAction(self.menu.menuAction())
 
         self.retranslateUi(MainWindow)
 
@@ -765,6 +768,7 @@ class Ui_MainWindow(object):
         self.saveButton.setText(QCoreApplication.translate("MainWindow", u"\u5132\u5b58\u88dd\u5099", None))
         self.saveNameInputBox.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u8f38\u5165\u7269\u54c1\u540d\u5b57...", None))
         self.pendingBookSlotDisplayLabel.setText(QCoreApplication.translate("MainWindow", u"\u9644\u9b54\u69fd\u4f4d\u4f7f\u7528: 37  (\u8b66\u544a: \u69fd\u4f4d\u4f7f\u7528\u8d85\u904e36\u57fa\u672c\u4e0a\u7121\u89e3)", None))
-        self.manual.setTitle(QCoreApplication.translate("MainWindow", u"\u4f7f\u7528\u8aaa\u660e", None))
+        self.manual.setTitle(QCoreApplication.translate("MainWindow", u"\u4f7f\u7528\u8aaa\u660e(Please notice meeeeee)", None))
+        self.menu.setTitle(QCoreApplication.translate("MainWindow", u"\u95dc\u65bc", None))
     # retranslateUi
 
