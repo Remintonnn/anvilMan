@@ -1,0 +1,50 @@
+<RCC>
+  <qresource prefix="armors">
+    <file>icons/boots.webp</file>
+    <file>icons/chestplate.png</file>
+    <file>icons/elytra.png</file>
+    <file>icons/helmet.webp</file>
+    <file>icons/leggings.webp</file>
+  </qresource>
+  <qresource prefix="melee">
+    <file>icons/axe.png</file>
+    <file>icons/mace.webp</file>
+    <file>icons/shield.webp</file>
+    <file>icons/spear.webp</file>
+    <file>icons/sword.png</file>
+    <file>icons/trident.webp</file>
+  </qresource>
+  <qresource prefix="range">
+    <file>icons/bow.png</file>
+    <file>icons/crossbow.webp</file>
+  </qresource>
+  <qresource prefix="tools">
+    <file>icons/axe.png</file>
+    <file>icons/F&amp;C.webp</file>
+    <file>icons/fishingRod.png</file>
+    <file>icons/hoe.png</file>
+    <file>icons/pickaxe.png</file>
+    <file>icons/shear.png</file>
+    <file>icons/shovel.webp</file>
+  </qresource>
+  <qresource prefix="UI">
+    <file>icons/checked.png</file>
+    <file>icons/checked10x10Center.png</file>
+    <file>icons/checked10x10CenterGrayout.png</file>
+    <file>icons/checkedGrayout.png</file>
+    <file>icons/downArrow.png</file>
+    <file>icons/enchantedBook.webp</file>
+    <file>icons/unChecked.png</file>
+    <file>icons/unCheckedGrayout.png</file>
+    <file>icons/upArrow.png</file>
+  </qresource>
+  <qresource prefix="Sound">
+    <file>sounds/anvilD3.wav</file>
+    <file>sounds/anvilF#4.wav</file>
+    <file>sounds/anvilD4.wav</file>
+    <file>sounds/anvilD#4.wav</file>
+    <file>sounds/noAnvilB3.wav</file>
+    <file>sounds/noAnvilD3.wav</file>
+    <file>sounds/noAnvilG3.wav</file>
+  </qresource>
+</RCC>

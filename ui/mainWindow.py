@@ -10,7 +10,7 @@ from calc.enchantments import enchantments as enchs # not cap cuz it's an instan
 from calc.enchantments import EnchantmentId as EnchId
 from calc.enchantments import EnchantmentTags as EnchTag
 from calc.enchantments import EnchantableItems as EnchItems
-from ui.mainMenu import Ui_MainWindow
+from ui.resources.QtFiles.mainMenu import Ui_MainWindow
 
 from PySide6.QtCore import Qt, QUrl, QDir, QTimer, QAbstractTableModel, QModelIndex, QEvent, QObject, Signal
 from PySide6.QtWidgets import * # QApplication, QStyleFactory, QHeaderView, QTableWidgetItem
@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
         bookBag = self.pendingTable.gimmeTheThing()
         calc.generateSteps(targetEnch,bookBag)
     def test(self):
-            self.saveTable.addItem(QIcon(r"ui/icons/sword.png"),"2026/12/25","The big man is here")
+            self.saveTable.addItem(QIcon(r"ui/resources/icons/sword.png"),"2026/12/25","The big man is here")
             self.enchTable.addItem(enchs[EnchId.gravity])
             self.enchTable.addItem(enchs[EnchId.efficiency])
             # addItem(enchTable,QCheckBox(),QCheckBox(),"動作音效 紲星燈", 4)
@@ -385,10 +385,10 @@ class EnchTableModel(QAbstractTableModel):
 class CheckBoxDelegate(QStyledItemDelegate):
     def __init__(self):
         super().__init__()
-        self.checked = QIcon(":/UI/checked.png").pixmap(16,16)
-        self.unchecked = QIcon(":/UI/unChecked.png").pixmap(16,16)
-        self.checkedGrayout = QIcon(":/UI/checkedGrayout.png").pixmap(16,16)
-        self.uncheckedGrayout = QIcon(":/UI/unCheckedGrayout.png").pixmap(16,16)
+        self.checked = QIcon(":/UI/icons/checked.png").pixmap(16,16)
+        self.unchecked = QIcon(":/UI/icons/unChecked.png").pixmap(16,16)
+        self.checkedGrayout = QIcon(":/UI/icons/checkedGrayout.png").pixmap(16,16)
+        self.uncheckedGrayout = QIcon(":/UI/icons/unCheckedGrayout.png").pixmap(16,16)
     def paint(self, painter, option, index):
         if index.column() not in (0,1): return
         opt = QStyleOptionViewItem(option)
@@ -527,7 +527,7 @@ class AmountDisplayDelegate(QStyledItemDelegate):
     def __init__(self):
         super().__init__()
         self.iconSize = 16
-        self.enchBook = QIcon(":/UI/enchantedBook.webp").pixmap(self.iconSize,self.iconSize)
+        self.enchBook = QIcon(":/UI/icons/enchantedBook.webp").pixmap(self.iconSize,self.iconSize)
     def paint(self, painter, option, index):
         if index.column() != pendingTableModel.AMOUNT_ICON_COL: return False
 
