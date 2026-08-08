@@ -1527,7 +1527,7 @@ QPushButton:disabled{
    </property>
    <widget class="QMenu" name="manual">
     <property name="title">
-     <string>使用說明(Please notice me senpai)</string>
+     <string>使用說明</string>
     </property>
    </widget>
    <addaction name="manual"/>
