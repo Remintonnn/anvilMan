@@ -12,7 +12,7 @@ from calc.enchantments import EnchantmentTags as EnchTag
 from calc.enchantments import EnchantableItems as EnchItems
 from ui.mainMenu import Ui_MainWindow
 
-from PySide6.QtCore import Qt, QUrl, QDir, QTimer, QAbstractTableModel, QModelIndex, QEvent, QObject
+from PySide6.QtCore import Qt, QUrl, QDir, QTimer, QAbstractTableModel, QModelIndex, QEvent, QObject, Signal
 from PySide6.QtWidgets import * # QApplication, QStyleFactory, QHeaderView, QTableWidgetItem
 from PySide6.QtUiTools import * # QUiLoader
 from PySide6.QtGui import * # QIcon
@@ -30,15 +30,22 @@ class MainWindow(QMainWindow):
         tryGetDarkTitleBar(self.window())
         self.saveTable = SaveTableControler(self.ui.saveTable)
         self.enchTable = EnchTableControler(self.ui.enchTable,self.ui.enchSelFrame)
-        self.pendingTable = PendingTableControler(self.ui.pendingBookTable,self.ui.pendingBookFram)
-        self.equSelection = EquipmentSelectionControler(self.equSelectButtons(),self.enchTable,self.pendingTable)
+        self.pendingTable = PendingTableControler(self.ui.pendingBookTable,self.ui.pendingBookFram,self.ui.pendingBookSlotDisplayLabel)
+        self.equSelection = EquipmentSelectionControler(self.equSelectButtons())
 
         self.mankAnvilLabel(self.ui.titleLabel)
         self.ui.enchSelHighlightCheckBox.toggled.connect(self.enchTable.setSelectdHighlight)
         self.ui.enchSelHighlightCheckBox.toggle()
-        self.ui.generatePendingBookButton.clicked.connect(self.generatePendingBooks)
-        self.ui.calculateInstructionButton.clicked.connect(self.generateSteps)
+        self.ui.theOneTheOriTHEONETHEORITOTOtotoTOTALtoto.clicked.connect(self.generateSteps)
 
+        self.equSelection.oneHasBeenChosen.connect(self.onEquChoose)
+        self.enchTable.model.updatePending.connect(self.generatePendingBooks)
+
+    def onEquChoose(self,button:QPushButton,item:Enum):
+        self.pendingTable.clearItem()
+        if button is None: self.enchTable.clearItem(); return # generatePendingBooks will clear it again otherwise
+        self.enchTable.populateFromNewItem(item)
+        self.generatePendingBooks()
     def equSelectButtons(self):
         ui = self.ui; EI = EnchItems
         return [
@@ -99,6 +106,8 @@ class MainWindow(QMainWindow):
             anvilUsed += 1
         label.mousePressEvent = playAnvil
     def generatePendingBooks(self):
+        # global aGlobal
+        # aGlobal+=1; print("GEN PENDING BOOKS "+str(aGlobal))
         data = self.enchTable.gimmeTheThing()
         books = calc.generateBooks(data,self.equSelection.theChosenItem)
         self.pendingTable.clearItem()
@@ -139,13 +148,13 @@ class SaveTableControler:
         self.table.setItem(row,2, nameObj)
         self.table.resizeRowsToContents()
 
-class EquipmentSelectionControler:
-    def __init__(self,buttons:list[list[QPushButton,Enum]],enchTable:"EnchTableControler",pendingTable:"PendingTableControler"):
-        self.buttons = []
-        self.enchTable = enchTable
-        self.pendingTable = pendingTable
-        self.theChosenOne:QPushButton = None
-        self.theChosenItem:Enum = None
+class EquipmentSelectionControler(QObject): # QObject just for the signal
+    oneHasBeenChosen:Signal = Signal(QPushButton,Enum)
+    buttons = []
+    theChosenOne:QPushButton = None
+    theChosenItem:Enum = None
+    def __init__(self,buttons:list[list[QPushButton,Enum]]):
+        super().__init__()
         for button,item in buttons:
             button:QPushButton;item:Enum
             # print(f"connecting {button.objectName()} for {item.value}")
@@ -154,7 +163,6 @@ class EquipmentSelectionControler:
             button.mouseDoubleClickEvent = lambda e, b=button, i=item: self.buttonAction(b,i)
 
     def buttonAction(self,button:QPushButton,item:Enum):
-        self.pendingTable.clearItem()
         if self.theChosenOne != None: # unchoosing chosen one:sob:
             self.theChosenOne.setProperty("chosenOne",False)
             repolish(self.theChosenOne)
@@ -163,11 +171,10 @@ class EquipmentSelectionControler:
             repolish(button)
             self.theChosenOne = button
             self.theChosenItem = item
-            self.enchTable.populateFromNewItem(item)
         else:
             self.theChosenOne = None
             self.theChosenItem = None
-            self.enchTable.clearItem()
+        self.oneHasBeenChosen.emit(self.theChosenOne,self.theChosenItem)
     def getChosenIcon(self):
         if self.theChosenOne is None: return None
         return self.theChosenOne.icon()
@@ -232,12 +239,12 @@ class EnchTableModel(QAbstractTableModel):
     SELECTED_COL, FROMONEUP_COL, NAME_COL, LEVEL_COL, MUTEX_COL = [0,1,2,3,4]
     HEADERS = ["選取","從I打起","名稱","目標等級"]
     ConflictedRole = Qt.ItemDataRole.UserRole+1
+    updatePending = Signal()
+    _data:list[tuple[bool,bool,Ench,int,list[Ench]]] = []
+    highlightSelected = True
+    selectedEnch = 0
 
-    def __init__(self):
-        super().__init__()
-        self._data:list[tuple[bool,bool,Ench,int,list[Ench]]] = []
-        self.highlightSelected = True
-        self.selectedEnch = 0
+    def __init__(self): super().__init__()
 
     def addItem(self,ench:Ench,selected=None,fromOneUp=None,lvl=None):
         # The mutex list means the currently conflicting enchantments that's selected
@@ -298,6 +305,7 @@ class EnchTableModel(QAbstractTableModel):
             self._data[row][col] = stateNow
 
             if col == self.SELECTED_COL:
+                self.updatePending.emit()
                 if stateNow: 
                     if self.selectedEnch == 0:
                         self.beginResetModel()
@@ -327,6 +335,7 @@ class EnchTableModel(QAbstractTableModel):
                                 Qt.ItemDataRole.DisplayRole,
                             ]
                         )
+            elif self._data[row][self.SELECTED_COL]: self.updatePending.emit()
             self.dataChanged.emit(
                 self.index(row, 0), 
                 self.index(row, 3), # This is a range
@@ -342,12 +351,12 @@ class EnchTableModel(QAbstractTableModel):
         if self.data(self.index(row,0),self.ConflictedRole): return
         lvlCap = self._data[row][self.NAME_COL].maxlvl
         lvlNow = self._data[row][self.LEVEL_COL]
-        # lvlOld = lvlNow
-        # lvlNow = max(1, min(lvlNow+1 if lvlUp else lvlNow-1, lvlCap))
-        lvlNow = max(1, lvlNow+1 if lvlUp else lvlNow-1)
-        self._data[row][self.LEVEL_COL] = lvlNow
+        lvlNow = lvlNow+1 if lvlUp else lvlNow-1
+        if lvlNow in (0,lvlCap+1): return
         # print(f"LEVEL CHANGE AT ROW {row} GOING {"up" if lvlUp else "down"} from {lvlOld} to {lvlNow}")
+        self._data[row][self.LEVEL_COL] = lvlNow
         index = self.index(row,self.LEVEL_COL)
+        if self._data[row][self.SELECTED_COL]: self.updatePending.emit()
         self.dataChanged.emit(index,index,[Qt.ItemDataRole.FontRole,Qt.ItemDataRole.DisplayRole])
     def giveUTheThing(self):
         """get a list of all ench selected"""
@@ -408,27 +417,31 @@ class CheckBoxDelegate(QStyledItemDelegate):
         return False
 
 class PendingTableControler:
-    def __init__(self, table:QTableView, pendingBookFrame:QFrame):
+    def __init__(self, table:QTableView, pendingBookFrame:QFrame,slotLabel:QLabel):
         self.table = table
         self.model = pendingTableModel()
         self.pendingBookFrame = pendingBookFrame
+        self.slotLabel = slotLabel
         delegate = AmountDisplayDelegate()
-        table.setItemDelegateForColumn(pendingTableModel.AMOUNT_COL,delegate)
+        table.setItemDelegateForColumn(pendingTableModel.AMOUNT_ICON_COL,delegate)
         self.grayOut(True)
         table.setModel(self.model)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
         table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
         table.setColumnWidth(0, 120)
         table.setColumnWidth(1, 39)
-        # print(table.columnWidth(2)) -> 369
+        # print(table.columnWidth(2)) -> 330
+        table.setColumnWidth(3, 39)
 
         table.verticalHeader().hide()
     def setItems(self,bookBag:list[Book],currentIcon:QIcon):
         self.model.setItems(bookBag,currentIcon)
         self.table.resizeRowsToContents()
         self.grayOut(False)
+        self.slotLabel.setText(self.model.getSlotLabelText())
     def clearItem(self): self.model.clearData();self.grayOut(True)
     def grayOut(self,doIt:bool): 
+        self.slotLabel.setText("")
         self.pendingBookFrame.setDisabled(doIt)
         self.table.verticalScrollBar().setProperty("grayOut",doIt)
         repolish(self.table.verticalScrollBar())
@@ -437,8 +450,8 @@ class PendingTableControler:
         return self.model.giveUTheThing()
 class pendingTableModel(QAbstractTableModel):
     # custom column doesn't exist because yes as well
-    ENCHESS_COL, PUNUSHENT_COL, AMOUNT_COL, CUSTOM_COL = [0,1,2,3]
-    HEADERS = ["內含附魔","懲罰","數量示意圖"]
+    ENCHESS_COL, AMOUNT_NUM_COL, AMOUNT_ICON_COL, PUNUSHENT_COL, CUSTOM_COL = [0,1,2,3,4]
+    HEADERS = ["內含附魔","數量","數量示意圖","懲罰"]
 
     def __init__(self):
         super().__init__()
@@ -465,18 +478,22 @@ class pendingTableModel(QAbstractTableModel):
                     string += f"{ench.names[0]} {getRomanNum(lvl)}"
                 return string
             if col == self.PUNUSHENT_COL: return punishent
-            if col == self.AMOUNT_COL:
+            if col == self.AMOUNT_NUM_COL: return amount
+            if col == self.AMOUNT_ICON_COL:
                 return amount, None if isBook else self._equIcon
                 # return '📓'*amount
             # print(f"WAT ARE YOU TALKING ABOUT IN {row},{col} ?")
-            # print(f"IS THIS AMOUNT COL? THE ANSWER IS {col == self.AMOUNT_COL}")
+            # print(f"IS THIS AMOUNT COL? THE ANSWER IS {col == self.AMOUNT_ICON_COL}")
             # print(f"IT IS {type(col)} TYPE BTW")
         if role == Qt.ItemDataRole.BackgroundRole:
             if isCustom: return QColor("#3B1500")
         if role == Qt.ItemDataRole.ForegroundRole:
-            if col == self.PUNUSHENT_COL and punishent!=0: return QColor("#FF0000")
+            if col == self.PUNUSHENT_COL:
+                if punishent!=0: return QColor("#FF0000")
+                else: return QColor("#AAAAAA")
         if role == Qt.ItemDataRole.TextAlignmentRole:
-            if col<self.AMOUNT_COL: return Qt.AlignmentFlag.AlignCenter
+            return Qt.AlignmentFlag.AlignCenter
+            if col<self.AMOUNT_ICON_COL: return Qt.AlignmentFlag.AlignCenter
             else: return Qt.AlignmentFlag.AlignLeft
         if role == Qt.ItemDataRole.FontRole:
             if col == self.PUNUSHENT_COL and punishent!=0:
@@ -487,12 +504,19 @@ class pendingTableModel(QAbstractTableModel):
         """get a copy of all data"""
         result = [book.copy() for book in self._data]
         return result
-
+    def getSlotLabelText(self):
+        if not len(self._data): return ""
+        slotNum = sum(d.amount*(2**d.punishent) for d in self._data)
+        # for d in self._data: print(f"DA: {d.amount}, DP: {d.punishent}, {d.amount}*(2**{d.punishent})={d.amount*(2**d.punishent)}")
+        color = "#FFFFFF"; warning = ""
+        if slotNum > 36: color = "#FF0000"; warning = "警告: 使用槽位超過36基本上無解(不管怎麼敲都太貴)"
+        elif slotNum > 32: color = "#FFFF00" # ; warning = "警告: 敲完後東西將無法再次升級(以後敲啥都會太貴)"
+        return f"<font color='{color}'>附魔槽位使用: {slotNum}{"&nbsp;"*2}{warning}</font>"
     def flags(self, index):
         flags = Qt.ItemFlag.ItemIsEnabled
         return flags
     def rowCount(self, index=0): return len(self._data)
-    def columnCount(self, index=0): return 3
+    def columnCount(self, index=0): return 4
     def headerData(self, section, orientation, role):
         # section is the index of the column/row.
         if role != Qt.ItemDataRole.DisplayRole: return
@@ -505,7 +529,7 @@ class AmountDisplayDelegate(QStyledItemDelegate):
         self.iconSize = 16
         self.enchBook = QIcon(":/UI/enchantedBook.webp").pixmap(self.iconSize,self.iconSize)
     def paint(self, painter, option, index):
-        if index.column() != pendingTableModel.AMOUNT_COL: return False
+        if index.column() != pendingTableModel.AMOUNT_ICON_COL: return False
 
         count, icon = index.data(Qt.ItemDataRole.DisplayRole)
         if icon is None: icon = self.enchBook

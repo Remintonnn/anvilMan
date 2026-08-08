@@ -1245,7 +1245,7 @@ QPushButton:hover {
       <bool>false</bool>
      </attribute>
     </widget>
-    <widget class="QPushButton" name="generatePendingBookButton">
+    <widget class="QPushButton" name="theOneTheOriTHEONETHEORITOTOtotoTOTALtoto">
      <property name="geometry">
       <rect>
        <x>120</x>
@@ -1278,7 +1278,7 @@ QPushButton:disabled{
 }</string>
      </property>
      <property name="text">
-      <string>生成附魔書組合</string>
+      <string>計算鐵砧組合方式</string>
      </property>
     </widget>
     <widget class="QCheckBox" name="enchSelHighlightCheckBox">
@@ -1398,15 +1398,12 @@ QPushButton:disabled{
       <number>0</number>
      </attribute>
     </widget>
-    <widget class="QPushButton" name="calculateInstructionButton">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
+    <widget class="QPushButton" name="pendingBookCustomItemButton">
      <property name="geometry">
       <rect>
-       <x>440</x>
+       <x>430</x>
        <y>370</y>
-       <width>141</width>
+       <width>151</width>
        <height>31</height>
       </rect>
      </property>
@@ -1434,39 +1431,15 @@ QPushButton:disabled{
 }</string>
      </property>
      <property name="text">
-      <string>計算組合方式</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pendingBookAdvencedEditButton">
-     <property name="geometry">
-      <rect>
-       <x>340</x>
-       <y>370</y>
-       <width>91</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string>進階編輯</string>
+      <string>自定義合成內容</string>
      </property>
     </widget>
     <widget class="QPushButton" name="saveButton">
      <property name="geometry">
       <rect>
-       <x>250</x>
+       <x>320</x>
        <y>370</y>
-       <width>81</width>
+       <width>101</width>
        <height>31</height>
       </rect>
      </property>
@@ -1482,7 +1455,7 @@ QPushButton:disabled{
       <string notr="true"/>
      </property>
      <property name="text">
-      <string>儲存</string>
+      <string>儲存裝備</string>
      </property>
     </widget>
     <widget class="QPlainTextEdit" name="saveNameInputBox">
@@ -1490,7 +1463,7 @@ QPushButton:disabled{
       <rect>
        <x>10</x>
        <y>370</y>
-       <width>231</width>
+       <width>301</width>
        <height>31</height>
       </rect>
      </property>
@@ -1514,6 +1487,31 @@ QPushButton:disabled{
      </property>
      <property name="placeholderText">
       <string>輸入物品名字...</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="pendingBookSlotDisplayLabel">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>11</y>
+       <width>451</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel{
+	color: #FF0000;
+	border-radius:0px;
+	border: 0px solid #b87700;
+}Label</string>
+     </property>
+     <property name="text">
+      <string>附魔槽位使用: 37  (警告: 槽位使用超過36基本上無解)</string>
      </property>
     </widget>
    </widget>

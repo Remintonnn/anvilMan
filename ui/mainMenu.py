@@ -546,12 +546,12 @@ class Ui_MainWindow(object):
         self.enchTable.setSelectionMode(QAbstractItemView.NoSelection)
         self.enchTable.setGridStyle(Qt.SolidLine)
         self.enchTable.verticalHeader().setVisible(False)
-        self.generatePendingBookButton = QPushButton(self.enchSelFrame)
-        self.generatePendingBookButton.setObjectName(u"generatePendingBookButton")
-        self.generatePendingBookButton.setGeometry(QRect(120, 780, 161, 31))
-        self.generatePendingBookButton.setFont(font2)
-        self.generatePendingBookButton.setFocusPolicy(Qt.NoFocus)
-        self.generatePendingBookButton.setStyleSheet(u"QPushButton{\n"
+        self.theOneTheOriTHEONETHEORITOTOtotoTOTALtoto = QPushButton(self.enchSelFrame)
+        self.theOneTheOriTHEONETHEORITOTOtotoTOTALtoto.setObjectName(u"theOneTheOriTHEONETHEORITOTOtotoTOTALtoto")
+        self.theOneTheOriTHEONETHEORITOTOtotoTOTALtoto.setGeometry(QRect(120, 780, 161, 31))
+        self.theOneTheOriTHEONETHEORITOTOtotoTOTALtoto.setFont(font2)
+        self.theOneTheOriTHEONETHEORITOTOtotoTOTALtoto.setFocusPolicy(Qt.NoFocus)
+        self.theOneTheOriTHEONETHEORITOTOtotoTOTALtoto.setStyleSheet(u"QPushButton{\n"
 "	background-color: #131313;\n"
 "	border-radius:4px;\n"
 "	border: 2px solid #b87700;\n"
@@ -600,13 +600,12 @@ class Ui_MainWindow(object):
         self.pendingBookTable.horizontalHeader().setHighlightSections(False)
         self.pendingBookTable.verticalHeader().setVisible(False)
         self.pendingBookTable.verticalHeader().setDefaultSectionSize(0)
-        self.calculateInstructionButton = QPushButton(self.pendingBookFram)
-        self.calculateInstructionButton.setObjectName(u"calculateInstructionButton")
-        self.calculateInstructionButton.setEnabled(True)
-        self.calculateInstructionButton.setGeometry(QRect(440, 370, 141, 31))
-        self.calculateInstructionButton.setFont(font2)
-        self.calculateInstructionButton.setFocusPolicy(Qt.NoFocus)
-        self.calculateInstructionButton.setStyleSheet(u"QPushButton{\n"
+        self.pendingBookCustomItemButton = QPushButton(self.pendingBookFram)
+        self.pendingBookCustomItemButton.setObjectName(u"pendingBookCustomItemButton")
+        self.pendingBookCustomItemButton.setGeometry(QRect(430, 370, 151, 31))
+        self.pendingBookCustomItemButton.setFont(font2)
+        self.pendingBookCustomItemButton.setFocusPolicy(Qt.NoFocus)
+        self.pendingBookCustomItemButton.setStyleSheet(u"QPushButton{\n"
 "	background-color: #131313;\n"
 "	border-radius:4px;\n"
 "	border: 2px solid #b87700;\n"
@@ -619,21 +618,15 @@ class Ui_MainWindow(object):
 "	border: 2px solid #2f2f2f;\n"
 "	color: #333333;\n"
 "}")
-        self.pendingBookAdvencedEditButton = QPushButton(self.pendingBookFram)
-        self.pendingBookAdvencedEditButton.setObjectName(u"pendingBookAdvencedEditButton")
-        self.pendingBookAdvencedEditButton.setGeometry(QRect(340, 370, 91, 31))
-        self.pendingBookAdvencedEditButton.setFont(font2)
-        self.pendingBookAdvencedEditButton.setFocusPolicy(Qt.NoFocus)
-        self.pendingBookAdvencedEditButton.setStyleSheet(u"")
         self.saveButton = QPushButton(self.pendingBookFram)
         self.saveButton.setObjectName(u"saveButton")
-        self.saveButton.setGeometry(QRect(250, 370, 81, 31))
+        self.saveButton.setGeometry(QRect(320, 370, 101, 31))
         self.saveButton.setFont(font2)
         self.saveButton.setFocusPolicy(Qt.NoFocus)
         self.saveButton.setStyleSheet(u"")
         self.saveNameInputBox = QPlainTextEdit(self.pendingBookFram)
         self.saveNameInputBox.setObjectName(u"saveNameInputBox")
-        self.saveNameInputBox.setGeometry(QRect(10, 370, 231, 31))
+        self.saveNameInputBox.setGeometry(QRect(10, 370, 301, 31))
         font5 = QFont()
         font5.setFamilies([u"Segoe UI"])
         font5.setPointSize(12)
@@ -642,6 +635,17 @@ class Ui_MainWindow(object):
         self.saveNameInputBox.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.saveNameInputBox.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.saveNameInputBox.setLineWrapMode(QPlainTextEdit.NoWrap)
+        self.pendingBookSlotDisplayLabel = QLabel(self.pendingBookFram)
+        self.pendingBookSlotDisplayLabel.setObjectName(u"pendingBookSlotDisplayLabel")
+        self.pendingBookSlotDisplayLabel.setGeometry(QRect(130, 11, 451, 21))
+        font6 = QFont()
+        font6.setPointSize(9)
+        self.pendingBookSlotDisplayLabel.setFont(font6)
+        self.pendingBookSlotDisplayLabel.setStyleSheet(u"QLabel{\n"
+"	color: #FF0000;\n"
+"	border-radius:0px;\n"
+"	border: 0px solid #b87700;\n"
+"}Label")
         MainWindow.setCentralWidget(self.centralWidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -754,13 +758,13 @@ class Ui_MainWindow(object):
         self.saveLoadButton.setStyleSheet("")
         self.saveLoadButton.setText(QCoreApplication.translate("MainWindow", u"\u8f09\u5165", None))
         self.enchSelTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt;\">\u9078\u64c7\u76ee\u6a19\u9644\u9b54</span></p></body></html>", None))
-        self.generatePendingBookButton.setText(QCoreApplication.translate("MainWindow", u"\u751f\u6210\u9644\u9b54\u66f8\u7d44\u5408", None))
+        self.theOneTheOriTHEONETHEORITOTOtotoTOTALtoto.setText(QCoreApplication.translate("MainWindow", u"\u8a08\u7b97\u9435\u7827\u7d44\u5408\u65b9\u5f0f", None))
         self.enchSelHighlightCheckBox.setText(QCoreApplication.translate("MainWindow", u"\u51f8\u986f\u5df2\u9078\u9644\u9b54", None))
         self.pendingBookTitleLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt;\">\u5408\u6210\u5167\u5bb9\u9810\u89bd</span></p></body></html>", None))
-        self.calculateInstructionButton.setText(QCoreApplication.translate("MainWindow", u"\u8a08\u7b97\u7d44\u5408\u65b9\u5f0f", None))
-        self.pendingBookAdvencedEditButton.setText(QCoreApplication.translate("MainWindow", u"\u9032\u968e\u7de8\u8f2f", None))
-        self.saveButton.setText(QCoreApplication.translate("MainWindow", u"\u5132\u5b58", None))
+        self.pendingBookCustomItemButton.setText(QCoreApplication.translate("MainWindow", u"\u81ea\u5b9a\u7fa9\u5408\u6210\u5167\u5bb9", None))
+        self.saveButton.setText(QCoreApplication.translate("MainWindow", u"\u5132\u5b58\u88dd\u5099", None))
         self.saveNameInputBox.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u8f38\u5165\u7269\u54c1\u540d\u5b57...", None))
+        self.pendingBookSlotDisplayLabel.setText(QCoreApplication.translate("MainWindow", u"\u9644\u9b54\u69fd\u4f4d\u4f7f\u7528: 37  (\u8b66\u544a: \u69fd\u4f4d\u4f7f\u7528\u8d85\u904e36\u57fa\u672c\u4e0a\u7121\u89e3)", None))
         self.manual.setTitle(QCoreApplication.translate("MainWindow", u"\u4f7f\u7528\u8aaa\u660e(Please notice me senpai)", None))
     # retranslateUi
 
