@@ -5,13 +5,13 @@
 <br>
 
 # 如何下載和打開
-(此專案寫於Python 3.12.4 Windows 11, 沒測其他版本和OS)  
+(此專案寫於Python 3.12.4 Windows 11, 沒測其他版本和OS能不能跑)  
   
 方案A: 直接下載原代碼
   - clone這個專案
   - 安裝python
-  - pip install 這個專案有用到的套件
-  - 打開main.py
+  - `pip install -r requirements.txt` 裝這邊有用到的外部套件
+  - `python main.py` 開啟程式
 
 ~~方案B: 下載exe~~ (還沒發布 sor mate)
   - ~~去[這邊](https://github.com/Remintonnn/waveDoc/releases)把exe檔案抓下來(只有windows的)~~
@@ -28,7 +28,7 @@
 
 ### 注意:
 - 裝備的物品和合成步驟是分開儲存的
-- 計算裝備合成步驟時間複雜度是約O=3^n, 所以要敲的書太多可能會害計算時間炸裂  
+- 計算裝備合成步驟時間複雜度實測約O=3^n, 所以要敲的書太多可能會害計算時間炸裂  
   (n主要受書種數量影響，書的數量反而還好)
 
 
