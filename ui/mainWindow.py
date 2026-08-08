@@ -429,7 +429,7 @@ class PendingTableControler:
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
         table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
         table.setColumnWidth(0, 120)
-        table.setColumnWidth(1, 39)
+        table.setColumnWidth(1, 19)
         # print(table.columnWidth(2)) -> 330
         table.setColumnWidth(3, 39)
 
@@ -451,7 +451,7 @@ class PendingTableControler:
 class pendingTableModel(QAbstractTableModel):
     # custom column doesn't exist because yes as well
     ENCHESS_COL, AMOUNT_NUM_COL, AMOUNT_ICON_COL, PUNUSHENT_COL, CUSTOM_COL = [0,1,2,3,4]
-    HEADERS = ["內含附魔","數量","數量示意圖","懲罰"]
+    HEADERS = ["內含附魔","量","數量示意圖","懲罰"]
 
     def __init__(self):
         super().__init__()
