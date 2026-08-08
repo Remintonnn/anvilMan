@@ -21,4 +21,9 @@ def main():
 
 main()
 
-# TODO: imp pendingTable
+# TODO: optimize step gen until acceptable
+# TODO: step display window
+# TODO: save/load state
+# TODO: custom item and generalize step gen
+# TODO: 
+# TODO: 
