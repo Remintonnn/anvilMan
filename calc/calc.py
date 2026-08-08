@@ -18,7 +18,7 @@ MAX_LEVEL = 39
 MAX_TREE_SIZE = 32 # punishent=5
 MAX_TREE_HEIGHT = 5
 
-@dataclass(frozen=True)
+@dataclass(frozen=True,slots=True)
 class Book:
     """I just realized that having a Book class who says Book.isBook = False is kinda funny,
     but I don't really wanna name it 'Item' or something else generic""" # plus me lazy
@@ -28,7 +28,7 @@ class Book:
     isBook:bool=True
     equ:Enum=None
     isCustom:bool=False
-    _key=None
+    _key:tuple=field(init=False,repr=False)
 
     def __post_init__(self):
         if isinstance(self.enchess,list):
@@ -119,12 +119,12 @@ def generateSteps(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
 # bookBag only contains either lvl 1 book or max lvl book
 # With modifications to the algorithm you can get around those limitation
 # but the time complexity or 3^n is brutal you know
-"""I had the idea about doint the search like this in the very start,
-but as times went by I kinda forgor about that idea,
-after whatever that's down there, I finally rember this exist now.
-Ancient technology, awake!(the next installment)
-"""
 def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
+    """I had the idea about doint the search like this in the very start,
+    but as times went by I kinda forgor about that idea,
+    but after whatever that's down there, I finally rember this exist now.
+    Ancient technology, awake!(the next installment)
+    """
     def bagPad(bb:list[Book]): # find the Pad for the Bag
         bookNum = sum(b.amount for b in bb)
         treeDepth = int.bit_length(bookNum-1)
@@ -232,7 +232,7 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         return result
     def bagKey(cd:dict[int,int]): return tuple(cd.items())
     
-    @dataclass
+    @dataclass(slots=True)
     class DPPOINT:
         book:Book=None
         cost:int=393
