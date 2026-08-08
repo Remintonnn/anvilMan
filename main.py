@@ -23,6 +23,7 @@ main()
 
 # TODO: optimize step gen until acceptable
 # TODO: step display window
+# TODO: unsplit saved item and steps
 # TODO: save/load state
 # TODO: custom item and generalize step gen
 # TODO: 
