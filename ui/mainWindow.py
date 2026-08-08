@@ -199,11 +199,10 @@ class EnchTableControler:
         table.setColumnWidth(3, 55)
         table.verticalHeader().hide()
 
-        self.filter = self.filterObj(self,table.viewport())
-        table.viewport().installEventFilter(self.filter) # for the level scroll
-    class filterObj(QObject):
+        table.viewport().installEventFilter(self.filterObj(self,table.viewport()))
+    class filterObj(QObject): # for the level scroll
         def __init__(self, controller:"EnchTableControler", parent=None):
-            super().__init__(parent) # To prevent effor when close program
+            super().__init__(parent) # To prevent error when close program
             self.controller = controller
         def eventFilter(self, obj, event): # for the level scroll
             if obj == self.controller.table.viewport():
@@ -433,12 +432,38 @@ class PendingTableControler:
         # print(table.columnWidth(2)) -> 330
         table.setColumnWidth(3, 39)
 
-        table.verticalHeader().hide()
+        table.verticalHeader().show()
+        # table.verticalHeader().setFixedWidth(19)
+        cornerButton = table.findChild(QAbstractButton)
+        if cornerButton is None: print("CORNER BUTTON IS MISSING SOMEHOW, WE LOST THE LINE")
+        else: cornerButton.installEventFilter(self.filterObj(cornerButton,table))
+    class filterObj(QObject): # FOR THE DIAGONAL LINE IN THE CORNER
+        def __init__(self, cornerButton:QAbstractButton, parent=None):
+            super().__init__(parent) # To prevent error when close program
+            self.cornerButton = cornerButton
+        def eventFilter(self, obj:QAbstractButton, event): # for the level scroll
+            # we don't use if gard because the risk of obj is None
+            if obj == self.cornerButton and event.type()==QEvent.Type.Paint:
+                obj.removeEventFilter(self)
+                obj.event(event)
+                obj.installEventFilter(self)
+                painter = QPainter(obj)
+                painter.setRenderHint(QPainter.Antialiasing)
+                painter.setPen(QPen(QColor("#676767"), 2, Qt.SolidLine))
+                buttonBox = obj.rect()
+                painter.drawLine(buttonBox.topLeft(), buttonBox.bottomRight())
+                painter.end()
+                return True
+            return super().eventFilter(obj, event)
+
+            
     def setItems(self,bookBag:list[Book],currentIcon:QIcon):
         self.model.setItems(bookBag,currentIcon)
         self.table.resizeRowsToContents()
         self.grayOut(False)
         self.slotLabel.setText(self.model.getSlotLabelText())
+        headerVwidth = self.table.verticalHeader().sizeHint().width()
+        self.table.verticalHeader().setFixedWidth(int(headerVwidth)*0.75)
     def clearItem(self): self.model.clearData();self.grayOut(True)
     def grayOut(self,doIt:bool): 
         self.slotLabel.setText("")
@@ -505,7 +530,8 @@ class pendingTableModel(QAbstractTableModel):
         result = [book.copy() for book in self._data]
         return result
     def getSlotLabelText(self):
-        if not len(self._data): return ""
+        bookTypes = len(self._data)
+        if not bookTypes: return ""
         slotNum = sum(d.amount*(2**d.punishent) for d in self._data)
         # for d in self._data: print(f"DA: {d.amount}, DP: {d.punishent}, {d.amount}*(2**{d.punishent})={d.amount*(2**d.punishent)}")
         color = "#FFFFFF"; warning = ""
@@ -520,9 +546,8 @@ class pendingTableModel(QAbstractTableModel):
     def headerData(self, section, orientation, role):
         # section is the index of the column/row.
         if role != Qt.ItemDataRole.DisplayRole: return
-        if orientation == Qt.Vertical: return
-        if orientation == Qt.Horizontal:
-            return str(self.HEADERS[section])
+        if orientation == Qt.Vertical: return f"{section+1}."
+        return str(self.HEADERS[section])
 class AmountDisplayDelegate(QStyledItemDelegate):
     def __init__(self):
         super().__init__()

@@ -82,9 +82,22 @@ class Ui_MainWindow(object):
                         "-color: #333333;\n"
 "	color: #FFFFFF;\n"
 "	border:none;\n"
+"}QHeaderView::section:horizontal {\n"
 "    border-right: 1px solid #676767;\n"
 "	font: 10pt \"OCR A Extended\";\n"
 "	font-weight: bold;\n"
+"}QHeaderView::section:vertical {\n"
+"	padding-left:2px;\n"
+"	border-bottom: 1px solid #676767;\n"
+"	font: 8pt \"Nirmala Text Semilight\";\n"
+"}QTableCornerButton::section { /*the damn corner*/\n"
+"    background-color: #333333;\n"
+"	border:none;\n"
+"	/*\n"
+"	NO COMPROMISE WII BE MADE, I WANT MY DIAGONAL LINE\n"
+"    border-right: 1px solid #676767;\n"
+"    border-bottom: 1px solid #676767;\n"
+"	*/\n"
 "}\n"
 "\n"
 "QTableView:disabled {\n"
@@ -103,7 +116,8 @@ class Ui_MainWindow(object):
 "\n"
 "QScrollBar:vertical {\n"
 "    background-color: #222222;\n"
-"    width: 19px;\n"
+""
+                        "    width: 19px;\n"
 "    margin: 19px 1px 19px 1px;\n"
 "}QScrollBar::handle:vertical {\n"
 "    background-color: #454545;\n"
@@ -115,8 +129,7 @@ class Ui_MainWindow(object):
 "    height: 13px;\n"
 "    subcontrol-origin: margin;\n"
 "	border: 2px solid #676767;\n"
-" 	margin: 1p"
-                        "x 1px 1px 1px;\n"
+" 	margin: 1px 1px 1px 1px;\n"
 "}QScrollBar::add-line:hover, QScrollBar::sub-line:hover{background-color: #555555;}\n"
 "QScrollBar::up-arrow:vertical {image: url(:/UI/icons/upArrow.png);}\n"
 "QScrollBar::down-arrow:vertical {image: url(:/UI/icons/downArrow.png);}\n"
@@ -127,7 +140,8 @@ class Ui_MainWindow(object):
 "	border: 2px solid #333333;\n"
 "	background-color: #222222\n"
 "}QScrollBar[grayOut=true]::up-arrow:vertical {image: url(:/NOTATHING);}\n"
-"QScrollBar[grayOut=true]::down-arrow:vertical {image: url(:/NOTATHING);}\n"
+""
+                        "QScrollBar[grayOut=true]::down-arrow:vertical {image: url(:/NOTATHING);}\n"
 "\n"
 "/*====== Smol things ======*/\n"
 "\n"
@@ -146,8 +160,7 @@ class Ui_MainWindow(object):
 "	color: #FFFFFF;\n"
 "}\n"
 "QPlainTextEdit:disabled{\n"
-"	b"
-                        "order: 2px solid #181818;\n"
+"	border: 2px solid #181818;\n"
 "	color: #676767;\n"
 "}\n"
 "\n"
@@ -170,7 +183,8 @@ class Ui_MainWindow(object):
 "    border-radius: 0px;\n"
 "	border: 2px solid #E87700;\n"
 "}QPushButton[chosenOne=True]:hover {\n"
-"	background-color: #5656FF;\n"
+"	background-co"
+                        "lor: #5656FF;\n"
 "	border: 2px solid #878787;\n"
 "}\n"
 "\n"
@@ -188,8 +202,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QCheckBox:disabled{\n"
-"    sp"
-                        "acing: 6px;\n"
+"    spacing: 6px;\n"
 "    font-size: 12px;\n"
 "    color: #333333;\n"
 "}\n"
@@ -539,6 +552,7 @@ class Ui_MainWindow(object):
         self.enchTable.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.enchTable.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.enchTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.enchTable.setTabKeyNavigation(False)
         self.enchTable.setProperty(u"showDropIndicator", False)
         self.enchTable.setDragEnabled(False)
         self.enchTable.setDragDropOverwriteMode(False)
@@ -586,19 +600,23 @@ class Ui_MainWindow(object):
         self.pendingBookTable = QTableView(self.pendingBookFram)
         self.pendingBookTable.setObjectName(u"pendingBookTable")
         self.pendingBookTable.setGeometry(QRect(10, 38, 571, 326))
+        self.pendingBookTable.setFocusPolicy(Qt.NoFocus)
         self.pendingBookTable.setStyleSheet(u"")
         self.pendingBookTable.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.pendingBookTable.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.pendingBookTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.pendingBookTable.setTabKeyNavigation(False)
         self.pendingBookTable.setProperty(u"showDropIndicator", False)
         self.pendingBookTable.setDragEnabled(False)
         self.pendingBookTable.setDragDropOverwriteMode(False)
         self.pendingBookTable.setAlternatingRowColors(True)
         self.pendingBookTable.setSelectionMode(QAbstractItemView.NoSelection)
+        self.pendingBookTable.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.pendingBookTable.horizontalHeader().setMinimumSectionSize(0)
         self.pendingBookTable.horizontalHeader().setDefaultSectionSize(183)
         self.pendingBookTable.horizontalHeader().setHighlightSections(False)
         self.pendingBookTable.verticalHeader().setVisible(False)
+        self.pendingBookTable.verticalHeader().setMinimumSectionSize(0)
         self.pendingBookTable.verticalHeader().setDefaultSectionSize(0)
         self.pendingBookCustomItemButton = QPushButton(self.pendingBookFram)
         self.pendingBookCustomItemButton.setObjectName(u"pendingBookCustomItemButton")

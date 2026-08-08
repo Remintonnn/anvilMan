@@ -75,9 +75,22 @@ QTableView {
 	background-color: #333333;
 	color: #FFFFFF;
 	border:none;
+}QHeaderView::section:horizontal {
     border-right: 1px solid #676767;
 	font: 10pt &quot;OCR A Extended&quot;;
 	font-weight: bold;
+}QHeaderView::section:vertical {
+	padding-left:2px;
+	border-bottom: 1px solid #676767;
+	font: 8pt &quot;Nirmala Text Semilight&quot;;
+}QTableCornerButton::section { /*the damn corner*/
+    background-color: #333333;
+	border:none;
+	/*
+	NO COMPROMISE WII BE MADE, I WANT MY DIAGONAL LINE
+    border-right: 1px solid #676767;
+    border-bottom: 1px solid #676767;
+	*/
 }
 
 QTableView:disabled {
@@ -1223,6 +1236,9 @@ QPushButton:hover {
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
+     <property name="tabKeyNavigation">
+      <bool>false</bool>
+     </property>
      <property name="showDropIndicator" stdset="0">
       <bool>false</bool>
      </property>
@@ -1355,6 +1371,9 @@ QPushButton:disabled{
        <height>326</height>
       </rect>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true"/>
      </property>
@@ -1366,6 +1385,9 @@ QPushButton:disabled{
      </property>
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="tabKeyNavigation">
+      <bool>false</bool>
      </property>
      <property name="showDropIndicator" stdset="0">
       <bool>false</bool>
@@ -1382,6 +1404,9 @@ QPushButton:disabled{
      <property name="selectionMode">
       <enum>QAbstractItemView::NoSelection</enum>
      </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
      <attribute name="horizontalHeaderDefaultSectionSize">
       <number>183</number>
      </attribute>
@@ -1395,6 +1420,9 @@ QPushButton:disabled{
       <bool>false</bool>
      </attribute>
      <attribute name="verticalHeaderDefaultSectionSize">
+      <number>0</number>
+     </attribute>
+     <attribute name="verticalHeaderMinimumSectionSize">
       <number>0</number>
      </attribute>
     </widget>
