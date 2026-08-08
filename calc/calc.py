@@ -110,7 +110,7 @@ def generateSteps(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
         todayImFeeling(targetEnchs,bookBag)
         print("===========================")
         stats = pstats.Stats(pr)
-        stats.sort_stats("cumtime").print_stats(10)
+        stats.sort_stats("cumtime").print_stats(25)
 
 # while in theory these are general calculator,
 # for optimization the following assumption is made:
