@@ -252,7 +252,7 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
             ("   ", "┃  ", "┣━━", "┗━━"),
             ("   ", "║  ", "╠══", "╚══"),
         ])
-        CORNER = ("┬","┐")[0]
+        CORNER = ("┬","┐")[1]
         resultBook,totalXPCost,wastedEnch = DPMAN[bagKey(countDict)].ncw()
         root = Tree(f"{resultBook}, PENALTY = {resultBook.getPenaltylvl()}")
         def nodeWalker(key:tuple, parentNode:Tree):
