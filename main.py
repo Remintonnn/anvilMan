@@ -21,9 +21,8 @@ def main():
 
 main()
 
-# TODO: TREE AUTO SHINKING
+
 # TODO: optimize step gen until acceptable
-# TODO: Tree auto expantion
 # TODO: step display window
 # TODO: unsplit saved item and steps
 # TODO: save/load state

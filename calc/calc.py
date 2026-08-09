@@ -15,7 +15,7 @@ from calc.enchantments import EnchantmentTags as EnchTag
 from calc.enchantments import EnchantableItems as EnchItems# Constants
 
 MAX_LEVEL = 39
-MAX_TREE_SIZE = 32 # punishent=5
+MAX_TREE_SIZE = 32 # the leaf of punishent=5
 MAX_TREE_HEIGHT = 5
 
 @dataclass(frozen=True,slots=True)
@@ -134,7 +134,7 @@ def generateSteps(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
         todayImFeeling(targetEnchs,bookBag)
         print("===========================")
         stats = pstats.Stats(pr)
-        # stats.sort_stats("cumtime").print_stats(25)
+        stats.sort_stats("cumtime").print_stats(25)
 
 # while in theory these are general calculator,
 # for optimization the following assumption is made:
@@ -150,39 +150,41 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
     but after whatever that's down there, I finally rember this exist now.
     Ancient technology, awake!(the next installment)
     """
-    def cdPad(cd:dict[Ench,int]):
-        bookNum = sum(v for v in cd.values())
-        treeDepth = int.bit_length(bookNum-1)
-        emptySlots = (1<<treeDepth)-bookNum
-        return treeDepth,emptySlots
     wasteAllowed = calWasteAllowed(targetEnchs,bookBag)
     book2IdDict:dict[Book,int]=dict((bookBag[i],i) for i in range(len(bookBag)))
     id2BookDict:dict[int,Book]=dict((i,bookBag[i]) for i in range(len(bookBag)))
     # TODO: DEAL WITH COUSTOM BOOKS
     countDict:dict[int,int]=dict((book2IdDict[b],b.amount) for b in bookBag)
-    treeDepth,emptySlots = cdPad(countDict)
+    emptySlots = (1<<MAX_TREE_HEIGHT)-sum(countDict.values())
     book2IdDict[-1]=-1;id2BookDict[-1]=-1;countDict[-1]=emptySlots
     DPMAN:dict[tuple,DPPOINT] = {} # Dynamic Programming Modules And Notes
 
     cacHit,cacMis,BAD = 0,0,0
+    # emptyIndexSurvey = {}
     # Tree? more like ROOT
     # Actually maybe I should call it side, or zoom?
     # this is just deciding order so not like we're going up the tree?
     def loopBoi(cd:dict[int,int],depth:int):
         nonlocal cacHit,cacMis,BAD
-        key = bagKey(cd)
-        DPMAN[key] = DPPOINT(); cacMis+=1
+        if depth==0: return id2BookDict[next(iter(cd))],0,{}
+        key = bagKey(cd); DPMAN[key] = DPPOINT(); cacMis+=1
+        if cd.get(-1,0) >= (1<<depth-1): # over half books are empty slot
+            ncd = cd.copy(); ncd[-1] -= (1<<depth-1)
+            nb,cc,ww = loopBoi(ncd,depth-1)
+            if nb is not None:
+                if ncd[-1]==0: del ncd[-1]
+                DPMAN[key]=DPPOINT(nb,cc,ww,bagKey(ncd) if depth!= 1 else None,None,cd,{-1:1})
+                return nb,cc,ww
+
         for bl,br in generateSplits(cd,depth): # we assume bl+br=br+bl for now
             keyL,keyR = bagKey(bl),bagKey(br)
             cacL,cacR = DPMAN.get(keyL),DPMAN.get(keyR)
             nbL,ccL,wwL = None,393,None
             nbR,ccR,wwR = None,393,None
             if cacL is not None: cacHit += 1; nbL,ccL,wwL = cacL.ncw()
-            elif depth==1: nbL,ccL,wwL = id2BookDict[next(iter(bl))],0,{}
-            else: cacMis+=1; nbL,ccL,wwL = loopBoi(bl,depth-1)
+            else: nbL,ccL,wwL = loopBoi(bl,depth-1)
             if cacR is not None: cacHit += 1; nbR,ccR,wwR = cacR.ncw()
-            elif depth==1: nbR,ccR,wwR = id2BookDict[next(iter(br))],0,{}
-            else: cacMis+=1; nbR,ccR,wwR = loopBoi(br,depth-1)
+            else: nbR,ccR,wwR = loopBoi(br,depth-1)
             nb,cc,ww = combine(nbL,nbR)
             if nb is None: continue
             cc = cc+ccL+ccR; ww = wasteCombine(ww,wwL,wwR)
@@ -219,10 +221,14 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
                 if rightAmount: right[bookId] = rightAmount
             yield left, right
     def productXL(bookNums:list[int],treeDepth:int,emptyIndex:int|None):
+        # the emptyIndex is always in the last slot of the list according to the survey
+        # nonlocal emptyIndexSurvey
         totalBook,totalHalf = 1<<treeDepth,1<<(treeDepth-1)
         halfTotalBook = [num//2 for num in bookNums]
         isBookNumEven = [num&1==0 for num in bookNums]
         bookTypes = len(bookNums)
+        # ei = -1 if emptyIndex is None else bookTypes-emptyIndex
+        # emptyIndexSurvey[ei] = emptyIndexSurvey.get(ei,0)+1
         remaingBooks = []; temp = totalBook
         for num in bookNums: temp-=num; remaingBooks.append(temp)
         # print(f"remainingBooks: {remaingBooks}")
@@ -268,6 +274,11 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
             for ench,amount in waste.items():
                 result[ench] = result.get(ench,0)+amount
         return result
+    def cdPad(cd:dict[Ench,int]):
+        bookNum = sum(v for v in cd.values())
+        treeDepth = int.bit_length(bookNum-1)
+        emptySlots = (1<<treeDepth)-bookNum
+        return treeDepth,emptySlots
     def bagKey(cd:dict[int,int]): return tuple(cd.items())
     
     @dataclass(slots=True)
@@ -297,10 +308,11 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
             dp = DPMAN[key]
             kl,kr = dp.keyL,dp.keyR
             bookIdL,bookIdR = next(iter(dp.bagL.keys())),next(iter(dp.bagR.keys()))
-            if True or bookIdR != -1: # in this order so L will always be below R
+            # remove True to unhide empty slots
+            if True or bookIdL!=-1: # in this order so L will always be below R
                 if kr is None: parentNode.add(f" {id2BookDict[bookIdR]}")
                 else: nodeWalker(kr,parentNode.add(CORNER))
-            if True or bookIdL != -1:
+            if True or bookIdR!=-1:
                 if kl is None: parentNode.add(f" {id2BookDict[bookIdL]}")
                 else: nodeWalker(kl,parentNode.add(CORNER))
         nodeWalker(key, root)
@@ -309,7 +321,7 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
     start = time()
     print("start loop")
     print(f"Total books: {sum(b.amount for b in bookBag)}, totalTypes: {len(bookBag)}")
-    loopBoi(countDict,treeDepth)
+    loopBoi(countDict,MAX_TREE_HEIGHT)
     print(f"done loop in {time()-start}")
     print(f"cacH:M = {cacHit}:{cacMis}")
     print(f"cacheLen = {len(DPMAN)}, split = {split}, avg {(split/len(DPMAN)):.2f} split per state")
@@ -325,6 +337,8 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
                 print(f"{ench.names[0]}*{amount}")
         print("FOUND COMBINATION")
     else:print("DIDN'T FOUND COMBINATION BRUH")
+    # print(f"THE EMPTY INDEXIES = {emptyIndexSurvey}")
+
 # This only work if bookBag contains no conflicting enchantment, so A+B=B+A
 def genStepBinTree(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
     """This will search through all possible Tree and combination,
