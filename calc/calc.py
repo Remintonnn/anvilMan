@@ -245,6 +245,14 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         def __str__(self): return str(self.book)
     def treePrinter(DPMAN:dict[any,DPPOINT],key:tuple,id2BookDict:dict[int,Book]):
         print("TREE WALKING TIME")
+        # REMOVEING THE SPACE INFRONT OF NODE NAMES FOR CLEAN CORNERS
+        # It modifies the Tree class globally, but it's fineeee
+        Tree.TREE_GUIDES = ([
+            ("   ", "│  ", "├──", "└──"),
+            ("   ", "┃  ", "┣━━", "┗━━"),
+            ("   ", "║  ", "╠══", "╚══"),
+        ])
+        CORNER = ("┬","┐")[0]
         resultBook,totalXPCost,wastedEnch = DPMAN[bagKey(countDict)].ncw()
         root = Tree(f"{resultBook}, PENALTY = {resultBook.getPenaltylvl()}")
         def nodeWalker(key:tuple, parentNode:Tree):
@@ -252,11 +260,11 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
             kl,kr = dp.keyL,dp.keyR
             bookIdL,bookIdR = next(iter(dp.bagL.keys())),next(iter(dp.bagR.keys()))
             if bookIdL != -1:
-                if kl is None: parentNode.add(str(id2BookDict[bookIdL]))
-                else: nodeWalker(kl,parentNode.add(""))
+                if kl is None: parentNode.add(f" {id2BookDict[bookIdL]}")
+                else: nodeWalker(kl,parentNode.add(CORNER))
             if bookIdR != -1:
-                if kr is None: parentNode.add(str(id2BookDict[bookIdR]))
-                else: nodeWalker(kr,parentNode.add(""))
+                if kr is None: parentNode.add(f" {id2BookDict[bookIdR]}")
+                else: nodeWalker(kr,parentNode.add(CORNER))
         nodeWalker(key, root)
         rprint(root)
         print(f"Total XP lvl cost: {totalXPCost}")
