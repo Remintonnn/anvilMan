@@ -48,7 +48,8 @@ class Book:
     def getPenaltylvl(self):
         return (1<<self.punishent)-1
     def combineWith(self,b2:"Book") -> tuple["Book",int,dict[Ench,int]]:
-        """Returns a new book, return (newBook,cost,wastedEnch)
+        """The base combine method that supports everything,
+           Returns a new book, return (newBook,cost,wastedEnch)
            newBook may be None if the combine failed,
            success or not has nothing to do with MAX_LEVEL, only basic anvil rules"""
         if self.isBook and not b2.isBook: return (None,0,{}) # can't do that
@@ -67,6 +68,29 @@ class Book:
             else:
                 old = nbChess[ench]
                 if lvl>old: wasted[ench] = wasted.get(ench,0)+(1<<(old-1)); nbChess[ench]=lvl
+                else: wasted[ench]=wasted.get(ench,0)+(1<<(lvl-1))
+            valid = True
+            cost += nbChess[ench]*(ench.multiplierBook if b2.isBook else ench.multiplierItem)
+        nPunishent = max(self.punishent,b2.punishent)+1
+        return (Book(enchess=nbChess,punishent=nPunishent,equ=self.equ,isCustom=self.isCustom) if valid else None),cost,wasted
+    def combineNoEquCheck(self,b2:"Book") -> tuple["Book",int,dict[Ench,int]]:
+        """This combine method assumes there won't be ench that conflicts with the enquipment,
+           and no wrong book (book+equ) ordering.
+           Returns a new book, return (newBook,cost,wastedEnch)
+           newBook may be None if the combine failed,
+           success or not has nothing to do with MAX_LEVEL, only basic anvil rules"""
+        cost = self.getPenaltylvl()+b2.getPenaltylvl()
+        wasted:dict[Ench,int]={}
+        nbChess = self.enchess.copy()
+        valid = False # if any enchantment sticks, accroding to vanilla
+        for ench,lvl in b2.enchess.items():
+            # TODO: conflict detection, performance tho
+            # cost += 1 if conflict
+            lvlOri = nbChess.get(ench)
+            if lvlOri is None: nbChess[ench]=lvl
+            elif lvlOri==lvl: nbChess[ench]+=1
+            else:
+                if lvl>lvlOri: wasted[ench] = wasted.get(ench,0)+(1<<(lvlOri-1)); nbChess[ench]=lvl
                 else: wasted[ench]=wasted.get(ench,0)+(1<<(lvl-1))
             valid = True
             cost += nbChess[ench]*(ench.multiplierBook if b2.isBook else ench.multiplierItem)
@@ -110,7 +134,7 @@ def generateSteps(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
         todayImFeeling(targetEnchs,bookBag)
         print("===========================")
         stats = pstats.Stats(pr)
-        stats.sort_stats("cumtime").print_stats(25)
+        # stats.sort_stats("cumtime").print_stats(25)
 
 # while in theory these are general calculator,
 # for optimization the following assumption is made:
@@ -167,9 +191,13 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         if bl is None or br is None: return None,393,None
         if isinstance(bl,int): return br,0,{}
         if isinstance(br,int): return bl,0,{}
+        # Equ should always be in the left, I think, according to productXL, mayhaps
+        # TODO: ench equ compatibility check
+        if bl.isBook and not br.isBook: return None,393,None # didn't trigger a single time when only one equ💥
         nb,cc,ww = None,393,None
-        nb1,c1,w1 = bl.combineWith(br)
-        nb2,c2,w2 = br.combineWith(bl)
+        # TODO: precompute combine cost maybe
+        nb1,c1,w1 = bl.combineNoEquCheck(br)
+        nb2,c2,w2 = br.combineNoEquCheck(bl)
         if isCombValid(nb1,c1,w1): nb=nb1;cc=c1;ww=w1
         if isCombValid(nb2,c2,w2) and c2<cc: nb=nb2;cc=c2;ww=w2 # we only compare cost for now
         return nb,cc,ww
@@ -197,7 +225,9 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
             if depth == bookTypes:
                 lefties = tuple(left)
                 rightiest = tuple(total-lefty for total,lefty in zip(bookNums, lefties))
-                yield lefties, rightiest
+                # I swapped left and right so equ can always be the left most item
+                # I'm not gonna go change all of the names just for this mate
+                yield rightiest, lefties 
                 return
             maxTake = bookNums[depth]
             for x in range(maxTake + 1):
@@ -259,12 +289,12 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
             dp = DPMAN[key]
             kl,kr = dp.keyL,dp.keyR
             bookIdL,bookIdR = next(iter(dp.bagL.keys())),next(iter(dp.bagR.keys()))
-            if bookIdL != -1:
-                if kl is None: parentNode.add(f" {id2BookDict[bookIdL]}")
-                else: nodeWalker(kl,parentNode.add(CORNER))
-            if bookIdR != -1:
+            if True or bookIdR != -1: # in this order so L will always be below R
                 if kr is None: parentNode.add(f" {id2BookDict[bookIdR]}")
                 else: nodeWalker(kr,parentNode.add(CORNER))
+            if True or bookIdL != -1:
+                if kl is None: parentNode.add(f" {id2BookDict[bookIdL]}")
+                else: nodeWalker(kl,parentNode.add(CORNER))
         nodeWalker(key, root)
         rprint(root)
         print(f"Total XP lvl cost: {totalXPCost}")
