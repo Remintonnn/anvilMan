@@ -149,16 +149,17 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
     but after whatever that's down there, I finally rember this exist now.
     Ancient technology, awake!(the next installment)
     """
-    def bagPad(bb:list[Book]): # find the Pad for the Bag
-        bookNum = sum(b.amount for b in bb)
+    def cdPad(cd:dict[Ench,int]):
+        bookNum = sum(v for v in cd.values())
         treeDepth = int.bit_length(bookNum-1)
         emptySlots = (1<<treeDepth)-bookNum
         return treeDepth,emptySlots
     wasteAllowed = calWasteAllowed(targetEnchs,bookBag)
-    treeDepth,emptySlots = bagPad(bookBag)
     book2IdDict:dict[Book,int]=dict((bookBag[i],i) for i in range(len(bookBag)))
     id2BookDict:dict[int,Book]=dict((i,bookBag[i]) for i in range(len(bookBag)))
+    # TODO: DEAL WITH COUSTOM BOOKS
     countDict:dict[int,int]=dict((book2IdDict[b],b.amount) for b in bookBag)
+    treeDepth,emptySlots = cdPad(countDict)
     book2IdDict[-1]=-1;id2BookDict[-1]=-1;countDict[-1]=emptySlots
     DPMAN:dict[tuple,DPPOINT] = {} # Dynamic Programming Modules And Notes
 
@@ -171,13 +172,14 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         key = bagKey(cd)
         DPMAN[key] = DPPOINT(); cacMis+=1
         for bl,br in generateSplits(cd,depth): # we assume bl+br=br+bl for now
+            keyL,keyR = bagKey(bl),bagKey(br)
+            cacL,cacR = DPMAN.get(keyL),DPMAN.get(keyR)
             nbL,ccL,wwL = None,393,None
             nbR,ccR,wwR = None,393,None
-            keyL,keyR = bagKey(bl),bagKey(br)
-            if keyL in DPMAN: cacHit += 1; nbL,ccL,wwL = DPMAN[keyL].ncw()
+            if cacL is not None: cacHit += 1; nbL,ccL,wwL = cacL.ncw()
             elif depth==1: nbL,ccL,wwL = id2BookDict[next(iter(bl))],0,{}
             else: cacMis+=1; nbL,ccL,wwL = loopBoi(bl,depth-1)
-            if keyR in DPMAN: cacHit += 1; nbR,ccR,wwR = DPMAN[keyR].ncw()
+            if cacR is not None: cacHit += 1; nbR,ccR,wwR = cacR.ncw()
             elif depth==1: nbR,ccR,wwR = id2BookDict[next(iter(br))],0,{}
             else: cacMis+=1; nbR,ccR,wwR = loopBoi(br,depth-1)
             nb,cc,ww = combine(nbL,nbR)
@@ -225,8 +227,9 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
             if depth == bookTypes:
                 lefties = tuple(left)
                 rightiest = tuple(total-lefty for total,lefty in zip(bookNums, lefties))
-                # I swapped left and right so equ can always be the left most item
-                # I'm not gonna go change all of the names just for this mate
+                # The order this produces is actually the opposite of what I want(EQU rank last instead of First)
+                # and I don't want to go change all that logics to do > and start dfs from right
+                # that's why left and right is reverced here
                 yield rightiest, lefties 
                 return
             maxTake = bookNums[depth]
@@ -238,6 +241,7 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
                     # we only allow [1,1] [0,8] [4,4] here
                     if x!=0 and x!=maxTake and x!=halfPoint: continue
                     # prevent weird splits like ((A,B),(A,C)) for A
+                    # since it can always be ((A,A),(B,C)) instead
                     if totalBook!=2 and x==1: continue
                 newCount = leftCount + x # newCount i.e. left only goes up from here
                 if newCount+remaingBooks[depth] < totalHalf: continue # took too little
