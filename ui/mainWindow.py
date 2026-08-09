@@ -1,6 +1,7 @@
 import ctypes
 import random
 from enum import Enum
+import importlib
 
 import hmmm_rc as resource
 from calc import calc
@@ -113,6 +114,7 @@ class MainWindow(QMainWindow):
         self.pendingTable.clearItem()
         self.pendingTable.setItems(books,self.equSelection.getChosenIcon())
     def generateSteps(self):
+        importlib.reload(calc) # hot swaps the searcher
         targetEnch = self.enchTable.gimmeTheThing()
         bookBag = self.pendingTable.gimmeTheThing()
         calc.generateSteps(targetEnch,bookBag)
