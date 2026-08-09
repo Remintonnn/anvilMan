@@ -143,6 +143,7 @@ def generateSteps(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
 # bookBag only contains either lvl 1 book or max lvl book
 # With modifications to the algorithm you can get around those limitation
 # but the time complexity or 3^n is brutal you know
+printTree = False
 def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
     """I had the idea about doint the search like this in the very start,
     but as times went by I kinda forgor about that idea,
@@ -195,7 +196,10 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         if isinstance(br,int): return bl,0,{}
         # Equ should always be in the left, I think, according to productXL, mayhaps
         # TODO: ench equ compatibility check
-        if bl.isBook and not br.isBook: return None,393,None # didn't trigger a single time when only one equ💥
+        if not bl.isBook and br.isBook: # only one side is legal
+            return bl.combineNoEquCheck(br)
+        if bl.isBook and not br.isBook: # BOOK ON WRONG SIDE
+            return None,393,None # won't trigger with one equ in bag cuz productXL ordering
         nb,cc,ww = None,393,None
         # TODO: precompute combine cost maybe
         nb1,c1,w1 = bl.combineNoEquCheck(br)
@@ -301,11 +305,6 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
                 else: nodeWalker(kl,parentNode.add(CORNER))
         nodeWalker(key, root)
         rprint(root)
-        print(f"Total XP lvl cost: {totalXPCost}")
-        if len(wastedEnch):
-            print("WASTED:")
-            for ench,amount in wastedEnch.items():
-                print(f"{ench.names[0]}*{amount}")
 
     start = time()
     print("start loop")
@@ -318,7 +317,12 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
     print(f"Vals: {list(countDict.values())}")
     resultBook,totalXPCost,wastedEnch = DPMAN[bagKey(countDict)].ncw()
     if resultBook is not None:
-        treePrinter(DPMAN,bagKey(countDict),id2BookDict)
+        if printTree: treePrinter(DPMAN,bagKey(countDict),id2BookDict)
+        print(f"Total XP lvl cost: {totalXPCost}")
+        if len(wastedEnch):
+            print("WASTED:")
+            for ench,amount in wastedEnch.items():
+                print(f"{ench.names[0]}*{amount}")
         print("FOUND COMBINATION")
     else:print("DIDN'T FOUND COMBINATION BRUH")
 # This only work if bookBag contains no conflicting enchantment, so A+B=B+A
