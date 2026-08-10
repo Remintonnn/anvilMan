@@ -169,9 +169,9 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         key = bagKey(cd); DPMAN[key] = DPPOINT(); cacMis+=1
         if cd.get(-1,0) >= (1<<depth-1): # over half books are empty slot
             ncd = cd.copy(); ncd[-1] -= (1<<depth-1)
+            if ncd[-1]==0: del ncd[-1]
             nb,cc,ww = loopBoi(ncd,depth-1)
             if nb is not None:
-                if ncd[-1]==0: del ncd[-1]
                 DPMAN[key]=DPPOINT(nb,cc,ww,bagKey(ncd) if depth!= 1 else None,None,cd,{-1:1})
                 return nb,cc,ww
 
