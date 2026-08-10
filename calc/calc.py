@@ -134,7 +134,7 @@ def generateSteps(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
         todayImFeeling(targetEnchs,bookBag)
         print("===========================")
         stats = pstats.Stats(pr)
-        stats.sort_stats("cumtime").print_stats(25)
+        stats.strip_dirs().sort_stats("cumtime").print_stats(10)
 
 # while in theory these are general calculator,
 # for optimization the following assumption is made:
@@ -215,6 +215,7 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         cdVal,cdKey = list(countDict.values()),list(countDict.keys())
         left:dict[int,int]; right:dict[int,int] # more CD!
         for leftSet, rightSet in productXL(cdVal,depth,None if -1 not in cdKey else cdKey.index(-1)):
+        # for leftSet, rightSet in productXLOldForRefrence(cdVal,depth,None if -1 not in cdKey else cdKey.index(-1)):
             left={};right={};split+=1
             for bookId, leftAmount, rightAmount in zip(cdKey,leftSet,rightSet):
                 if leftAmount: left[bookId] = leftAmount
@@ -224,14 +225,27 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         # the emptyIndex is always in the last slot of the list according to the survey
         # nonlocal emptyIndexSurvey
         totalBook,totalHalf = 1<<treeDepth,1<<(treeDepth-1)
-        halfTotalBook = [num//2 for num in bookNums]
-        isBookNumEven = [num&1==0 for num in bookNums]
         bookTypes = len(bookNums)
         # ei = -1 if emptyIndex is None else bookTypes-emptyIndex
         # emptyIndexSurvey[ei] = emptyIndexSurvey.get(ei,0)+1
-        remaingBooks = []; temp = totalBook
-        for num in bookNums: temp-=num; remaingBooks.append(temp)
-        # print(f"remainingBooks: {remaingBooks}")
+
+        # pregen the ranges
+        bookEvenNumRanges = [(True if n&1==0 else None) for n in bookNums]
+        if emptyIndex is not None: bookEvenNumRanges[emptyIndex]=None
+        remainingBooks = []; halfTotalBook = []; tbCopy = totalBook
+        for depth,maxTake in enumerate(bookNums):
+            tbCopy -= maxTake; remaingBook = tbCopy
+            bnIsEven,halfPoint = bookEvenNumRanges[depth],(maxTake//2)
+            remainingBooks.append(remaingBook); halfTotalBook.append(halfPoint)
+            if bnIsEven is None: continue
+            # avoid uneven splits, which leads to ench waste 
+            # # we only allow [1,1] [0,8] [4,4] here 
+                # # also prevent weird splits like ((A,B),(A,C)) for A 
+                # # since it can always be ((A,A),(B,C)) instead 
+            if totalBook!=2 and maxTake==2: 
+                bookEvenNumRanges[depth] = (0,maxTake)
+            else: bookEvenNumRanges[depth] = (0,halfPoint,maxTake)
+
         left = [0]*bookTypes
         def dfs(depth,leftCount,headLess):
             if depth == bookTypes:
@@ -242,25 +256,27 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
                 # that's why left and right is reverced here
                 yield rightiest, lefties 
                 return
-            maxTake = bookNums[depth]
-            for x in range(maxTake + 1):
-                bnIsEven,halfPoint = isBookNumEven[depth],halfTotalBook[depth]
-                if not headLess and x>halfPoint: break
-                if depth!=emptyIndex and bnIsEven:
-                    # check if the split is uneven, which leads to ench waste
-                    # we only allow [1,1] [0,8] [4,4] here
-                    if x!=0 and x!=maxTake and x!=halfPoint: continue
-                    # prevent weird splits like ((A,B),(A,C)) for A
-                    # since it can always be ((A,A),(B,C)) instead
-                    if totalBook!=2 and x==1: continue
-                newCount = leftCount + x # newCount i.e. left only goes up from here
-                if newCount+remaingBooks[depth] < totalHalf: continue # took too little
-                if newCount > totalHalf: break # took too much
-                left[depth] = x
-                # the headLess is treated differently, 
-                # because for even numbers the half point sits perfectly in the middle
-                # so x is not really less when x==halfPoint
-                yield from dfs(depth+1, newCount, headLess or (x<halfPoint if bnIsEven else x<=halfPoint))
+            roomLeft = totalHalf-leftCount; maxTake = bookNums[depth]
+            xMin = roomLeft-remainingBooks[depth]
+            xMax = roomLeft if roomLeft<maxTake else maxTake
+            if xMin<0: xMin=0
+            evenRange,halfPoint = bookEvenNumRanges[depth],halfTotalBook[depth]
+            if evenRange is not None:
+                for x in evenRange:
+                    if not headLess and x>halfPoint: break
+                    # the check is on X now
+                    if x < xMin: continue # took too little
+                    if x > xMax: break # took too much
+                    newCount = leftCount + x; left[depth] = x
+                    # the headLess is treated differently between this and the loop down there, 
+                    # because for even numbers the half point sits perfectly in the middle
+                    # so x is not really less when x==halfPoint
+                    yield from dfs(depth+1, newCount, headLess or x<halfPoint)
+            else:
+                for x in range(xMin,xMax+1):
+                    if not headLess and x>halfPoint: break
+                    newCount = leftCount + x; left[depth] = x
+                    yield from dfs(depth+1, newCount, headLess or x<=halfPoint)
         yield from dfs(0,0,False)
     def isCombValid(success:bool,cost:int,waste:dict[Ench,int]):
         if success is None: return False
@@ -274,7 +290,7 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
             for ench,amount in waste.items():
                 result[ench] = result.get(ench,0)+amount
         return result
-    def cdPad(cd:dict[Ench,int]):
+    def cdPad(cd:dict[Ench,int]): # uh this function still holds information I guess, for me
         bookNum = sum(v for v in cd.values())
         treeDepth = int.bit_length(bookNum-1)
         emptySlots = (1<<treeDepth)-bookNum
