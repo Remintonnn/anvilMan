@@ -7,12 +7,7 @@ from dataclasses import field
 from rich.tree import Tree
 from rich import print as rprint
 
-
 from calc.enchantments import Enchantment as Ench
-from calc.enchantments import enchantments as enchs # not cap cuz it's an instance
-from calc.enchantments import EnchantmentId as EnchId
-from calc.enchantments import EnchantmentTags as EnchTag
-from calc.enchantments import EnchantableItems as EnchItems# Constants
 
 MAX_LEVEL = 39
 MAX_TREE_SIZE = 32 # the leaf of punishent=5
@@ -143,7 +138,7 @@ def generateSteps(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
 # bookBag only contains either lvl 1 book or max lvl book
 # With modifications to the algorithm you can get around those limitation
 # but the time complexity or 3^n is brutal you know
-printTree = False
+printTree = True
 def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
     """I had the idea about doint the search like this in the very start,
     but as times went by I kinda forgor about that idea,
