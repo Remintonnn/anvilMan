@@ -143,6 +143,7 @@ def generateSteps(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
 # With modifications to the algorithm you can get around those limitation
 # but the time complexity or 3^n is brutal you know
 printTree = True
+showEmptyNodes = False
 def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
     """I had the idea about doint the search like this in the very start,
     but as times went by I kinda forgor about that idea,
@@ -319,23 +320,35 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         ])
         CORNER = ("┬","┐")[1]
         resultBook,totalXPCost,wastedEnch = DPMAN[bagKey(countDict)].ncw()
-        root = Tree(f"{resultBook}, PENALTY = {resultBook.getPenaltylvl()}")
-        def nodeWalker(key:tuple, parentNode:Tree):
+        rootText = f"{resultBook}, PENALTY = {resultBook.getPenaltylvl()}"
+        root = Tree(rootText)
+        trueRoot,trueRootDepth = root,MAX_TREE_HEIGHT
+        def nodeWalker(key:tuple, parentNode:Tree, depth:int):
+            nonlocal trueRoot,trueRootDepth
             dp = DPMAN[key]
             kl,kr = dp.keyL,dp.keyR
             bookIdL,bookIdR = next(iter(dp.bagL.keys())),next(iter(dp.bagR.keys()))
-            # remove True to unhide empty slots
-            if True or bookIdL!=-1: # in this order so L will always be below R
+            childCount = (bookIdL!=-1) + (bookIdR!=-1)
+            # print(childCount,depth)
+            if depth<392 and childCount==2: # THE TRUE ROOT
+                trueRoot,trueRootDepth=parentNode,depth
+                # print(f"FOUND THE TRUE ROOT IN {depth}")
+                depth = 393
+            elif depth>=392: depth = 393 # hacky I know but eh
+            showEmptyNodes = True
+            if showEmptyNodes or bookIdR!=-1: # in this order so L will always be below R
                 if kr is None: parentNode.add(f" {id2BookDict[bookIdR]}")
-                else: nodeWalker(kr,parentNode.add(CORNER))
-            if True or bookIdR!=-1:
+                else: nodeWalker(kr,parentNode.add(CORNER),depth-1)
+            if showEmptyNodes or bookIdL!=-1:
                 if kl is None: parentNode.add(f" {id2BookDict[bookIdL]}")
-                else: nodeWalker(kl,parentNode.add(CORNER))
-        nodeWalker(key, root)
+                else: nodeWalker(kl,parentNode.add(CORNER),depth-1)
+        nodeWalker(key, root, MAX_TREE_HEIGHT)
 
         treeConsole = console.Console()
         with treeConsole.capture() as capture:
-            treeConsole.print(root)
+            # treeConsole.print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+            if showEmptyNodes: treeConsole.print(root)
+            else: trueRoot.label = rootText; treeConsole.print(trueRoot)
         print("\n".join("        " + line for line in capture.get().splitlines()))
 
     start = time()
