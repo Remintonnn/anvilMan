@@ -13,7 +13,7 @@ from calc.enchantments import Enchantment as Ench
 
 MAX_LEVEL = 39
 MAX_TREE_SIZE = 32 # the leaf of punishent=5
-MAX_TREE_HEIGHT = 5
+MAX_TREE_HEIGHT = 6
 
 @dataclass(frozen=True,slots=True)
 class Book:
