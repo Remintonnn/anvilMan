@@ -4,9 +4,11 @@ import cProfile
 import pstats
 from dataclasses import dataclass
 from dataclasses import field
+import io
 from rich.tree import Tree
-from rich import print as rprint
+from rich import console
 
+from calc.XP import getXP
 from calc.enchantments import Enchantment as Ench
 
 MAX_LEVEL = 39
@@ -126,10 +128,12 @@ def generateSteps(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
     # todayImFeeling = funcs[1]
     todayImFeeling = genStepTheOneTheOri # feeling the one the ori!
     with cProfile.Profile() as pr:
+        STRING_CATCHER = io.StringIO()
         todayImFeeling(targetEnchs,bookBag)
-        print("===========================")
-        stats = pstats.Stats(pr)
+        print("    ===========================PROFILER===========================")
+        stats = pstats.Stats(pr,stream=STRING_CATCHER)
         stats.strip_dirs().sort_stats("cumtime").print_stats(10)
+        print("\n".join("     "+line for line in STRING_CATCHER.getvalue().splitlines()))
 
 # while in theory these are general calculator,
 # for optimization the following assumption is made:
@@ -194,7 +198,8 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         # Equ should always be in the left, I think, according to productXL, mayhaps
         # TODO: ench equ compatibility check
         if not bl.isBook and br.isBook: # only one side is legal
-            return bl.combineNoEquCheck(br)
+            nb,cc,ww = bl.combineNoEquCheck(br)
+            return nb,getXP(cc),ww
         if bl.isBook and not br.isBook: # BOOK ON WRONG SIDE
             return None,393,None # won't trigger with one equ in bag cuz productXL ordering
         nb,cc,ww = None,393,None
@@ -203,7 +208,7 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         nb2,c2,w2 = br.combineNoEquCheck(bl)
         if isCombValid(nb1,c1,w1): nb=nb1;cc=c1;ww=w1
         if isCombValid(nb2,c2,w2) and c2<cc: nb=nb2;cc=c2;ww=w2 # we only compare cost for now
-        return nb,cc,ww
+        return nb,getXP(cc),ww
     split=0
     def generateSplits(countDict: dict[int,int],depth:int):
         nonlocal split
@@ -304,7 +309,7 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         def ncw(self): return self.book,self.cost,self.waste
         def __str__(self): return str(self.book)
     def treePrinter(DPMAN:dict[any,DPPOINT],key:tuple,id2BookDict:dict[int,Book]):
-        print("TREE WALKING TIME")
+        print("    TREE WALKING TIME:")
         # REMOVEING THE SPACE INFRONT OF NODE NAMES FOR CLEAN CORNERS
         # It modifies the Tree class globally, but it's fineeee
         Tree.TREE_GUIDES = ([
@@ -327,27 +332,32 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
                 if kl is None: parentNode.add(f" {id2BookDict[bookIdL]}")
                 else: nodeWalker(kl,parentNode.add(CORNER))
         nodeWalker(key, root)
-        rprint(root)
+
+        treeConsole = console.Console()
+        with treeConsole.capture() as capture:
+            treeConsole.print(root)
+        print("\n".join("        " + line for line in capture.get().splitlines()))
 
     start = time()
-    print("start loop")
-    print(f"Total books: {sum(b.amount for b in bookBag)}, totalTypes: {len(bookBag)}")
+    print("CASE SOMETHING:")
+    print("    start loop")
+    print(f"    Total books: {sum(b.amount for b in bookBag)}, totalTypes: {len(bookBag)}")
     loopBoi(countDict,MAX_TREE_HEIGHT)
-    print(f"done loop in {time()-start}")
-    print(f"cacH:M = {cacHit}:{cacMis}")
-    print(f"cacheLen = {len(DPMAN)}, split = {split}, avg {(split/len(DPMAN)):.2f} split per state")
-    print(f"BAD: {BAD}")
-    print(f"Vals: {list(countDict.values())}")
+    print(f"    done loop in {time()-start}")
+    print(f"    cacH:M = {cacHit}:{cacMis}")
+    print(f"    cacheLen = {len(DPMAN)}, split = {split}, avg {(split/len(DPMAN)):.2f} split per state")
+    print(f"    BAD: {BAD}")
+    print(f"    Vals: {list(countDict.values())}")
     resultBook,totalXPCost,wastedEnch = DPMAN[bagKey(countDict)].ncw()
     if resultBook is not None:
         if printTree: treePrinter(DPMAN,bagKey(countDict),id2BookDict)
-        print(f"Total XP lvl cost: {totalXPCost}")
+        print(f"    Total XP lvl cost: {totalXPCost}")
         if len(wastedEnch):
             print("WASTED:")
             for ench,amount in wastedEnch.items():
                 print(f"{ench.names[0]}*{amount}")
-        print("FOUND COMBINATION")
-    else:print("DIDN'T FOUND COMBINATION BRUH")
+        print("    FOUND COMBINATION")
+    else:print("    DIDN'T FOUND COMBINATION BRUH")
     # print(f"THE EMPTY INDEXIES = {emptyIndexSurvey}")
 
 # This only work if bookBag contains no conflicting enchantment, so A+B=B+A
