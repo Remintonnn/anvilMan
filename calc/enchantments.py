@@ -56,6 +56,12 @@ class Enchantment:
     def __eq__(self, otherEnch):
         if not isinstance(otherEnch,Enchantment): return NotImplemented
         return self.Id==otherEnch.Id
+    def __lt__(self, otherEnch):
+        if not isinstance(otherEnch,Enchantment): return NotImplemented
+        return self.Id<otherEnch.Id
+    def __ge__(self, otherEnch):
+        if not isinstance(otherEnch,Enchantment): return NotImplemented
+        return self.Id>otherEnch.Id
     def __hash__(self):
         return self.Id
 
