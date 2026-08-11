@@ -22,16 +22,16 @@ class Book:
     enchess:dict[Ench,int] = field(default_factory=dict)
     punishent:int=0
     amount:int=1 # only used for table display and init countDict, will be ignored durning calculation
-    isBook:bool=True
     equ:Enum=None
     isCustom:bool=False
-    _key:tuple=field(init=False,repr=False)
+    # _key:tuple=field(init=False,repr=False)
 
-    def __post_init__(self):
-        if isinstance(self.enchess,list):
-            object.__setattr__(self,"enchess",dict(self.enchess))
-        object.__setattr__(self, "isBook", self.equ is None)
-        object.__setattr__(self, "_key", (tuple(sorted((ench.Id, lvl)for ench, lvl in self.enchess.items())),self.punishent,self.isBook))
+    # def __post_init__(self):
+    #     if isinstance(self.enchess,list):
+    #         object.__setattr__(self,"enchess",dict(self.enchess))
+    #     object.__setattr__(self, "_key", (tuple(sorted((ench.Id, lvl)for ench, lvl in self.enchess.items())),self.punishent,self.isBook))
+    @property
+    def isBook(self) -> bool: return self.equ is None
     def asList(self) -> tuple[dict[Ench,int],int,int,bool,bool]:
         return [self.enchess,self.punishent,self.amount,self.isBook,self.isCustom]
     def copy(self,enchs:dict[Ench,int]|list[tuple[Ench,int]]=None,punishment:int=None,amount:int=None,equ:Enum|None=None,custom:bool=None):
@@ -91,11 +91,8 @@ class Book:
                 else: wasted[ench]=wasted.get(ench,0)+(1<<(lvl-1))
             valid = True
             cost += nbChess[ench]*(ench.multiplierBook if b2.isBook else ench.multiplierItem)
-        nPunishent = max(self.punishent,b2.punishent)+1
+        nPunishent = (self.punishent if self.punishent>b2.punishent else b2.punishent)+1
         return (Book(enchess=nbChess,punishent=nPunishent,equ=self.equ,isCustom=self.isCustom) if valid else None),cost,wasted
-    def key(self):
-        """No longer includes amount"""
-        return self._key
 
     def __str__(self):
         """debug use only"""
@@ -115,12 +112,15 @@ class Book:
         # isCustom is ignored cuz not relevent to calculation
         # amount is ignored in favor of external countDict
         if not isinstance(otherBook, Book): return NotImplemented
-        if self.isBook != otherBook.isBook: return False
-        if self.punishent != otherBook.punishent: return False
+    # def key(self):
+    #     """No longer includes amount"""
+    #     return self._key
         if self.enchess != otherBook.enchess: return False
+        if self.punishent != otherBook.punishent: return False
+        if self.isBook != otherBook.isBook: return False
         return True
-    def __hash__(self):
-        return hash(self._key)
+    # def __hash__(self): # REMOVE HASH FUNCTION SO WE DON'T NEED TO CALCULATE KEYS
+    #     return hash(self._key)
 
 # TODO: isCustom propagation(Only them has weird edge case)
 def generateSteps(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
@@ -151,12 +151,11 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
     Ancient technology, awake!(the next installment)
     """
     wasteAllowed = calWasteAllowed(targetEnchs,bookBag)
-    book2IdDict:dict[Book,int]=dict((bookBag[i],i) for i in range(len(bookBag)))
-    id2BookDict:dict[int,Book]=dict((i,bookBag[i]) for i in range(len(bookBag)))
+    id2BookDict:dict[int,Book]=dict((i,bookBag[i]) for i,b in enumerate(bookBag))
     # TODO: DEAL WITH COUSTOM BOOKS
-    countDict:dict[int,int]=dict((book2IdDict[b],b.amount) for b in bookBag)
+    countDict:dict[int,int]=dict((i,b.amount) for i,b in enumerate(bookBag))
     emptySlots = (1<<MAX_TREE_HEIGHT)-sum(countDict.values())
-    book2IdDict[-1]=-1;id2BookDict[-1]=-1;countDict[-1]=emptySlots
+    id2BookDict[-1]=-1;countDict[-1]=emptySlots
     DPMAN:dict[tuple,DPPOINT] = {} # Dynamic Programming Modules And Notes
 
     cacHit,cacMis,BAD = 0,0,0
@@ -191,6 +190,7 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
             DPnb,DPcc,DPww = DPMAN[key].ncw()
             if  DPnb is None or nb.punishent<DPnb.punishent or (nb.punishent<=DPnb.punishent and cc<DPcc):
                 DPMAN[key]=DPPOINT(nb,cc,ww,keyL if depth!=1 else None,keyR if depth!=1 else None,bl,br)
+                # return DPMAN[key].ncw() # DON'T LOOK FOR BEST
         return DPMAN[key].ncw()
     def combine(bl:Book,br:Book) -> tuple[Book,int,dict[Ench,int]]:
         if bl is None or br is None: return None,393,None
@@ -198,17 +198,20 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
         if isinstance(br,int): return bl,0,{}
         # Equ should always be in the left, I think, according to productXL, mayhaps
         # TODO: ench equ compatibility check
+        nb,cc,ww = None,393,None
         if not bl.isBook and br.isBook: # only one side is legal
             nb,cc,ww = bl.combineNoEquCheck(br)
-            return nb,getXP(cc),ww
-        if bl.isBook and not br.isBook: # BOOK ON WRONG SIDE
-            return None,393,None # won't trigger with one equ in bag cuz productXL ordering
-        nb,cc,ww = None,393,None
-        # TODO: precompute combine cost maybe
-        nb1,c1,w1 = bl.combineNoEquCheck(br)
-        nb2,c2,w2 = br.combineNoEquCheck(bl)
-        if isCombValid(nb1,c1,w1): nb=nb1;cc=c1;ww=w1
-        if isCombValid(nb2,c2,w2) and c2<cc: nb=nb2;cc=c2;ww=w2 # we only compare cost for now
+            if not isCombValid(nb,cc,ww): return None,393,None
+        elif bl.isBook and not br.isBook: # BOOK ON WRONG SIDE
+            return nb,cc,ww # won't trigger with one equ in bag cuz productXL ordering
+        # elif bl.enchess==br.enchess: # THEY ARE THE SAME, NO NEED TO CHECK BOTH DIR
+        #     nb,cc,ww = bl.combineNoEquCheck(br)
+        else:
+            # TODO: precompute combine cost maybe
+            nb1,c1,w1 = bl.combineNoEquCheck(br)
+            nb2,c2,w2 = br.combineNoEquCheck(bl)
+            if isCombValid(nb1,c1,w1): nb=nb1;cc=c1;ww=w1
+            if isCombValid(nb2,c2,w2) and c2<cc: nb=nb2;cc=c2;ww=w2 # we only compare cost for now
         return nb,getXP(cc),ww
     split=0
     def generateSplits(countDict: dict[int,int],depth:int):
@@ -331,16 +334,30 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
             childCount = (bookIdL!=-1) + (bookIdR!=-1)
             # print(childCount,depth)
             if depth<392 and childCount==2: # THE TRUE ROOT
+                # the down side of this is that if there's only every 1 real node in the tree
+                # or NO real node in the tree, a true root won't be found.
+                # but at that point you DESERVE to get funny tree for doing funnies
                 trueRoot,trueRootDepth=parentNode,depth
                 # print(f"FOUND THE TRUE ROOT IN {depth}")
                 depth = 393
             elif depth>=392: depth = 393 # hacky I know but eh
-            showEmptyNodes = True
             if showEmptyNodes or bookIdR!=-1: # in this order so L will always be below R
-                if kr is None: parentNode.add(f" {id2BookDict[bookIdR]}")
+                if kr is None: 
+                    book = id2BookDict[bookIdR]
+                    combineCost = 0
+                    if bookIdR!=-1 and len(book.enchess):
+                        for ench,lvl in book.enchess.items():
+                            combineCost += lvl*(ench.multiplierBook if book.isBook else ench.multiplierItem)
+                    parentNode.add(f" {book} {combineCost}")
                 else: nodeWalker(kr,parentNode.add(CORNER),depth-1)
             if showEmptyNodes or bookIdL!=-1:
-                if kl is None: parentNode.add(f" {id2BookDict[bookIdL]}")
+                if kl is None: 
+                    book = id2BookDict[bookIdL]
+                    combineCost = 0
+                    if bookIdL!=-1 and len(book.enchess):
+                        for ench,lvl in book.enchess.items():
+                            combineCost += lvl*(ench.multiplierBook if book.isBook else ench.multiplierItem)
+                    parentNode.add(f" {book} {combineCost}")
                 else: nodeWalker(kl,parentNode.add(CORNER),depth-1)
         nodeWalker(key, root, MAX_TREE_HEIGHT)
 
@@ -359,7 +376,7 @@ def genStepTheOneTheOri(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book
     print(f"    done loop in {time()-start}")
     print(f"    cacH:M = {cacHit}:{cacMis}")
     print(f"    cacheLen = {len(DPMAN)}, split = {split}, avg {(split/len(DPMAN)):.2f} split per state")
-    print(f"    BAD: {BAD}")
+    print(f"    BAD = {BAD}")
     print(f"    Vals: {list(countDict.values())}")
     resultBook,totalXPCost,wastedEnch = DPMAN[bagKey(countDict)].ncw()
     if resultBook is not None:
@@ -686,7 +703,7 @@ def calWasteAllowed(targetEnchs:list[tuple[bool,Ench,int]],bookBag:list[Book]):
     return result
 
 def generateBooks(targetEnchs:list[tuple[bool,Ench,int]],targetEqu:Enum):
-    bookBag:list[Book] = [Book(equ=targetEqu)]
+    bookBag:list[Book] = [Book(equ="TEST EQU NOT REAL")]
     for data in targetEnchs:
         enchs,amount = [],0
         fromOneUp,ench,lvl = data
